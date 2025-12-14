@@ -713,9 +713,15 @@
     const links = document.querySelector('.nav-links');
     if (burger && links){
       const toggle = () => {
-        const isOpen = links.classList.toggle('open');
-        burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-      };
+  const isOpen = links.classList.toggle('open');
+  burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  document.body.classList.toggle('menu-open', isOpen);
+};
+links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  links.classList.remove('open');
+  burger.setAttribute('aria-expanded','false');
+  document.body.classList.remove('menu-open');
+}));
       burger.addEventListener('click', toggle);
       links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
         links.classList.remove('open');
