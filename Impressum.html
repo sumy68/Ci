@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Impressum – CI Dienstleistungen</title>
+  <meta name="description" content="Impressum von CI Dienstleistungen – Gebäudereinigung & Hausmeisterservice im Raum Kelheim, Regensburg & Landshut." />
+  <link rel="icon" href="logo.jpg" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header wie auf der Startseite -->
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a class="brand" href="index.html" aria-label="Startseite">
+        <div class="logo-box">
+          <img src="logo.jpg" alt="CI Logo">
+        </div>
+      </a>
+
+      <nav class="nav-links" aria-label="Hauptmenü">
+        <a href="index.html#leistungen">Service</a>
+        <a href="index.html#kundenmeinungen">Kundenmeinungen</a>
+        <a href="index.html#ueber-uns">Über uns</a>
+        <a href="index.html#standort">Standort</a>
+        <a href="index.html#kontakt">Kontakt</a>
+        <a href="#abos">Abo-Modelle</a>
+        <a href="Impressum.html" aria-current="page">Impressum</a>
+        <a href="Datenschutzerklärung.html">Datenschutz</a>
+      </nav>
+
+      <div class="nav-cta">
+        <a class="btn" href="#instagram">Instagram</a>
+        <a class="btn" href="tel:+4915114098172">Anrufen</a>
+      </div>
+
+      <button class="burger" aria-label="Menü öffnen" aria-expanded="false"><span></span></button>
+    </div>
+  </header>
+
+  <!-- Inhalt -->
+  <main>
+    <section class="contact" aria-label="Impressum">
+      <div class="container">
+        <h1 class="contact__title">Impressum</h1>
+        <p class="contact__lead">Angaben gemäß § 5 TMG</p>
+
+        <div class="card service" style="max-width:900px; margin:0 auto;">
+          <div class="card-body">
+            <h3>Anbieterkennzeichnung</h3>
+            <p>
+              <strong>CI Dienstleistungen</strong><br>
+              Inhaber: <strong>Cetin Ilcin</strong><br>
+              Büro: Benzstr. 20, 93053 Regensburg<br>
+              Lager: Gewerbering 8, 84085 Langquaid
+            </p>
+
+            <h3>Unternehmensangaben</h3>
+            <p>
+              Unternehmensform: Einzelkaufmann<br>
+              Unternehmensgegenstand: Hausmeisterservice<br>
+              Steuernummer: 211/232/12752
+            </p>
+
+            <h3>Kontakt</h3>
+            <p>
+              Telefon: <a href="tel:+4915114098172">+49&nbsp;151&nbsp;14098172</a><br>
+              E-Mail: <a href="mailto:info@ci-dienstleistungen.com">info@ci-dienstleistungen.com</a>
+            </p>
+
+            <h3>Verantwortlich i.S.d. § 55 Abs. 2 RStV</h3>
+            <p><strong>Cetin Ilcin</strong>, Anschrift wie oben.</p>
+
+            <h3>Hinweis auf EU-Streitschlichtung</h3>
+            <p>
+              Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:
+              <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">https://ec.europa.eu/consumers/odr</a>.
+              Wir sind weder verpflichtet noch bereit, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
+            </p>
+
+            <h3>Haftung für Inhalte</h3>
+            <p>
+              Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten verantwortlich.
+              Nach §§ 8 bis 10 TMG sind wir nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen.
+              Eine Haftung ist erst ab Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden entfernen wir solche Inhalte umgehend.
+            </p>
+
+            <h3>Haftung für Links</h3>
+            <p>
+              Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben.
+              Daher können wir für diese fremden Inhalte keine Gewähr übernehmen. Verantwortlich ist stets der jeweilige Betreiber.
+            </p>
+
+            <h3>Urheberrecht</h3>
+            <p>
+              Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht.
+              Vervielfältigung, Bearbeitung und Verbreitung außerhalb der Grenzen des Urheberrechtes bedürfen der Zustimmung des jeweiligen Autors.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer wie auf Index -->
+  <footer>
+    <div class="footer-inner">
+      <nav class="links" aria-label="Rechtliches">
+        <a href="Impressum.html" aria-current="page">Impressum</a>
+        <a href="Datenschutzerklärung.html">Datenschutz</a>
+      </nav>
+      <div class="copyright">© 2025 CI Dienstleistungen</div>
+    </div>
+  </footer>
+
+  <script>
+    // Burger-Menü wie auf der Index-Seite
+    const burger = document.querySelector('.burger');
+    const links = document.querySelector('.nav-links');
+    if (burger && links){
+      const toggle = () => {
+        const isOpen = links.classList.toggle('open');
+        burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      };
+      burger.addEventListener('click', toggle);
+      links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+        links.classList.remove('open');
+        burger.setAttribute('aria-expanded','false');
+      }));
+    }
+  </script>
+</body>
+</html>
