@@ -149,7 +149,7 @@ main{ flex: 1 0 auto; }
 .burger[aria-expanded="true"]::before{ transform: translateY(9px) rotate(45deg); }
 .burger[aria-expanded="true"]::after{ transform: translateY(-9px) rotate(-45deg); }
 
-/* ===== HERO MIT VIDEO ===== */
+/* ===== HERO MIT BILD ===== */
 .hero{
   position: relative;
   display: grid;
@@ -163,8 +163,8 @@ main{ flex: 1 0 auto; }
   .hero{ min-height: calc(100dvh - var(--nav-h)); }
 }
 
-/* VIDEO */
-.hero__video{
+/* BILD */
+.hero__img{
   position: absolute;
   inset: 0;
   width: 100%;
@@ -214,14 +214,7 @@ main{ flex: 1 0 auto; }
 /* Mobile Hero */
 @media (max-width: 600px){
   .hero{ min-height: calc(100svh - var(--nav-h)); }
-  .hero__video{ object-position: center; }
-}
-
-@media (max-width: 380px){
-  .hero__video{ display: none; }
-  .hero{
-    background: #000 url('hero-poster.jpg') center / cover no-repeat;
-  }
+  .hero__img{ object-position: center; }
 }
 
 /* ===== RESPONSIVE NAVIGATION ===== */
