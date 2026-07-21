@@ -155,12 +155,12 @@ main{ flex: 1 0 auto; }
   display: grid;
   place-items: center;
   margin-top: 0; /* buendig an die sticky Navbar andocken, kein Zwischenraum */
-  min-height: calc(68svh - var(--nav-h));
+  min-height: calc(88svh - var(--nav-h));
   overflow: hidden;
 }
 
 @supports (height: 100dvh){
-  .hero{ min-height: calc(68dvh - var(--nav-h)); }
+  .hero{ min-height: calc(88dvh - var(--nav-h)); }
 }
 
 /* BILD */
@@ -262,8 +262,8 @@ body.menu-open{ overflow: hidden; }
 
 /* ===== INTRO TEXT ===== */
 .intro{
-  margin-top: 400px;
-  padding: 40px 16px;
+  margin-top: 0; /* keine grosse gruene Leerflaeche mehr nach dem Hero */
+  padding: 56px 16px;
   display: flex;
   justify-content: center;
 }
