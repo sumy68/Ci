@@ -172,6 +172,7 @@ main{ flex: 1 0 auto; }
   display: block;
   object-fit: cover;
   object-position: center 65%;
+  filter: brightness(0.7); /* Bild um 30% abgedunkelt */
   transform: translateZ(0);
   -webkit-user-select: none;
   z-index: 0;
