@@ -154,7 +154,7 @@ main{ flex: 1 0 auto; }
   position: relative;
   display: grid;
   place-items: center;
-  margin-top: var(--nav-h);
+  margin-top: 0; /* buendig an die sticky Navbar andocken, kein Zwischenraum */
   min-height: calc(68svh - var(--nav-h));
   overflow: hidden;
 }
