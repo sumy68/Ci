@@ -190,7 +190,10 @@ main{ flex: 1 0 auto; }
 
 /* Content */
 .hero__inner{
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Textblock exakt mittig im Hero */
   z-index: 2;
   width: min(1100px, 92%);
   text-align: center;
@@ -222,9 +225,6 @@ main{ flex: 1 0 auto; }
     word-break: normal;
     hyphens: none;                       /* kein Trennen mitten im Wort */
     line-height: 1.1;
-  }
-  .hero__inner{
-    transform: translateY(-2cm);         /* Textblock ~2 cm nach oben */
   }
 }
 
