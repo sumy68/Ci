@@ -155,12 +155,12 @@ main{ flex: 1 0 auto; }
   display: grid;
   place-items: center;
   margin-top: var(--nav-h);
-  min-height: calc(100svh - var(--nav-h));
+  min-height: calc(68svh - var(--nav-h));
   overflow: hidden;
 }
 
 @supports (height: 100dvh){
-  .hero{ min-height: calc(100dvh - var(--nav-h)); }
+  .hero{ min-height: calc(68dvh - var(--nav-h)); }
 }
 
 /* BILD */
@@ -171,7 +171,7 @@ main{ flex: 1 0 auto; }
   height: 100%;
   display: block;
   object-fit: cover;
-  object-position: center;
+  object-position: center 65%;
   transform: translateZ(0);
   -webkit-user-select: none;
   z-index: 0;
@@ -211,8 +211,8 @@ main{ flex: 1 0 auto; }
   justify-content: center;
 }
 
-/* Mobile Hero */
-@media (max-width: 600px){
+/* Mobile Hero (Hochformat-Bild fuellt volle Hoehe, mittig) */
+@media (max-width: 768px){
   .hero{ min-height: calc(100svh - var(--nav-h)); }
   .hero__img{ object-position: center; }
 }
