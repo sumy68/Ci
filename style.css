@@ -216,6 +216,16 @@ main{ flex: 1 0 auto; }
 @media (max-width: 768px){
   .hero{ min-height: calc(100svh - var(--nav-h)); }
   .hero__img{ object-position: center; }
+  .hero__title{
+    font-size: clamp(24px, 6.5vw, 40px); /* "HAUSMEISTERSERVICE" & "GEBÄUDEREINIGUNG" je 1 Zeile */
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;                       /* kein Trennen mitten im Wort */
+    line-height: 1.1;
+  }
+  .hero__inner{
+    transform: translateY(-2cm);         /* Textblock ~2 cm nach oben */
+  }
 }
 
 /* ===== RESPONSIVE NAVIGATION ===== */
