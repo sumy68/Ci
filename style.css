@@ -171,7 +171,7 @@ main{ flex: 1 0 auto; }
   height: 100%;
   display: block;
   object-fit: cover;
-  object-position: center 65%;
+  object-position: center 85%; /* Ausschnitt tiefer -> mehr Boden/Gebaeudebasis sichtbar */
   filter: brightness(0.7); /* Bild um 30% abgedunkelt */
   transform: translateZ(0);
   -webkit-user-select: none;
