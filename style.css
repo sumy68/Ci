@@ -83,6 +83,9 @@ main{ flex: 1 0 auto; }
   gap: 12px;
 }
 
+/* Kontakt-Buttons im mobilen Menue – auf Desktop ausgeblendet (dort oben rechts in .nav-cta) */
+.nav-links__cta{ display: none; }
+
 .btn{
   display: inline-flex;
   align-items: center;
@@ -238,6 +241,11 @@ main{ flex: 1 0 auto; }
     top: 0;
     right: -100%;
     bottom: 0;
+    /* Viewport-Hoehe erzwingen: ein Vorfahre mit transform ist Containing-Block,
+       daher greift top/bottom:0 nicht -> Panel volle Hoehe via vh/dvh */
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
     width: min(78vw, 320px);
     background: var(--green-footer);
     flex-direction: column;
@@ -264,7 +272,27 @@ main{ flex: 1 0 auto; }
     border-radius: 10px;
   }
   .nav-links a:hover{ background: rgba(255,255,255,.06); }
-  
+
+  /* Kontakt-Buttons unten im Slide-in-Menue */
+  .nav-links__cta{
+    margin-top: auto;               /* nach unten schieben */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 16px;
+  }
+  .nav-links__cta .btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 48px;               /* gut tippbar */
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 17px;
+  }
+  .nav-links__cta .btn:hover{ background: var(--accent-strong); }
+
   .logo-box img{ height: 48px; }
 }
 
