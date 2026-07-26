@@ -1,11 +1,12 @@
 :root{
-  --green: #0f2416;
-  --green-footer: #0c1c12;
+  --green: #23262a;         /* Anthrazit-Basis (dunkel) */
+  --green-footer: #17191c;  /* Anthrazit – dunkelster Ton */
   --text: #ffffff;
-  --red: #e5093d;
-  --accent: #ff2b53;
-  --accent-strong: #ff1744;
+  --red: #4fc3f7;           /* Hellblau – Akzent */
+  --accent: #4fc3f7;        /* Hellblau – Akzent */
+  --accent-strong: #29b6f6; /* Hellblau – Hover */
   --nav-h: 90px;
+  --anthracite: #5F6368;    /* Marken-Anthrazit */
 }
 
 /* ===== BASIS ===== */
@@ -94,9 +95,9 @@ main{ flex: 1 0 auto; }
   border-radius: 16px;
   font-weight: 700;
   text-decoration: none;
-  color: white;
+  color: #17191c;
   background: var(--accent);
-  box-shadow: 0 2px 8px rgba(255, 43, 83, .22);
+  box-shadow: 0 2px 8px rgba(79, 195, 247, .28);
   transition: transform .15s ease, filter .2s ease, background .2s ease;
   white-space: nowrap;
 }
@@ -115,7 +116,7 @@ main{ flex: 1 0 auto; }
   border-radius: 14px;
   font-weight: 800;
   background: var(--red);
-  color: #fff;
+  color: #17191c;
   text-decoration: none;
   transition: transform .15s ease, filter .2s ease;
   border: 0;
@@ -525,8 +526,8 @@ body.menu-open{ overflow: hidden; }
 }
 .donut .bar{
   fill: none;
-  stroke: #34d399;
-  filter: drop-shadow(0 0 6px rgba(79, 255, 176, .25));
+  stroke: #4fc3f7;
+  filter: drop-shadow(0 0 6px rgba(79, 195, 247, .30));
   stroke-linecap: round;
   stroke-width: 12;
   stroke-dasharray: 326;
@@ -583,7 +584,8 @@ body.menu-open{ overflow: hidden; }
   margin: 0 auto;
 }
 .testimonial-card{
-  background: #1a2a1d;
+  background: #2c2f33;
+  border: 1px solid #5F6368;
   color: var(--text);
   padding: 28px 22px;
   border-radius: 14px;
@@ -745,13 +747,13 @@ body.menu-open{ overflow: hidden; }
 }
 .field input::placeholder,
 .field textarea::placeholder{
-  color: rgba(234,246,234,.7);
+  color: rgba(255,255,255,.6);
 }
 
 .field input:focus,
 .field textarea:focus{
   border-color: var(--red);
-  box-shadow: 0 0 0 3px rgba(229,9,61,.18);
+  box-shadow: 0 0 0 3px rgba(79,195,247,.25);
   background: rgba(255,255,255,0.06);
 }
 
@@ -777,7 +779,7 @@ body.menu-open{ overflow: hidden; }
 
 /* ===== FOOTER ===== */
 footer{
-  background: #0c1e0f;
+  background: #17191c;
   color: #ffffff;
   text-align: center;
   padding: 3rem 1rem 2rem;
@@ -791,7 +793,7 @@ footer::before{
   left: 0;
   width: 100%;
   height: 80px;
-  background: #0c1e0f;
+  background: #17191c;
   border-top-left-radius: 100% 80px;
   border-top-right-radius: 100% 80px;
 }
@@ -832,7 +834,7 @@ p{
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: #0c1c12;
+  background: #17191c;
 }
 
 .hero-aga__bg{
@@ -857,7 +859,7 @@ p{
     var(--green) 0%,
     var(--green) 15%,
     rgba(0,0,0,0.0) 45%,
-    rgba(10,23,15,0.40) 75%,
+    rgba(23,26,28,0.40) 75%,
     var(--green) 100%
   );
 }
