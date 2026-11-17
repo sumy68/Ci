@@ -6,25 +6,29 @@
 const serviceImage = (src, name) =>
   Object.freeze({ src: `leistungen/${src}`, name, dir: 'leistungen', widths: [480, 768, 1000], budgetKb: 120, width: 1000, height: 666 });
 
-export const HERO_WIDE = Object.freeze({
-  src: 'hero/ci-hero-desktop-2.png',
-  name: 'gebaeudereinigung-glasfassade',
+/*
+ * Glas-Hero (Art Direction): Desktop/Tablet quer, Mobil hoch.
+ * Quellen liegen öffentlich unter /assets/hero/ (rootSrc = relativ zum Projekt-Root).
+ * Breiten nie größer als das Original (1344 × 752 bzw. 752 × 1344).
+ */
+export const HERO_GLASS_DESKTOP = Object.freeze({
+  rootSrc: 'assets/hero/hero-glas-desktop.jpg',
+  name: 'hero-glas-desktop',
   dir: 'hero',
-  widths: [480, 768, 1200, 1920],
+  widths: [768, 1200, 1344],
   budgetKb: 250,
-  width: 1920,
-  height: 1072,
+  width: 1344,
+  height: 752,
 });
 
-export const HERO_TALL = Object.freeze({
-  src: 'hero/ci-hero-mobile-2.png',
-  name: 'gebaeudereinigung-glasfassade-hochformat',
+export const HERO_GLASS_MOBILE = Object.freeze({
+  rootSrc: 'assets/hero/hero-glas-mobil.jpg',
+  name: 'hero-glas-mobil',
   dir: 'hero',
-  widths: [480, 768, 1200],
+  widths: [480, 752],
   budgetKb: 250,
-  aspect: 4 / 5,
-  width: 1200,
-  height: 1500,
+  width: 752,
+  height: 1344,
 });
 
 export const ABOUT_IMAGE = Object.freeze({
@@ -37,7 +41,7 @@ export const ABOUT_IMAGE = Object.freeze({
   height: 1066,
 });
 
-export const IMAGE_SETS = Object.freeze([HERO_WIDE, HERO_TALL, ABOUT_IMAGE]);
+export const IMAGE_SETS = Object.freeze([HERO_GLASS_DESKTOP, HERO_GLASS_MOBILE, ABOUT_IMAGE]);
 
 /** Schlüssel = interne ID der Leistung (siehe data.mjs). */
 export const SERVICE_IMAGE_BY_ID = Object.freeze({

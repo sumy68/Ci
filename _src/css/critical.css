@@ -75,13 +75,13 @@
   --sans: "Schibsted Grotesk", "Grotesk Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
   --display: var(--sans);
 
-  --fs-body: 1.0625rem;        /* 17px */
+  --fs-body: 1rem;             /* 16px mobil, 17px Desktop (s. u.) */
   --fs-small: 0.9375rem;       /* 15px */
-  --fs-lead: clamp(1.125rem, 1rem + 0.45vw, 1.3125rem);
-  --fs-hero: clamp(2.5rem, 0.6rem + 7.2vw, 6.875rem);  /* 40 → 110px, Hero-H1 */
-  --fs-h1: clamp(2.375rem, 1.3rem + 3.6vw, 4.5rem);    /* 38 → 72px, Unterseiten */
-  --fs-h2: clamp(2rem, 1.3rem + 2.2vw, 3.375rem);      /* 32 → 54px */
-  --fs-h3: clamp(1.375rem, 1.15rem + 0.7vw, 1.75rem);
+  --fs-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);  /* 17 → 20px */
+  --fs-hero: clamp(2.5rem, 0.8rem + 6.2vw, 6rem);      /* 40 → 96px, Hero-H1 */
+  --fs-h1: clamp(2.25rem, 1.3rem + 3vw, 4rem);         /* 36 → 64px, Unterseiten */
+  --fs-h2: clamp(1.875rem, 1.25rem + 1.9vw, 3.25rem);  /* 30 → 52px */
+  --fs-h3: clamp(1.25rem, 1.1rem + 0.55vw, 1.625rem);
 
   --space-section: clamp(72px, 4.5rem + 6vw, 152px);
   --gutter: clamp(20px, 3.4vw, 48px);
@@ -96,7 +96,7 @@
   --shadow-soft: 0 1px 0 rgba(22, 24, 27, .04), 0 12px 32px -12px rgba(22, 24, 27, .12);
 }
 @media (min-width: 1025px) {
-  :root { --header-h: 76px; --fs-body: 1.125rem; }
+  :root { --header-h: 76px; --fs-body: 1.0625rem; }
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -452,49 +452,88 @@ main p a:not([class]):hover, main li a:not([class]):hover { color: var(--accent-
 }
 html.menu-open, html.menu-open body { overflow: hidden; }
 
-/* ---------- Hero (Startseite) ----------
-   H1 über die volle Breite, darunter Untertitel | Button + Telefon,
-   darunter Panorama (21/9 Desktop, 4/3 mobil) mit Abzieher-Wisch. */
+/* ---------- Hero (Startseite): eine große Glasscheibe, Text liegt darauf ----------
+   Desktop ca. 100dvh, Mobil ca. 88dvh. Bild + Wisch-Effekt füllen die ganze Fläche,
+   der Text ist eine eigene Ebene darüber und sofort sichtbar. */
 .hero {
   position: relative;
-  padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + clamp(28px, 4vw, 56px));
-  padding-bottom: clamp(40px, 5vw, 72px);
+  display: flex;
+  flex-direction: column;
+  min-height: 88vh;
+  min-height: 88dvh;
+  overflow: hidden;
+  isolation: isolate;
+  background: #DDE3E6;
+}
+@media (min-width: 768px) {
+  .hero { min-height: 94vh; min-height: 94dvh; }
+}
+@media (min-width: 1025px) {
+  .hero { min-height: 100vh; min-height: 100dvh; }
 }
 .nav-sentinel { position: absolute; top: 0; left: 0; width: 1px; height: 40px; pointer-events: none; }
+.hero__glass { position: absolute; inset: 0; z-index: 0; }
+.hero__content {
+  position: relative;
+  z-index: 5;
+  margin-block: auto;
+  padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + clamp(24px, 6vh, 64px));
+  padding-bottom: clamp(48px, 9vh, 96px);
+}
+/* Mobil: Text oben auf der ruhigen, hellen Glasfläche */
+@media (max-width: 767px) {
+  .hero__content { margin-top: 0; padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 28px); }
+}
 .hero__title {
-  margin: 0 0 clamp(28px, 3.4vw, 48px);
+  max-width: 11em;
+  margin: 0 0 clamp(20px, 2.6vw, 32px);
   font-family: var(--display);
   font-weight: 700;
   font-size: var(--fs-hero);
   line-height: 1.02;
   letter-spacing: -0.035em;
+  color: var(--ink);
   hyphens: manual;
+  -webkit-hyphens: manual;
 }
 @media (min-width: 640px) { .hero__line { display: block; } }
-@media (max-width: 639px) {
-  /* Lange Komposita trennen nur an den gesetzten &shy;-Stellen (Gebäude-reinigung, Hausmeister-service) */
-  .hero__title { hyphens: manual; -webkit-hyphens: manual; overflow-wrap: break-word; }
+.hero__lead {
+  max-width: 30em;
+  margin: 0 0 clamp(24px, 3vw, 36px);
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  font-weight: 500;
+  color: #2E3338;
+  text-wrap: pretty;
 }
-.hero__bar {
-  display: grid;
-  gap: 24px;
-  align-items: end;
-  margin-bottom: clamp(28px, 3.4vw, 48px);
-}
-.hero__lead { margin: 0; max-width: 38em; font-size: var(--fs-lead); line-height: 1.55; color: var(--ink-2); text-wrap: pretty; }
 .hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
-@media (min-width: 900px) {
-  .hero__bar { grid-template-columns: minmax(0, 1fr) auto; column-gap: 48px; }
+.hero .phone-link > span { border-color: rgba(22, 24, 27, .3); }
+
+/* Aufhellung hinter dem Textbereich (über Bild/Schmutz-Ebene, unter Abzieher + Text):
+   sichert AA-Kontrast für dunklen Text – auch auf der beschlagenen Scheibe. */
+.hero__wash {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(250, 250, 248, .75) 0%, rgba(250, 250, 248, 0) 18%),
+    linear-gradient(90deg, rgba(250, 250, 248, .84) 0%, rgba(250, 250, 248, .74) 50%, rgba(250, 250, 248, 0) 85%);
+}
+@media (max-width: 767px) {
+  .hero__wash {
+    background: linear-gradient(180deg, rgba(250, 250, 248, .86) 0%, rgba(250, 250, 248, .78) 64%, rgba(250, 250, 248, 0) 94%);
+  }
 }
 
-/* Hinweis „Scrollen zum Sauberwischen“ liegt auf dem Panorama (nur Desktop + Motion) */
+/* Hinweis „Scrollen zum Sauberwischen“ (nur Desktop + Motion) */
 .hero__scroll { display: none; }
 @media (min-width: 1025px) {
   .hero__scroll {
     position: absolute;
-    left: 24px;
-    bottom: 20px;
-    z-index: 4;
+    left: 50%;
+    bottom: 28px;
+    z-index: 6;
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -505,28 +544,22 @@ html.menu-open, html.menu-open body { overflow: hidden; }
     color: #fff;
     font-size: 0.875rem;
     font-weight: 500;
+    transform: translateX(-50%);
     transition: opacity .4s;
   }
   .hero__scroll-arrow { display: inline-block; transform: rotate(90deg); }
   .hero__scroll-arrow svg { animation: nudge 1.8s var(--ease-out) infinite; }
   .hero__scroll.is-gone { opacity: 0; }
   .hero__scroll.is-gone svg { animation: none; }
-  html:not(.js-motion) .hero__scroll, html.motion-off .hero__scroll, .wipe.is-clean .hero__scroll { display: none; }
+  html:not(.js-motion) .hero__scroll, html.motion-off .hero__scroll { display: none; }
 }
 @keyframes nudge { 0%, 100% { transform: translateX(-2px); } 50% { transform: translateX(4px); } }
 
-/* ---------- Wisch-Effekt (Abzieher) ---------- */
-.wipe {
-  position: relative;
-  overflow: hidden;
-  border-radius: 20px;
-  background: var(--placeholder);
-  aspect-ratio: 4 / 3;
-  isolation: isolate;
-}
-@media (min-width: 900px) {
-  .wipe { aspect-ratio: 21 / 9; }
-}
+/* ---------- Wisch-Effekt (Abzieher) über die ganze Hero-Fläche ---------- */
+.wipe { overflow: hidden; background: var(--placeholder); }
+/* Bild: ruhige Glasfläche hinter dem Text (Desktop links, Mobil oben) */
+.wipe img { object-position: 30% 50%; }
+@media (max-width: 767px) { .wipe img { object-position: 50% 20%; } }
 .wipe picture, .wipe img { width: 100%; height: 100%; }
 .wipe img { object-fit: cover; }
 .wipe__clean, .wipe__dirty { position: absolute; inset: 0; }

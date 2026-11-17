@@ -49,10 +49,11 @@ async function writeVariants(pipeline, outBase, budgetKb) {
   return warnings;
 }
 
-async function buildSet({ src, name, dir, widths, budgetKb, aspect }) {
+async function buildSet({ src, rootSrc, name, dir, widths, budgetKb, aspect }) {
   const outDir = path.join(OUT, dir);
   await ensureDir(outDir);
-  const base = sharp(path.join(SRC, src)).rotate();
+  // rootSrc: Quelle relativ zum Projekt-Root (z. B. /assets/hero), sonst unter _src/images
+  const base = sharp(rootSrc ? path.join(ROOT, rootSrc) : path.join(SRC, src)).rotate();
   const meta = await base.metadata();
   const warnings = [];
   for (const width of widths) {
@@ -137,7 +138,7 @@ async function buildIcons() {
 async function buildOgImage() {
   const W = 1200;
   const H = 630;
-  const photo = await sharp(path.join(SRC, 'hero/ci-hero-desktop-2.png'))
+  const photo = await sharp(path.join(ROOT, 'assets/hero/hero-glas-desktop.jpg'))
     .resize({ width: W, height: H, fit: 'cover', position: 'attention' })
     .toBuffer();
   const shade = Buffer.from(
@@ -155,7 +156,10 @@ async function buildOgImage() {
 async function main() {
   await ensureDir(OUT);
   const warnings = [];
-  for (const set of [...IMAGE_SETS, ...SERVICE_IMAGES]) {
+  // Optionaler Filter: npm run images -- hero  (nur Sets, deren Name den Text enthält)
+  const only = process.argv[2];
+  const sets = [...IMAGE_SETS, ...SERVICE_IMAGES].filter((s) => !only || s.name.includes(only));
+  for (const set of sets) {
     warnings.push(...(await buildSet(set)));
     console.log(`✓ ${set.dir}/${set.name}`);
   }

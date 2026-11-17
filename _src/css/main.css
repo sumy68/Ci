@@ -28,14 +28,6 @@
   .section-head--split .lead { grid-column: 8 / -1; margin: 0; }
 }
 
-/* ---------- Intro ---------- */
-.intro__head .h-section { max-width: 14em; }
-.intro__body .lead { color: var(--ink); margin: 0; }
-@media (min-width: 900px) {
-  .intro__head { grid-column: 1 / span 7; }
-  .intro__body { grid-column: 8 / -1; align-self: end; }
-}
-
 /* ---------- Leistungsverzeichnis (editorial, ohne Karten/Chips) ---------- */
 .index { border-top: 1px solid var(--ink); }
 .index-row {
@@ -142,10 +134,18 @@
 .compare-tab__num { grid-row: 1 / span 2; font-size: var(--fs-small); font-weight: 500; padding-top: 2px; }
 .compare-tab__label { font-weight: 700; font-size: 1.0625rem; }
 .compare-tab__text { font-size: var(--fs-small); }
-.compare-tab[aria-pressed="true"] { color: var(--ink); box-shadow: inset 0 -2px 0 var(--accent); }
+/* Aktiver Eintrag: Türkis-Balken links, dunkle Schrift, Nummer in Türkis; inaktive einheitlich gedämpft */
+.compare-tab { position: relative; padding-left: 14px; transition: color .25s, background-color .25s; }
+.compare-tab::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 3px; background: var(--accent); transform: scaleY(0); transition: transform .35s var(--ease-out); }
+.compare-tab[aria-pressed="true"] { color: var(--ink); background: var(--surface); }
+.compare-tab[aria-pressed="true"]::before { transform: scaleY(1); }
+.compare-tab[aria-pressed="true"] .compare-tab__num { color: var(--accent-ink); }
 .compare-tab:hover { color: var(--ink); }
 .compare-section__note { font-size: 0.75rem; color: var(--ink-2); }
-.compare-section__stage { margin-top: 24px; }
+/* Alle Paare im selben Rasterfeld übereinander -> weicher Crossfade beim Wechsel */
+.compare-section__stage { margin-top: 24px; display: grid; }
+.compare-section__stage > .compare { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity .5s var(--ease-out), visibility 0s linear .5s; }
+.compare-section__stage > .compare.is-active { opacity: 1; visibility: visible; transition: opacity .5s var(--ease-out); }
 @media (min-width: 900px) { .compare-section__stage { margin-top: 0; } }
 
 .compare { margin: 0; }
@@ -167,7 +167,6 @@
 /* Neutraler Platzhalter, solange kein Bildpaar im Ordner liegt */
 .compare__ph { display: grid; place-items: center; background: #E4E7E9; color: #6B7178; font-weight: 500; }
 .compare__ph--after { background: #F1F3F4; }
-.compare__caption { margin-top: 10px; font-size: 0.75rem; color: var(--ink-2); }
 .compare__tag {
   position: absolute;
   top: 16px;
@@ -180,7 +179,7 @@
   pointer-events: none;
 }
 .compare__tag--before { left: 16px; }
-.compare__tag--after { right: 16px; background: rgba(255, 255, 255, .88); color: var(--ink); }
+.compare__tag--after { right: 16px; }  /* identisch zu „Vorher“, nur rechts */
 .compare__handle {
   position: absolute;
   top: 0;

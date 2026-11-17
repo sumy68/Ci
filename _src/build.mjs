@@ -112,7 +112,7 @@ function llmsTxt() {
   const locs = LOCATIONS.map((l) => `- ${l.label}: ${l.street}, ${l.zipCity}`).join('\n');
   return `# ${SITE.name}
 
-> ${SITE.name} ist ein Dienstleister für Gebäudereinigung und Hausmeisterservice in Regensburg, Kelheim und Landshut (Bayern). Je Standort wird das Umland im Umkreis von rund ${SITE.radiusKm} km betreut. Inhaber: ${SITE.owner}.
+> ${SITE.name} ist ein Dienstleister für Gebäudereinigung und Hausmeisterservice in Regensburg, Kelheim und Landshut (Bayern). Je Standort wird das Umland im Umkreis von rund ${SITE.radiusKm} km betreut; ${SITE.radiusNote.charAt(0).toLowerCase() + SITE.radiusNote.slice(1)} Inhaber: ${SITE.owner}.
 
 ## Kontakt
 - Telefon: ${SITE.phoneDisplay} (${SITE.phoneE164})

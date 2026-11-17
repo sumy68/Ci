@@ -80,6 +80,7 @@ function area(city) {
           <p>Wir sind in ${city.city} und im Umkreis von rund ${SITE.radiusKm}&nbsp;km im Einsatz, unter anderem in:</p>
           <!-- TODO: vom Kunden – Liste der Orte bestätigen bzw. ergänzen -->
           <ul class="inline-list">${city.places.map((p) => `<li>${p}</li>`).join('')}</ul>
+          <p>${SITE.radiusNote}</p>
           <p class="city-area__others">Weitere Einsatzgebiete: ${others.map((c) => `<a href="/${c.slug}">Gebäudereinigung ${c.city}</a>`).join(' und ')}.</p>
         </div>
       </div>

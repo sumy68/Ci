@@ -20,10 +20,12 @@ mit schriftlicher Einwilligung.
 
 ## Hero und große Bilder
 
+> Der Glas-Hero ist ein **KI-Symbolbild** (Alt-Text „Saubere Glasfassade – Gebäudereinigung Regensburg (Symbolbild)“). Nach dem Austausch `npm run images -- hero-glas` und `npm run build` ausführen.
+
 | Bild | Quelle | Wirkt KI-generiert, weil … | Motiv-Vorschlag für echtes Foto |
 |---|---|---|---|
-| Hero (Glasfassade, quer) | `_src/images/hero/ci-hero-desktop-2.png` | Fantasie-Bürogebäude, perfekter Himmel, keine Menschen | Eine echte, von CI betreute Glasfassade oder ein großes Fenster in der Region, frontal und leicht seitlich, ruhiger Hintergrund. **Wichtig für den Wisch-Effekt:** viel Glasfläche, gleichmäßiges Licht |
-| Hero (Glasfassade, hoch) | `_src/images/hero/ci-hero-mobile-2.png` | wie oben | Dasselbe Motiv im Hochformat (4:5) |
+| Glas-Hero Desktop/Tablet (**KI-Symbolbild**) | `assets/hero/hero-glas-desktop.jpg` (1344 × 752) | KI-generiert, keine reale Fassade | Nahaufnahme einer echten, von CI gereinigten Glasfassade/Fensterfront in der Region, quer, ruhige helle Fläche **links** (dort liegt der Text), mind. 2400 px breit |
+| Glas-Hero Mobil (**KI-Symbolbild**) | `assets/hero/hero-glas-mobil.jpg` (752 × 1344) | KI-generiert, keine reale Fassade | Dasselbe Motiv im Hochformat, ruhige helle Fläche **oben** (dort liegt der Text), mind. 1200 px breit |
 | Wohnhaus (derzeit **nicht verwendet** – „Über uns“ zeigt jetzt den Rundum-Paket-Orbit) | `_src/images/hero/hero-villa.jpg` | Rendering-Look, grünstichige Nachbearbeitung | Team vor dem Firmenfahrzeug oder vor einem betreuten Wohnhaus, Abendlicht, Gesichter erkennbar – eignet sich z. B. als Bild für eine Stadtseite |
 
 ## Leistungen (18 Bilder, je 3:2)

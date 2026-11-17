@@ -9,7 +9,7 @@
  *  - aggregateRating/review     -> keine Bewertungen mit überprüfbarer Quelle vorhanden
  */
 import { SITE, SERVICES, SERVICE_GROUPS } from '../data.mjs';
-import { HERO_WIDE } from '../image-config.mjs';
+import { HERO_GLASS_DESKTOP } from '../image-config.mjs';
 import { imgUrl } from './html.mjs';
 
 export const BUSINESS_ID = `${SITE.origin}/#organisation`;
@@ -22,10 +22,10 @@ export function localBusiness({ areas = AREAS, url = `${SITE.origin}/` } = {}) {
     '@type': 'HousekeepingService',
     '@id': BUSINESS_ID,
     name: SITE.name,
-    description: 'Gebäudereinigung und Hausmeisterservice aus einer Hand in Regensburg, Kelheim und Landshut – je Standort mit rund 40 km Umkreis.',
+    description: 'Gebäudereinigung und Hausmeisterservice aus einer Hand in Regensburg, Kelheim und Landshut – je Standort mit rund 40 km Umkreis. ' + SITE.radiusNote,
     url,
     logo: `${SITE.origin}/assets/img/icons/icon-512.png`,
-    image: `${SITE.origin}${imgUrl(HERO_WIDE, 1200)}`,
+    image: `${SITE.origin}${imgUrl(HERO_GLASS_DESKTOP, 1344)}`,
     telephone: SITE.phoneE164,
     email: SITE.email,
     founder: { '@type': 'Person', name: SITE.owner },

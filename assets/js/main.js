@@ -62,7 +62,16 @@
           var active = t === tab;
           t.setAttribute('aria-pressed', active ? 'true' : 'false');
           var panel = document.getElementById(t.getAttribute('aria-controls'));
-          if (panel) panel.hidden = !active;
+          if (!panel) return;
+          // Crossfade per CSS (.is-active); inaktive Paare sind nicht bedienbar/vorlesbar
+          panel.classList.toggle('is-active', active);
+          if (active) {
+            panel.removeAttribute('aria-hidden');
+            panel.removeAttribute('inert');
+          } else {
+            panel.setAttribute('aria-hidden', 'true');
+            panel.setAttribute('inert', '');
+          }
         });
       });
     });

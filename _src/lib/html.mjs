@@ -36,25 +36,28 @@ export function picture(set, { alt, sizes, priority = false, eager = false, clas
 </picture>`;
 }
 
-/** Art-Direction: unterschiedliche Bildsets je Breakpoint (Hero). */
-export function artPicture({ wide, tall, alt, breakpoint, wideSizes, tallSizes, decorative = false }) {
-  const mq = `(min-width: ${breakpoint}px)`;
-  // Dekorative Kopie (z. B. Schmutz-Ebene): gleiche URLs -> kein zweiter Download, keine Priorität
-  const priority = decorative ? '' : ' fetchpriority="high"';
+/**
+ * Art Direction (Hero): Mobil-Set bis mobileMax px (Hochformat), sonst Desktop-Set (Querformat).
+ * decorative=true: gleiche URLs ohne Alt/Priorität (z. B. Schmutz-Ebene) -> kein zweiter Download.
+ */
+export function artPicture({ desktop, mobile, alt, mobileMax = 767, sizes = '100vw', decorative = false, imgClass = '' }) {
+  const mq = `(max-width: ${mobileMax}px)`;
+  const priority = decorative ? ' loading="eager"' : ' fetchpriority="high"';
   const altText = decorative ? '' : esc(alt);
   return `<picture>
-  <source media="${mq}" type="image/avif" srcset="${srcset(tall, 'avif')}" sizes="${tallSizes}">
-  <source media="${mq}" type="image/webp" srcset="${srcset(tall, 'webp')}" sizes="${tallSizes}">
-  <source media="${mq}" srcset="${srcset(tall, 'jpg')}" sizes="${tallSizes}">
-  <source type="image/avif" srcset="${srcset(wide, 'avif')}" sizes="${wideSizes}">
-  <source type="image/webp" srcset="${srcset(wide, 'webp')}" sizes="${wideSizes}">
-  <img src="${imgUrl(wide, 768)}" srcset="${srcset(wide, 'jpg')}" sizes="${wideSizes}" alt="${altText}" width="${wide.width}" height="${wide.height}"${priority} decoding="async">
+  <source media="${mq}" type="image/avif" srcset="${srcset(mobile, 'avif')}" sizes="${sizes}">
+  <source media="${mq}" type="image/webp" srcset="${srcset(mobile, 'webp')}" sizes="${sizes}">
+  <source media="${mq}" srcset="${srcset(mobile, 'jpg')}" sizes="${sizes}">
+  <source type="image/avif" srcset="${srcset(desktop, 'avif')}" sizes="${sizes}">
+  <source type="image/webp" srcset="${srcset(desktop, 'webp')}" sizes="${sizes}">
+  <img${imgClass ? ` class="${imgClass}"` : ''} src="${imgUrl(desktop, desktop.widths.at(-1))}" srcset="${srcset(desktop, 'jpg')}" sizes="${sizes}" alt="${altText}" width="${desktop.width}" height="${desktop.height}"${priority} decoding="async">
 </picture>`;
 }
 
-export const preloadArt = ({ wide, tall, breakpoint, wideSizes, tallSizes }) =>
-  `<link rel="preload" as="image" type="image/avif" media="(max-width: ${breakpoint - 1}px)" imagesrcset="${srcset(wide, 'avif')}" imagesizes="${wideSizes}" fetchpriority="high">
-  <link rel="preload" as="image" type="image/avif" media="(min-width: ${breakpoint}px)" imagesrcset="${srcset(tall, 'avif')}" imagesizes="${tallSizes}" fetchpriority="high">`;
+/** Preload beider Hero-Varianten mit passender media-Angabe (LCP). */
+export const preloadArt = ({ desktop, mobile, mobileMax = 767, sizes = '100vw' }) =>
+  `<link rel="preload" as="image" type="image/avif" media="(max-width: ${mobileMax}px)" imagesrcset="${srcset(mobile, 'avif')}" imagesizes="${sizes}" fetchpriority="high">
+  <link rel="preload" as="image" type="image/avif" media="(min-width: ${mobileMax + 1}px)" imagesrcset="${srcset(desktop, 'avif')}" imagesizes="${sizes}" fetchpriority="high">`;
 
 export const preloadPicture = (set, sizes) =>
   `<link rel="preload" as="image" type="image/avif" imagesrcset="${srcset(set, 'avif')}" imagesizes="${sizes}" fetchpriority="high">`;

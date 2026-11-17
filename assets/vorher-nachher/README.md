@@ -28,3 +28,16 @@ schneidet Vorher- und Nachher-Bild eines Paares automatisch exakt gleich zu
 480/768/1200/1920 px (nie größer als das Original) nach
 `/assets/img/vorher-nachher/`. Fehlt ein Paar, zeigt die Seite einen neutralen
 Platzhalter.
+
+## Deckungsgleichheit (aktuelle Symbolbilder)
+
+Die KI-generierten Paare waren nicht exakt deckungsgleich (lokal neu gemalte
+Details – Kanten sprangen an der Slider-Linie). Deshalb wurde jedes
+Vorher-Bild aus den Pixeln des Nachher-Bildes erzeugt und die Verschmutzung
+des ursprünglichen Vorher-Bildes kantenabhängig übertragen:
+
+- Analyse (SIFT + Homographie, Messwert „Kantenversatz“): `_src/tools/va_align.py`
+- Erzeugung der deckungsgleichen Vorher-Bilder: `_src/tools/va_synth.py`
+- KI-Originale: `_src/images/vorher-nachher-original/`
+
+Bei **echten** Fotopaaren ist das nicht nötig – einfach die Dateien ersetzen.

@@ -1,57 +1,58 @@
 /** Startseite */
 import { SITE, SERVICE_GROUPS, SERVICES, servicesInGroup, ABOS, TESTIMONIALS, STEPS, FIGURES, FAQ_HOME, CITIES, LOCATIONS, ORBIT } from '../data.mjs';
-import { HERO_WIDE, SERVICE_IMAGE_BY_ID } from '../image-config.mjs';
-import { preloadPicture, picture, imgUrl, ICONS, button, overline, arrowLink, esc } from '../lib/html.mjs';
+import { HERO_GLASS_DESKTOP, HERO_GLASS_MOBILE, SERVICE_IMAGE_BY_ID } from '../image-config.mjs';
+import { artPicture, preloadArt, picture, imgUrl, ICONS, button, overline, arrowLink, esc } from '../lib/html.mjs';
 import { orbitIcon } from '../lib/orbit-icons.mjs';
 import { sectionHead, faqList, radiusMap, contactList, locationAddress } from '../lib/sections.mjs';
 import { graph, localBusiness, serviceNodes, website, faqPage, webPage } from '../lib/schema.mjs';
 
-/* Panorama über die volle Containerbreite (max. 1320 px). */
-const HERO_SIZES = '(min-width: 1416px) 1320px, 94vw';
+/* Glas-Hero: Art Direction Desktop/Tablet quer, Mobil (bis 767 px) hoch. */
+const HERO_ART = Object.freeze({ desktop: HERO_GLASS_DESKTOP, mobile: HERO_GLASS_MOBILE, mobileMax: 767, sizes: '100vw' });
+const HERO_ALT = 'Saubere Glasfassade – Gebäudereinigung Regensburg (Symbolbild)';
 
 /*
- * Hero: H1 sehr groß über die volle Breite (2 Zeilen), darunter eine Zeile
- * Untertitel | Button + Telefon, darunter das Panorama mit Abzieher-Wisch.
+ * Hero = eine große Glasscheibe über die volle Breite, der Text liegt direkt darauf.
+ * Text ist sofort sichtbar und unabhängig vom Wisch-Effekt (eigene Ebene darüber).
  */
 function hero() {
   return `<section class="hero" id="top" aria-labelledby="hero-title">
       <div class="nav-sentinel" data-nav-sentinel aria-hidden="true"></div>
-      <div class="wrap">
+      ${wipeMedia()}
+      <div class="wrap hero__content">
         <h1 class="hero__title" id="hero-title"><span class="hero__line">Gebäude&shy;reinigung &amp;</span> <span class="hero__line">Hausmeister&shy;service</span></h1>
-        <div class="hero__bar">
-          <p class="hero__lead">Gebäudereinigung und Hausmeisterservice aus einer Hand – für Büros, Praxen, Wohnanlagen und Privathäuser in Regensburg, Kelheim und Landshut.</p>
-          <div class="hero__actions">
-            ${button('#kontakt', 'Jetzt anfragen')}
-            <a class="phone-link" href="tel:${SITE.phoneE164}">${ICONS.phone(18)}<span>${SITE.phoneDisplay}</span></a>
-          </div>
+        <p class="hero__lead">Alles aus einer Hand – für Büros, Praxen, Wohnanlagen und Privathäuser in Regensburg, Kelheim und Landshut.</p>
+        <div class="hero__actions">
+          ${button('#kontakt', 'Jetzt anfragen')}
+          <a class="phone-link" href="tel:${SITE.phoneE164}">${ICONS.phone(18)}<span>${SITE.phoneDisplay}</span></a>
         </div>
-        ${wipeMedia()}
       </div>
+      <p class="hero__scroll" aria-hidden="true" data-scroll-hint>Scrollen zum Sauberwischen <span class="hero__scroll-arrow">${ICONS.arrow(14)}</span></p>
     </section>`;
 }
 
 /*
- * Signature-Motion „Abzieher-Wisch“: unten das saubere Bild (LCP, sofort sichtbar),
- * darüber dieselbe Datei als „schmutzige“ Ebene (CSS-Filter + SVG-Schlieren),
+ * Signature-Motion „Abzieher-Wisch“ über die ganze Hero-Fläche: unten das saubere
+ * Bild (LCP), darüber dieselbe Datei als beschlagene Ebene (Filter + Tropfen-SVG),
  * die per clip-path weggewischt wird. Ohne JS/bei reduced motion ausgeblendet.
+ * hero__wash = Aufhellung hinter dem Text (Lesbarkeit, auch auf beschlagenem Glas).
  */
 function wipeMedia() {
-  return `<div class="hero__media wipe" data-wipe>
-          <div class="wipe__clean">
-            ${picture(HERO_WIDE, { alt: 'Moderne Glasfassade eines Bürogebäudes – Gebäudereinigung und Hausmeisterservice von CI Dienstleistungen in Regensburg (Symbolbild)', sizes: HERO_SIZES, priority: true })}
-          </div>
-          <div class="wipe__dirty" aria-hidden="true" data-wipe-dirty>
-            ${picture(HERO_WIDE, { alt: '', sizes: HERO_SIZES, eager: true })}
-            <span class="wipe__veil"></span>
-            <img class="wipe__grime" src="/assets/img/hero/schmutzfilm.svg" alt="" width="600" height="750" decoding="async">
-          </div>
-          <p class="hero__scroll" aria-hidden="true" data-scroll-hint>Scrollen zum Sauberwischen <span class="hero__scroll-arrow">${ICONS.arrow(14)}</span></p>
-          <span class="wipe__glint" aria-hidden="true" data-wipe-glint></span>
-          <div class="wipe__tool" aria-hidden="true" data-wipe-tool>
-            <span class="wipe__film"></span>
-            ${squeegeeSvg()}
-          </div>
-        </div>`;
+  return `<div class="hero__glass wipe" data-wipe>
+        <div class="wipe__clean">
+          ${artPicture({ ...HERO_ART, alt: HERO_ALT })}
+        </div>
+        <div class="wipe__dirty" aria-hidden="true" data-wipe-dirty>
+          ${artPicture({ ...HERO_ART, decorative: true })}
+          <span class="wipe__veil"></span>
+          <img class="wipe__grime" src="/assets/img/hero/schmutzfilm.svg" alt="" width="600" height="750" decoding="async">
+        </div>
+        <span class="hero__wash" aria-hidden="true"></span>
+        <span class="wipe__glint" aria-hidden="true" data-wipe-glint></span>
+        <div class="wipe__tool" aria-hidden="true" data-wipe-tool>
+          <span class="wipe__film"></span>
+          ${squeegeeSvg()}
+        </div>
+      </div>`;
 }
 
 /** Selbst gezeichneter Abzieher: Gummilippe, Aluminiumschiene, Griff. */
@@ -92,19 +93,6 @@ function marquee() {
   return `<div class="marquee" aria-hidden="true">
       <div class="marquee__track">${row}${row}</div>
     </div>`;
-}
-
-function intro() {
-  return `<section class="section intro" aria-labelledby="intro-title">
-      <div class="wrap grid12">
-        <div class="intro__head">
-          <h2 class="h-section" id="intro-title" data-reveal="lines">Sie haben ein Gebäude, aber keinen Alleskönner an der Hand?</h2>
-        </div>
-        <div class="intro__body">
-          <p class="lead">Kein Problem – den haben wir! Wir kümmern uns um alles rund um Ihre Immobilie, innen wie außen. Lehnen Sie sich zurück – wir machen den Rest.</p>
-        </div>
-      </div>
-    </section>`;
 }
 
 /*
@@ -175,7 +163,10 @@ function compareLayers(item, pair) {
 }
 
 function comparisonFigure(item, index, pairs) {
-  return `<figure class="compare" id="vergleich-${item.id}" data-compare${index === 0 ? '' : ' hidden'}>
+  // Alle Paare liegen übereinander; aktiv = sichtbar, Wechsel per Crossfade (main.js)
+  const state = index === 0 ? ' is-active' : '';
+  const inactive = index === 0 ? '' : ' aria-hidden="true" inert';
+  return `<figure class="compare${state}" id="vergleich-${item.id}" data-compare${inactive}>
             <div class="compare__stage" data-compare-stage style="--pos: 50%">
               ${compareLayers(item, pairs[item.id])}
               <span class="compare__tag compare__tag--before" aria-hidden="true">Vorher</span>
@@ -184,7 +175,6 @@ function comparisonFigure(item, index, pairs) {
                 <span class="compare__knob">${ICONS.arrow(14)}${ICONS.arrow(14)}</span>
               </div>
             </div>
-            <figcaption class="compare__caption">Symbolbild</figcaption>
           </figure>`;
 }
 
@@ -244,7 +234,7 @@ function about() {
         <div class="about__copy">
           ${overline('Über uns')}
           <h2 class="h-section" id="about-title" data-reveal="lines">Rundum-Paket für Gebäudereinigung &amp; Hausmeisterservice</h2>
-          <p class="lead">${SITE.name} verbindet Gebäudereinigung und Hausmeisterservice aus einer Hand – mit festem Ansprechpartner, klaren Standards und transparenter Dokumentation. Aktiv in Regensburg, Kelheim und Landshut, je Standort mit rund 40&nbsp;km Umland.</p>
+          <p class="lead">${SITE.name} verbindet Gebäudereinigung und Hausmeisterservice aus einer Hand – mit festem Ansprechpartner, klaren Standards und transparenter Dokumentation. Aktiv in Regensburg, Kelheim und Landshut, je Standort mit rund 40&nbsp;km Umland – größere Projekte auch weiter entfernt nach Absprache.</p>
           ${button('#kontakt', 'Jetzt anfragen', { variant: 'accent' })}
         </div>
         <div class="about__orbit">
@@ -357,7 +347,7 @@ function areas() {
           ${radiusMap()}
         </div>
         <div class="areas__copy" id="standort">
-          ${sectionHead({ label: 'Einsatzgebiete', id: 'areas-title', title: 'Ganz in Ihrer Nähe', lead: `Wir sind in Regensburg, Kelheim und Landshut im Einsatz – je Standort mit Umland im Umkreis von rund ${SITE.radiusKm}&nbsp;km.` })}
+          ${sectionHead({ label: 'Einsatzgebiete', id: 'areas-title', title: 'Ganz in Ihrer Nähe', lead: `Regensburg, Kelheim und Landshut plus ${SITE.radiusKm}&nbsp;km Umkreis – größere Projekte auch weiter entfernt nach Absprache.` })}
           <ul class="area-cities">
             ${rows}
           </ul>
@@ -444,9 +434,9 @@ export function homePage({ pairs = {} } = {}) {
     ogTitle: 'Gebäudereinigung & Hausmeisterservice in Regensburg, Kelheim und Landshut',
     description,
     priority: '1.0',
-    preload: preloadPicture(HERO_WIDE, HERO_SIZES),
+    preload: preloadArt(HERO_ART),
     bodyClass: 'page-home',
     jsonLd: graph([website(), webPage({ url, name: title, description }), localBusiness(), ...serviceNodes(), faqPage(FAQ_HOME, url)]),
-    main: [hero(), marquee(), intro(), services(), beforeAfter(pairs), about(), process(), abos(), testimonials(), areas(), faq(), contactSection()].join('\n\n    '),
+    main: [hero(), marquee(), services(), beforeAfter(pairs), about(), process(), abos(), testimonials(), areas(), faq(), contactSection()].join('\n\n    '),
   };
 }

@@ -75,7 +75,7 @@
     // dann Wisch synchron zum Scrollen. Start wird nur beim Refresh gemessen.
     var pinStart = function () {
       var bottom = wipe.getBoundingClientRect().bottom + window.scrollY;
-      return Math.max(0, Math.round(bottom - (window.innerHeight - 24)));
+      return Math.max(0, Math.round(bottom - window.innerHeight));
     };
     mm.add(DESKTOP, function () {
       var tl = wipeTimeline(wipe, tool, dirty, glint);

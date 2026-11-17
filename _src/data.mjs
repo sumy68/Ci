@@ -15,6 +15,8 @@ export const SITE = Object.freeze({
   formAction: 'https://formspree.io/f/xqayqdyy',
   priceRange: '€€',
   radiusKm: 40,
+  // Ergänzung überall, wo der Radius genannt wird
+  radiusNote: 'Größere Projekte auch weiter entfernt nach Absprache.',
   mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Benzstra%C3%9Fe%2020%2C%2093053%20Regensburg',
   address: Object.freeze({
     street: 'Benzstraße 20',
@@ -124,7 +126,7 @@ export const STEPS = Object.freeze([
 /** Nur Fakten, die bereits auf der Seite stehen (Standorte, Radius, fester Ansprechpartner). */
 export const FIGURES = Object.freeze([
   { value: LOCATIONS.length, prefix: '', suffix: '', label: 'Standorte' },
-  { value: SITE.radiusKm, prefix: '+', suffix: ' km', label: 'Radius je Standort' },
+  { value: SITE.radiusKm, prefix: '+', suffix: ' km', label: 'Radius je Standort – darüber hinaus nach Absprache' },
   { value: 1, prefix: '', suffix: '', label: 'fester Ansprechpartner' },
 ]);
 
@@ -154,7 +156,7 @@ export const FAQ_HOME = Object.freeze([
   },
   {
     q: 'In welchen Orten sind Sie im Einsatz?',
-    a: 'Wir sind in Regensburg, Kelheim und Landshut aktiv – je Standort mit Umland im Umkreis von rund 40 km. Unser Büro liegt in der Benzstraße 20 in Regensburg, für Landshut ist unser Standort in Ergolding zuständig, für den Landkreis Kelheim unser Standort in Langquaid.',
+    a: 'Wir sind in Regensburg, Kelheim und Landshut aktiv – je Standort mit Umland im Umkreis von rund 40 km; größere Projekte übernehmen wir nach Absprache auch weiter entfernt. Unser Büro liegt in der Benzstraße 20 in Regensburg, für Landshut ist unser Standort in Ergolding zuständig, für den Landkreis Kelheim unser Standort in Langquaid.',
   },
   {
     q: 'Welche Leistungen bieten Sie an?',
@@ -192,7 +194,7 @@ export const CITIES = Object.freeze([
     title: 'Gebäudereinigung in Regensburg | CI Dienstleistungen',
     description: 'Gebäudereinigung und Hausmeisterservice in Regensburg und 40 km Umkreis: Büro-, Treppenhaus- und Fensterreinigung aus einer Hand. Jetzt Angebot anfragen.',
     h1: 'Gebäudereinigung in Regensburg',
-    lead: 'CI Dienstleistungen reinigt und betreut Gebäude in Regensburg und im Umkreis von rund 40 km – vom Büro über die Praxis bis zur Wohnanlage. Ausgangspunkt ist unser Büro in der Benzstraße 20.',
+    lead: 'CI Dienstleistungen reinigt und betreut Gebäude in Regensburg und im Umkreis von rund 40 km – vom Büro über die Praxis bis zur Wohnanlage. Ausgangspunkt ist unser Büro in der Benzstraße 20; größere Projekte auch weiter entfernt nach Absprache.',
     body: [
       'Wo täglich gearbeitet, behandelt und gewohnt wird, muss die Reinigung vor allem eines: zuverlässig nach Plan laufen, ohne den Betrieb zu stören. Deshalb stimmen wir Intervalle und Reinigungspläne individuell ab und arbeiten mit festen Ansprechpartnern.',
       'Neben der Unterhalts- und Büroreinigung übernehmen wir in Regensburg die Treppenhausreinigung für Eigentümergemeinschaften und Wohnanlagen, die Fenster- und Glasreinigung sowie Desinfektionsreinigungen für Kitas und Praxen. Dazu kommen die Reinigung von Teeküchen und Sozialräumen und – wer mehr als Sauberkeit braucht – planmäßige Objektkontrollen durch unseren Hausmeisterservice.',
@@ -204,7 +206,7 @@ export const CITIES = Object.freeze([
     faq: [
       { q: 'Wo befindet sich CI Dienstleistungen in Regensburg?', a: 'Unser Büro liegt in der Benzstraße 20, 93053 Regensburg. Telefonisch erreichen Sie uns unter 0155 6858 1734.' },
       { q: 'Reinigen Sie Treppenhäuser für Hausverwaltungen und Eigentümergemeinschaften?', a: 'Ja. Wir reinigen Treppenhäuser in WEG, Wohnanlagen und Gewerbeobjekten – Stufen, Podeste, Geländer und Eingangsbereiche, sicher und rutschhemmend.' },
-      { q: 'Kommen Sie auch ins Regensburger Umland?', a: 'Ja, wir sind in Regensburg und im Umkreis von rund 40 km im Einsatz. Fragen Sie einfach mit Ihrer Adresse an.' },
+      { q: 'Kommen Sie auch ins Regensburger Umland?', a: 'Ja, wir sind in Regensburg und im Umkreis von rund 40 km im Einsatz. Größere Projekte übernehmen wir nach Absprache auch weiter entfernt – fragen Sie einfach mit Ihrer Adresse an.' },
     ],
   },
   {
@@ -213,7 +215,7 @@ export const CITIES = Object.freeze([
     title: 'Gebäudereinigung im Landkreis Kelheim | CI Dienstleistungen',
     description: 'Gebäudereinigung, Hausmeisterservice und Gartenpflege im Landkreis Kelheim – vom Standort Langquaid aus, im Umkreis von 40 km. Jetzt unverbindlich anfragen',
     h1: 'Gebäudereinigung im Landkreis Kelheim',
-    lead: 'Im Landkreis Kelheim sind wir von unserem Standort in Langquaid aus im Einsatz – für Gebäudereinigung, Hausmeisterservice und die Pflege von Außenanlagen, im Umkreis von rund 40 km.',
+    lead: 'Im Landkreis Kelheim sind wir von unserem Standort in Langquaid aus im Einsatz – für Gebäudereinigung, Hausmeisterservice und die Pflege von Außenanlagen, im Umkreis von rund 40 km – größere Projekte auch weiter entfernt nach Absprache.',
     body: [
       'Bei Wohnhäusern, Gewerbeobjekten und Anlagen mit Grünflächen fällt ein großer Teil der Arbeit draußen an: Rasen und Hecken, Wege und Zufahrten, Mülltonnen, Laub im Herbst und Schnee im Winter. Diese Aufgaben bündeln wir mit der Reinigung im Gebäude – einzeln beauftragt oder als Abo mit festem Intervall.',
       'So haben Sie für Kelheim, Langquaid und Umgebung einen Dienstleister, der Fassade, Pflaster und Mauern ebenso im Blick hat wie die Außenanlage – bis hin zur fachgerechten Graffiti-Entfernung.',
@@ -222,7 +224,7 @@ export const CITIES = Object.freeze([
     focus: ['aussenanlagen', 'kehrdienst', 'muell', 'winterdienst', 'fassade', 'stein'],
     places: ['Kelheim', 'Langquaid', 'Abensberg', 'Bad Abbach', 'Saal an der Donau', 'Mainburg'],
     faq: [
-      { q: 'Von wo aus betreuen Sie den Landkreis Kelheim?', a: 'Von unserem Standort am Gewerbering 8 in 84085 Langquaid. Von hier betreuen wir Langquaid und den Landkreis Kelheim im Umkreis von rund 40 km.' },
+      { q: 'Von wo aus betreuen Sie den Landkreis Kelheim?', a: 'Von unserem Standort am Gewerbering 8 in 84085 Langquaid. Von hier betreuen wir Langquaid und den Landkreis Kelheim im Umkreis von rund 40 km, größere Projekte nach Absprache auch darüber hinaus.' },
       { q: 'Kann ich Gartenpflege und Hausmeisterservice kombinieren?', a: 'Ja. Das KombiAbo Home verbindet Gartenpflege und Hausmeisterservice zweimal monatlich; die Premium-Abos schließen zusätzlich die Gebäudereinigung ein.' },
       { q: 'Kümmern Sie sich auch um den Winterdienst?', a: 'Wir organisieren und überwachen externe Winterdienste, kontrollieren die Ausführung und dokumentieren die Einsätze.' },
     ],
@@ -233,7 +235,7 @@ export const CITIES = Object.freeze([
     title: 'Gebäudereinigung Landshut & Ergolding | CI Dienstleistungen',
     description: 'Gebäudereinigung und Hausmeisterservice in Landshut vom Standort Ergolding: Bauendreinigung, Grundreinigung, Entrümpelung und mehr. Jetzt Angebot anfragen.',
     h1: 'Gebäudereinigung in Landshut',
-    lead: 'Für Landshut und Umgebung ist unser Standort in Ergolding zuständig, direkt vor den Toren der Stadt. Von dort übernehmen wir Gebäudereinigung und Hausmeisterservice im Umkreis von rund 40 km.',
+    lead: 'Für Landshut und Umgebung ist unser Standort in Ergolding zuständig, direkt vor den Toren der Stadt. Von dort übernehmen wir Gebäudereinigung und Hausmeisterservice im Umkreis von rund 40 km – größere Projekte auch weiter entfernt nach Absprache.',
     body: [
       'Neben der laufenden Betreuung übernehmen wir in Landshut auch einmalige Einsätze: die Bauendreinigung nach Neu- oder Umbau für eine bezugsfertige Übergabe, die Grundreinigung vor dem Einzug oder die Entrümpelung von Keller, Dachboden und Gewerbeflächen – auf Wunsch samt Transport und fachgerechter Entsorgung.',
       'Für Büros, Praxen und Wohnanlagen bieten wir Sanitärhygiene mit dokumentierten Hygieneplänen, Kleinreparaturen und Maler-Ausbesserungen sowie ein geordnetes Schlüssel- und Zutrittsmanagement.',
