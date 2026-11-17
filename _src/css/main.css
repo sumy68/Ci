@@ -733,7 +733,7 @@ html:not(.js) .acc__icon { display: none; }
 .footer__ai a { color: var(--night-muted); text-decoration: underline; text-decoration-color: var(--night-line); text-underline-offset: 3px; }
 .footer__ai a:hover { color: var(--night-text); }
 /* Nur mobil sichtbar (siehe unten) */
-.footer__toggle, .footer__legal, .footer__wa { display: none; }
+.footer__toggle, .footer__legal { display: none; }
 
 /* ---------- WhatsApp-Button ---------- */
 .wa-fab {
@@ -869,11 +869,10 @@ html.menu-open .wa-fab { opacity: 0; pointer-events: none; }
   .footer__claim { font-size: 1rem; line-height: 1.45; margin-bottom: 16px; }
   /* Kontaktangaben einheitlich: gleiche Größe, Stärke, Farbe – ohne Unterstreichung */
   .footer__nap { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.5; }
-  .footer__nap > br, .footer__wa > br { display: none; }
+  .footer__nap > br { display: none; }
+  .footer__nap a.footer__addr { display: none; }   /* Anschrift mobil nicht im Footer (steht im Kontaktbereich) */
   .footer__nap strong { margin-bottom: 4px; }
   .footer__nap .contact-link { display: inline-block; padding-block: 10px; color: var(--night-text); font-size: 1rem; font-weight: 500; white-space: nowrap; }
-  .footer__nap > a:first-of-type { padding-top: 0; white-space: normal; }
-  .footer__wa { display: block; }
   .footer__col { border-top: 1px solid var(--night-line); }
   .footer__col--rechtliches { display: none; }   /* Links stehen in der Fußzeile */
   .footer__col .footer__title { display: none; }

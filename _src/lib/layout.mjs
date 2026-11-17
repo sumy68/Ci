@@ -113,10 +113,9 @@ export function footer({ isHome, currentPath }) {
         <p class="footer__claim">Gebäudereinigung und Hausmeisterservice aus einer Hand – in Regensburg, Kelheim und Landshut.</p>
         <address class="footer__nap">
           <strong>${SITE.name}</strong><br>
-          <a class="contact-link" href="${SITE.mapsUrl}" target="_blank" rel="noopener">${SITE.address.street}<br>${SITE.address.zip} ${SITE.address.city}<span class="sr-only"> (Google Maps, öffnet neues Fenster)</span></a><br>
+          <a class="contact-link footer__addr" href="${SITE.mapsUrl}" target="_blank" rel="noopener">${SITE.address.street}<br>${SITE.address.zip} ${SITE.address.city}<span class="sr-only"> (Google Maps, öffnet neues Fenster)</span></a><br>
           <a class="contact-link" href="tel:${SITE.phoneE164}">${SITE.phoneDisplay}</a><br>
           <a class="contact-link" href="mailto:${SITE.email}">${SITE.email}</a>
-          <span class="footer__wa"><br><a class="contact-link" href="${SITE.whatsapp}" target="_blank" rel="noopener noreferrer">WhatsApp<span class="sr-only"> (öffnet neues Fenster)</span></a></span>
         </address>
       </div>
       ${footerList('leistungen', 'Leistungen', [...SERVICE_GROUPS.map((g) => [`${base}#${g.id}`, g.title]), [`${base}#abos`, 'Abo-Modelle']])}
