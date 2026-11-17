@@ -297,6 +297,21 @@ function abos() {
   ).join('');
   const meter = (a) => `<span class="abo-table__percent">${a.percent}&nbsp;%</span><span class="abo-table__bar" aria-hidden="true"><span style="--p:${a.percent / 100}"></span></span>`;
   const link = (a) => `<a class="link-arrow" href="#kontakt" data-service="${esc(a.name)}"><span>Anfragen<span class="sr-only">: ${a.name}</span></span>${ICONS.arrow()}</a>`;
+  // Mobil: dieselben Daten als gestapelte Einträge (Tabelle dort ausgeblendet, nie beide sichtbar)
+  const item = (label, value) => `<div><dt>${label}</dt><dd>${value}</dd></div>`;
+  const cards = ABOS.map(
+    (a) => `<li class="abo-card${a.recommended ? ' is-recommended' : ''}">
+            ${a.recommended ? '<span class="abo-table__badge">Empfehlung</span>' : ''}
+            <div class="abo-card__head"><span class="abo-table__name">${a.name}</span>${meter(a)}</div>
+            <dl class="abo-card__list">
+              ${item('Gartenpflege', aboCell(a.garten))}
+              ${item('Hausmeisterservice', aboCell(a.hausmeister))}
+              ${item('Gebäudereinigung', aboCell(a.reinigung))}
+              ${item('Intervall', a.interval)}
+            </dl>
+            ${link(a)}
+          </li>`,
+  ).join('\n          ');
   return `<section class="section abos" id="abos" aria-labelledby="abos-title">
       <div class="wrap">
         ${sectionHead({ label: 'Abo-Modelle', id: 'abos-title', title: 'Regelmäßige Betreuung im Abo', lead: 'Preis auf Anfrage – der Leistungsumfang ist als Prozent dargestellt.', className: 'section-head--split' })}
@@ -315,6 +330,9 @@ function abos() {
             </tbody>
           </table>
         </div>
+        <ul class="abo-cards" aria-label="Abo-Modelle im Überblick">
+          ${cards}
+        </ul>
       </div>
     </section>`;
 }

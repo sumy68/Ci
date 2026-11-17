@@ -558,6 +558,8 @@ html:not(.js) .acc__icon { display: none; }
 .map__city.is-active text { font-size: 5px; }
 .map__office { fill: var(--accent-ink); }
 .map__caption { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-top: 16px; font-size: 0.8125rem; color: var(--ink-2); }
+/* Legendengruppen: Desktop wie zuvor (Elemente direkt im Flex), mobil als Paare zusammengehalten */
+.map__legend { display: contents; }
 .map__key { display: inline-block; width: 10px; height: 10px; }
 .map__key--office { background: var(--accent-ink); transform: rotate(45deg) scale(.8); }
 .map__key--radius { border: 1.5px solid var(--accent); border-radius: 50%; margin-left: 10px; }
@@ -755,3 +757,111 @@ html.menu-open .wa-fab { opacity: 0; pointer-events: none; }
 
 /* ---------- Scroll-Animationen: Hilfsklassen ---------- */
 .reveal-line { display: block; }
+
+/* ---------- Abo-Modelle mobil: gestapelte Einträge statt breiter Tabelle ---------- */
+.abo-cards { display: none; }
+.abo-card__head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 16px; margin-bottom: 14px; }
+.abo-card__head .abo-table__percent { margin: 0; font-size: 1.25rem; }
+.abo-card__head .abo-table__bar { grid-column: 1 / -1; max-width: none; margin-top: 10px; }
+.abo-card__list { margin: 0 0 8px; }
+.abo-card__list div { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 8px 0; border-top: 1px solid var(--line); font-size: var(--fs-small); }
+.abo-card__list dt { color: var(--ink-2); }
+.abo-card__list dd { margin: 0; text-align: right; }
+.abo-card__list svg { display: inline-block; }
+
+/* =====================================================================
+   Mobil (bis 767 px) – Desktop unverändert
+   ===================================================================== */
+/* WhatsApp sitzt mobil/Tablet im Header (neben Telefon) statt schwebend über Inhalten */
+@media (max-width: 1024px) {
+  .wa-fab { display: none; }
+}
+@media (max-width: 767px) {
+  .section-head { margin-bottom: 32px; }
+  .section-head .lead { margin-top: 16px; }
+  .overline { margin-bottom: 12px; }
+
+  /* Links mit Pfeil: Pfeil folgt dem Text (auch bei Umbruch), Touch-Fläche ≥ 44 px */
+  .link-arrow { display: inline; padding-block: 11px; }
+  .link-arrow svg { display: inline-block; margin-left: 8px; vertical-align: -0.15em; }
+
+  /* Leistungsverzeichnis + Stadtseiten-Akkordeon */
+  .index-row { padding-block: 28px; row-gap: 12px; }
+  .index-item .acc__trigger { min-height: 52px; }
+  .svc-row__title .acc__trigger { gap: 12px; padding-block: 16px; }
+  .svc-row__num { width: 1.8em; }
+  .svc-row__detail { gap: 16px; }
+  .svc-row__media { max-height: 220px; }
+
+  /* Vorher/Nachher: Bild (max. 280 px) oben, Liste darunter */
+  .compare-layout__tabs { margin-top: 20px; }
+  .compare-tab { grid-template-columns: 1.5em minmax(0, 1fr); padding-block: 14px; }
+  .compare-tab__label { font-size: 1rem; }
+
+  /* Über uns */
+  .about__grid { row-gap: 40px; }
+  .about__copy .h-section { margin-bottom: 20px; }
+  .about__copy .lead { margin-bottom: 28px; }
+  /* Spalten nach Inhalt: „Hausmeisterservice“ passt ohne Trennung */
+  .orbit__list { grid-template-columns: repeat(2, max-content); justify-content: space-between; column-gap: 6px; }
+  .orbit__link { min-height: 52px; padding-block: 12px; gap: 8px; }
+  .orbit__label { white-space: nowrap; -webkit-hyphens: manual; hyphens: manual; }
+  .figures { margin-top: 48px; }
+  .figure { display: block; padding: 20px 0; }
+  .figure .figure__value { font-size: 2.75rem; min-width: 0; margin: 0 0 6px; }
+  .figure__label { margin: 0; max-width: none; }
+
+  /* Ablauf */
+  .step { padding: 24px 0; }
+  .step__num { font-size: 1.25rem; margin-bottom: 4px; }
+  .step__title { margin-bottom: 8px; }
+
+  /* Abo-Modelle */
+  .abo-table__scroll { display: none; }
+  .abo-cards { display: block; border-top: 1px solid var(--ink); }
+  .abo-card { padding: 22px 0 14px; border-bottom: 1px solid var(--line); }
+  .abo-card.is-recommended { padding-inline: 16px; background: var(--surface); box-shadow: inset 3px 0 0 var(--accent); }
+
+  /* Kundenstimmen */
+  .quotes { gap: 40px; }
+  .quote blockquote { margin: 12px 0 16px; }
+  .quote blockquote p { font-size: 1.1875rem; line-height: 1.45; }
+  .quote--big blockquote p { font-size: 1.375rem; line-height: 1.35; }
+  .quotes__row { gap: 40px; padding-top: 40px; }
+
+  /* Einsatzgebiete */
+  .areas__map { margin-bottom: 32px; }
+  .map__svg { max-width: 260px; margin-inline: auto; }
+  .map__caption { justify-content: center; gap: 4px 16px; }
+  .map__legend { display: inline-flex; align-items: center; gap: 8px; }
+  .map__key--radius { margin-left: 0; }
+  .area-city { padding: 24px 0; }
+
+  /* FAQ */
+  .faq__q { gap: 16px; padding: 18px 0; font-size: 1.0625rem; min-height: 64px; }
+  .faq__a { padding: 0 0 24px; }
+
+  /* Kontakt + Formular (Felder volle Breite, Touch-Ziele ≥ 44 px) */
+  .contact-list { margin-bottom: 32px; }
+  .contact-list .contact-link, .loc-card__contact .contact-link { display: inline-block; padding-block: 10px; margin-block: -10px; }
+  .form { gap: 18px; }
+
+  /* Rechtstexte */
+  .prose h2 { margin: 40px 0 12px; }
+
+  /* Footer kompakt, zwei Spalten */
+  .footer { padding-top: 56px; }
+  .footer__grid { gap: 32px 20px; }
+  .footer__logo img { margin-bottom: 16px; }
+  .footer__claim { font-size: 1.125rem; margin-bottom: 16px; }
+  .footer ul { gap: 0; }
+  .footer ul a { display: inline-block; padding-block: 10px; }
+  .footer__nap a { display: inline-block; padding-block: 10px; margin-block: -10px; }
+  .footer__bottom { margin-top: 40px; }
+  .footer__ai a { display: inline-block; padding-block: 13px; margin-block: -13px; }
+}
+
+/* Sehr schmale Geräte (< 360 px): Leistungsliste im Orbit einspaltig */
+@media (max-width: 359px) {
+  .orbit__list { grid-template-columns: minmax(0, 1fr); }
+}

@@ -342,7 +342,7 @@ main p a:not([class]):hover, main li a:not([class]):hover { color: var(--accent-
 }
 .brand { display: block; margin-right: auto; flex: none; }
 /* Logo, Telefon-Icon und Burger liegen über dem Mobil-Overlay */
-.brand, .nav-phone-icon, .burger { position: relative; z-index: 2; }
+.brand, .nav-wa-icon, .nav-phone-icon, .burger { position: relative; z-index: 2; }
 .brand img { width: 52px; height: auto; }
 @media (min-width: 1025px) { .brand img { width: 58px; } }
 
@@ -379,7 +379,7 @@ main p a:not([class]):hover, main li a:not([class]):hover { color: var(--accent-
 .nav-phone svg { color: var(--accent-ink); }
 .nav-menu__meta { display: none; }
 
-.nav-phone-icon, .burger {
+.nav-wa-icon, .nav-phone-icon, .burger {
   display: none;
   place-items: center;
   width: 44px;
@@ -411,7 +411,7 @@ main p a:not([class]):hover, main li a:not([class]):hover { color: var(--accent-
   .nav-menu { display: flex; align-items: center; gap: clamp(24px, 3vw, 48px); }
 }
 @media (max-width: 1024px) {
-  .nav-phone-icon, .burger { display: grid; }
+  .nav-wa-icon, .nav-phone-icon, .burger { display: grid; }
   .nav-menu {
     position: fixed;
     inset: 0;
@@ -720,4 +720,54 @@ html.js-motion:not(.wipe-done):not(.motion-off) .marquee__track { animation-play
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
   .marquee__track { animation: none; }
+}
+
+/* =====================================================================
+   Mobil (bis 767 px): einheitliches Raster, Typografie, Hero.
+   Desktop bleibt unverändert – alle Regeln liegen in Mobil-Media-Queries.
+   ===================================================================== */
+@media (max-width: 767px) {
+  :root {
+    --gutter: 20px;              /* Seitenränder 20 px */
+    --space-section: 60px;       /* Abschnittsabstand 56–64 px */
+  }
+  .site-header__bar { gap: 8px; }
+  /* Logo als Touch-Ziel ≥ 44 px, ohne die Optik zu ändern */
+  .brand { padding-block: 5px; }
+
+  /* Fließtext: lange Komposita dürfen trennen statt überzulaufen (lang="de") */
+  p, li, dd, blockquote, td, figcaption {
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    /* nur lange Wörter trennen, mind. 5 Zeichen vor/nach dem Trennstrich */
+    hyphenate-limit-chars: 12 5 5;
+    -webkit-hyphenate-limit-before: 5;
+    -webkit-hyphenate-limit-after: 5;
+  }
+  /* Keine automatische Trennung in Kontaktdaten und größeren Einleitungstexten */
+  .tel, .nowrap, .contact-link, .phone-link, .nav-phone, .btn, a[href^="tel:"], a[href^="mailto:"],
+  .lead, .hero__lead, .page-head__lead, .site-header *, .footer * { -webkit-hyphens: manual; hyphens: manual; }
+
+  /* Unterseiten-H1: „Gebäudereinigung“ passt immer in eine Zeile (≈ 36–44 px) */
+  .h-display { font-size: min(2.75rem, calc((100vw - 2 * var(--gutter)) / 8.75)); }
+
+  /* Hero: „Gebäudereinigung &“ / „Hausmeisterservice“ je eine Zeile, ohne Trennstrich */
+  .hero { min-height: 88vh; min-height: 88svh; }   /* svh: kein Springen, wenn die Browserleiste einklappt */
+  .hero__title {
+    max-width: none;
+    font-size: min(var(--fs-hero), calc((100vw - 2 * var(--gutter)) / 9.35));
+    margin-bottom: 20px;
+  }
+  .hero__line { display: block; }
+  .hero__lead { margin-bottom: 28px; }
+  .hero__actions { gap: 12px 24px; }
+  .hero__actions .phone-link { padding-block: 11px; }
+  /* Abzieher läuft unter der Aufhellung durch: der Text bleibt während des Wischens lesbar */
+  .hero__wash { z-index: 4; }
+
+  .page-head { padding-bottom: 48px; }
+  .page-head__lead { margin: 20px 0 28px; }
+  .page-head__grid { gap: 32px; }
+  .page-head__media { max-height: 300px; }
+  .breadcrumb { margin-bottom: 20px; }
 }

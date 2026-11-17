@@ -92,7 +92,7 @@ export function radiusMap({ highlight = null, idSuffix = 'home' } = {}) {
             ${labels}
             ${offices}
           </svg>
-          <figcaption class="map__caption"><span class="map__key map__key--office" aria-hidden="true"></span> Unsere Standorte <span class="map__key map__key--radius" aria-hidden="true"></span> rund ${SITE.radiusKm} km Einsatzradius (schematisch)</figcaption>
+          <figcaption class="map__caption"><span class="map__legend"><span class="map__key map__key--office" aria-hidden="true"></span> Unsere Standorte</span> <span class="map__legend"><span class="map__key map__key--radius" aria-hidden="true"></span> rund ${SITE.radiusKm} km Einsatzradius (schematisch)</span></figcaption>
         </figure>`;
 }
 

@@ -18,7 +18,7 @@
     return burger.getAttribute('aria-expanded') === 'true';
   };
 
-  var setMenu = function (open) {
+  var setMenu = function (open, viaKeyboard) {
     burger.setAttribute('aria-expanded', open ? 'true' : 'false');
     burger.setAttribute('aria-label', open ? LABEL_CLOSE : LABEL_OPEN);
     header.classList.toggle('is-menu-open', open);
@@ -28,13 +28,14 @@
     document.dispatchEvent(new CustomEvent('ci:menu', { detail: { open: open } }));
     if (open) {
       header.classList.remove('is-hidden');
+      // Nur bei Tastaturbedienung in das Menü springen – bei Touch kein Fokusrahmen
       var first = menu.querySelector('a');
-      if (first) first.focus({ preventScroll: true });
+      if (first && viaKeyboard) first.focus({ preventScroll: true });
     }
   };
 
-  burger.addEventListener('click', function () {
-    setMenu(!isOpen());
+  burger.addEventListener('click', function (e) {
+    setMenu(!isOpen(), e.detail === 0);
   });
 
   menu.addEventListener('click', function (e) {
@@ -50,9 +51,9 @@
     }
     // Fokus im geöffneten Overlay halten (Menü-Links + Burger)
     if (e.key === 'Tab') {
-      var phoneIcon = header.querySelector('.nav-phone-icon');
+      var icons = Array.prototype.slice.call(header.querySelectorAll('.nav-wa-icon, .nav-phone-icon'));
       var focusables = Array.prototype.slice.call(menu.querySelectorAll('a, button'))
-        .concat(phoneIcon ? [phoneIcon, burger] : [burger]);
+        .concat(icons, [burger]);
       var first = focusables[0];
       var last = focusables[focusables.length - 1];
       if (e.shiftKey && document.activeElement === first) {
