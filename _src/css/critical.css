@@ -731,16 +731,28 @@ html.js-motion:not(.wipe-done):not(.motion-off) .marquee__track { animation-play
     --gutter: 20px;              /* Seitenränder 20 px */
     --space-section: 60px;       /* Abschnittsabstand 56–64 px */
   }
-  /* Header: Logo größer (≈ 46 px hoch), Icons ohne Kasten, je 44 px Touch-Fläche, mittig auf einer Höhe */
-  .site-header__bar { gap: 4px; padding-inline: 20px; }
-  .brand img { width: 66px; }
-  .nav-wa-icon, .nav-phone-icon, .burger { width: 44px; height: 44px; border: 0; border-radius: 10px; background: none; }
+  /* Header: solide Fläche ohne Blur/Verlauf, feine Linie erst nach dem Scrollen */
+  .site-header::before {
+    background: #fff;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    opacity: 1;
+    transition: box-shadow .25s;
+  }
+  .site-header.is-scrolled::before { box-shadow: 0 1px 0 rgba(0, 0, 0, .08); }
+  .site-header__bar { gap: 0; padding-inline: 20px; }
+  .brand img { width: 56px; }       /* ≈ 39 px hoch */
+  /* Icons: einheitliches Outline-Set, 22 px; Touch-Fläche 34 × 44 px -> 12 px sichtbarer Abstand */
+  .nav-wa-icon, .nav-phone-icon, .burger { width: 34px; height: 44px; border: 0; border-radius: 8px; background: none; color: var(--ink); }
   .nav-wa-icon svg, .nav-phone-icon svg { width: 22px; height: 22px; }
-  .nav-wa-icon { margin-right: 0; }
-  .burger { margin-right: -11px; }   /* Striche bündig mit dem rechten Rand (20 px) */
-  .burger span, .burger span::before, .burger span::after { width: 22px; height: 2px; }
+  .burger { margin-right: -6px; }   /* Striche bündig mit dem 20-px-Rand */
+  .burger span, .burger span::before, .burger span::after { width: 22px; height: 1.75px; }
   .burger span::before { transform: translateY(-7px); }
   .burger span::after { transform: translateY(7px); }
+  /* Anker-Ziele nicht unter dem Header (nativ und mit Lenis je 80 px) */
+  html { scroll-padding-top: 0; }
+  [id] { scroll-margin-top: 80px; }
 
   /* Laufband kleiner */
   .marquee__item { font-size: 1.5rem; padding-inline: 16px; }

@@ -84,8 +84,8 @@ export function header({ isHome }) {
         </div>
         <p class="nav-menu__meta"><a class="contact-link" href="${SITE.mapsUrl}" target="_blank" rel="noopener">${SITE.address.street}, ${SITE.address.zip} ${SITE.address.city}<span class="sr-only"> (Google Maps, öffnet neues Fenster)</span></a><br><a class="contact-link" href="mailto:${SITE.email}">${SITE.email}</a></p>
       </nav>
-      <a class="nav-wa-icon" href="${SITE.whatsapp}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp-Nachricht schreiben (öffnet neues Fenster)">${ICONS.whatsapp(20)}</a>
-      <a class="nav-phone-icon" href="tel:${SITE.phoneE164}" aria-label="Anrufen: ${SITE.phoneDisplay}">${ICONS.phone(19)}</a>
+      <a class="nav-wa-icon" href="${SITE.whatsapp}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp-Nachricht schreiben (öffnet neues Fenster)">${ICONS.waLine(22)}</a>
+      <a class="nav-phone-icon" href="tel:${SITE.phoneE164}" aria-label="Anrufen: ${SITE.phoneDisplay}">${ICONS.phoneLine(22)}</a>
       <button class="burger" type="button" data-burger aria-controls="site-menu" aria-expanded="false" aria-label="Menü öffnen">
         <span aria-hidden="true"></span>
       </button>
@@ -117,6 +117,15 @@ export function footer({ isHome, currentPath }) {
           <a class="contact-link" href="tel:${SITE.phoneE164}">${SITE.phoneDisplay}</a><br>
           <a class="contact-link" href="mailto:${SITE.email}">${SITE.email}</a>
         </address>
+        <div class="footer__contact">
+          <p class="footer__contact-title">${SITE.name}</p>
+          <ul>
+            <li><a class="contact-link" href="tel:${SITE.phoneE164}">${ICONS.phoneLine(16)}<span>${SITE.phoneDisplay}</span></a></li>
+            <li><a class="contact-link" href="mailto:${SITE.email}">${ICONS.mailLine(16)}<span>${SITE.email}</span></a></li>
+            <li><a class="contact-link" href="${SITE.whatsapp}" target="_blank" rel="noopener noreferrer">${ICONS.waLine(16)}<span>WhatsApp<span class="sr-only"> (öffnet neues Fenster)</span></span></a></li>
+            <li><a class="contact-link" href="${SITE.mapsUrl}" target="_blank" rel="noopener">${ICONS.pinLine(16)}<span>${SITE.address.street}, ${SITE.address.zip} ${SITE.address.city}<span class="sr-only"> (Google Maps, öffnet neues Fenster)</span></span></a></li>
+          </ul>
+        </div>
       </div>
       ${footerList('leistungen', 'Leistungen', [...SERVICE_GROUPS.map((g) => [`${base}#${g.id}`, g.title]), [`${base}#abos`, 'Abo-Modelle']])}
       ${footerList('einsatzgebiete', 'Einsatzgebiete', CITIES.map((c) => mark(`/${c.slug}`, `Gebäudereinigung ${c.city}`)))}

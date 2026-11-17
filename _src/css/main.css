@@ -733,7 +733,7 @@ html:not(.js) .acc__icon { display: none; }
 .footer__ai a { color: var(--night-muted); text-decoration: underline; text-decoration-color: var(--night-line); text-underline-offset: 3px; }
 .footer__ai a:hover { color: var(--night-text); }
 /* Nur mobil sichtbar (siehe unten) */
-.footer__toggle, .footer__legal { display: none; }
+.footer__toggle, .footer__legal, .footer__contact { display: none; }
 
 /* ---------- WhatsApp-Button ---------- */
 .wa-fab {
@@ -899,4 +899,38 @@ html.menu-open .wa-fab { opacity: 0; pointer-events: none; }
   .footer__legal [aria-current] { padding-block: 12px; }
   .footer__ai { flex-basis: 100%; }
   .footer__ai a { display: inline-block; padding-block: 12px; margin-block: -6px 0; }
+}
+
+/* ---------- Footer mobil, Feinschliff: kleinere Schrift, Kontakt als Icon-Liste, dezente Linien ---------- */
+@media (max-width: 767px) {
+  /* weniger Leerraum zwischen letztem Abschnitt (Formular) und Footer */
+  main > .section:last-child { padding-bottom: 48px; }
+  /* Anker-Ziele: einheitlich 80 px unter dem Header (überschreibt die Einzelwerte oben) */
+  [id], .index-row, .index-item, .svc-row { scroll-margin-top: 80px; }
+  .footer { padding-top: 40px; }
+  .footer__brand { padding-bottom: 24px; }
+  .footer__logo img { width: 46px; margin-bottom: 20px; }   /* ≈ 32 px hoch */
+  .footer__claim { max-width: 32ch; margin: 0 0 24px; font-size: 0.9375rem; line-height: 1.5; }
+  .footer__nap { display: none; }
+  .footer__contact { display: block; }
+  .footer__contact-title { margin: 0 0 6px; color: var(--night-text); font-size: 0.9375rem; font-weight: 700; }
+  .footer__contact ul { display: grid; gap: 0; }
+  .footer .footer__contact a {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding-block: 6px;             /* 22 px Zeile + 12 px Abstand */
+    color: var(--night-text); font-size: 0.9375rem; font-weight: 400; line-height: 22px;
+  }
+  .footer__contact svg { flex: none; width: 16px; height: 16px; color: var(--night-text); opacity: .75; }
+  .footer__contact .tel, .footer__contact a[href^="tel:"] { white-space: nowrap; }
+  .footer__col { border-top-color: rgba(255, 255, 255, .1); }
+  .footer__toggle { min-height: 52px; font-size: 1rem; }
+  .footer__toggle .acc__icon { width: 16px; height: 16px; }
+  .footer__toggle .acc__icon::before, .footer__toggle .acc__icon::after { width: 16px; }
+  .footer__col ul a { font-size: 0.9375rem; }
+  .footer__bottom { display: block; padding-top: 16px; border-top: 0; font-size: 0.8125rem;
+    background: linear-gradient(rgba(255, 255, 255, .1), rgba(255, 255, 255, .1)) var(--gutter) 0 / calc(100% - 2 * var(--gutter)) 1px no-repeat; }   /* Linie bündig mit dem Inhalt */
+  .footer__legal { display: flex; margin: 0 0 6px; }
+  .footer__legal a, .footer__legal [aria-current] { padding-block: 8px; }
+  .footer__copy { margin: 0 0 6px; color: var(--night-muted); }
+  .footer .footer__ai a { display: inline; padding: 0; margin: 0; color: var(--night-muted); text-decoration: none; font-size: 0.8125rem; }
 }
