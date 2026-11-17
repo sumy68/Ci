@@ -754,6 +754,24 @@ html.js-motion:not(.wipe-done):not(.motion-off) .marquee__track { animation-play
   html { scroll-padding-top: 0; }
   [id] { scroll-margin-top: 80px; }
 
+  /* Hero: Textblock zentriert, optisch bei ca. 45 % der Hero-Höhe
+     (Mitte = (H + oben − unten) / 2  ->  unten = oben + 10 % von 88svh) */
+  .hero { justify-content: center; }
+  .hero__content {
+    margin-block: 0;
+    padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 16px);
+    padding-bottom: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 16px + 8.8svh);
+    text-align: center;
+  }
+  .hero__title { margin-inline: auto; }
+  .hero__lead { max-width: 30ch; margin-inline: auto; }
+  .hero__actions { flex-direction: column; align-items: center; gap: 5px; }   /* + 11 px Polster am Telefon-Link = 16 px */
+  .hero__actions .phone-link { white-space: nowrap; }
+  /* Weiche, radiale Aufhellung hinter dem Textblock (keine harte Fläche); Abzieher läuft darunter */
+  .hero__wash {
+    background: radial-gradient(ellipse 95% 42% at 50% 45%, rgba(250, 250, 248, .88) 0%, rgba(250, 250, 248, .72) 50%, rgba(250, 250, 248, 0) 100%);
+  }
+
   /* Laufband kleiner */
   .marquee__item { font-size: 1.5rem; padding-inline: 16px; }
   .marquee { padding-block: 14px; }
