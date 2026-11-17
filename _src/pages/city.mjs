@@ -53,7 +53,7 @@ function story(city, loc) {
 }
 
 function services(city) {
-  const cards = city.focus.map((id) => serviceCard(serviceById(id), { headingLevel: 3, sizes: CARD_SIZES, contactHref: '#anfrage' })).join('\n          ');
+  const cards = city.focus.map((id) => serviceCard(serviceById(id), { headingLevel: 3, sizes: CARD_SIZES, contactHref: '#anfrage', long: true })).join('\n          ');
   return `<section class="section city-services" aria-labelledby="services-title">
       <div class="wrap">
         ${sectionHead({ label: 'Leistungen', id: 'services-title', title: `Leistungen in ${city.city}`, lead: `Eine Auswahl aus unseren ${SERVICES.length} Leistungen – alle weiteren bieten wir in ${city.city} ebenso an.`, className: 'section-head--split' })}
@@ -112,7 +112,7 @@ export function cityPage(city) {
     jsonLd: graph([
       webPage({ url, name: city.title, description: city.description }),
       localBusiness({ areas: [city.city], url }),
-      ...serviceNodes(focus, [city.city]),
+      ...serviceNodes(focus, [city.city], { long: true }),
       faqPage(city.faq, url),
       breadcrumbs([{ name: `Gebäudereinigung ${city.city}`, url }]),
     ]),

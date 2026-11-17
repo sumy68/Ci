@@ -31,12 +31,17 @@ export const LOCATIONS = Object.freeze([
 ]);
 
 export const SERVICE_GROUPS = Object.freeze([
-  { id: 'innen', title: 'Gebäudereinigung innen', short: 'Von Unterhalts- bis Grundreinigung, Sanitärhygiene, Küchen und Treppenhäusern.' },
-  { id: 'aussen', title: 'Gebäudereinigung außen', short: 'Glas- und Fassadenpflege, Stein- & Fugenreinigung, Graffiti-Entfernung und Bauendreinigung.' },
-  { id: 'hausmeister', title: 'Hausmeisterservice', short: 'Objektkontrollen, Kleinreparaturen, Außenanlagenpflege, Müll- & Containerdienst, Winterdienste.' },
+  { id: 'innen', title: 'Gebäudereinigung innen', tags: ['Unterhaltsreinigung', 'Grundreinigung', 'Sanitär', 'Küche', 'Treppenhaus', 'Desinfektion'], short: 'Von Unterhalts- bis Grundreinigung, Sanitärhygiene, Küchen und Treppenhäusern.' },
+  { id: 'aussen', title: 'Gebäudereinigung außen', tags: ['Fenster', 'Fassade', 'Stein & Fugen', 'Graffiti', 'Bauendreinigung'], short: 'Glas- und Fassadenpflege, Stein- & Fugenreinigung, Graffiti-Entfernung und Bauendreinigung.' },
+  { id: 'hausmeister', title: 'Hausmeisterservice', tags: ['Objektkontrolle', 'Kleinreparaturen', 'Gartenpflege', 'Müll & Container', 'Winterdienst'], short: 'Objektkontrollen, Kleinreparaturen, Außenanlagenpflege, Müll- & Containerdienst, Winterdienste.' },
 ]);
 
-export const SERVICES = Object.freeze([
+/**
+ * text  = ausführliche Beschreibung (Original der bisherigen Website) –
+ *         erscheint auf genau einer Stadt-Landingpage (siehe CITIES.focus).
+ * short = Kurzfassung (1 Satz) für die Leistungskarten der Startseite.
+ */
+const SERVICES_RAW = [
   { id: 'unterhaltsreinigung', group: 'innen', title: 'Unterhaltsreinigung & Büroreinigung', alt: 'Reinigungskraft saugt den Teppichboden in einem Büro', text: 'Büro, Praxis, Kita, Handel & privat – planbar nach Intervall. Wir übernehmen die laufende Reinigung aller nutzungsrelevanten Bereiche und sorgen für dauerhaft gepflegte Oberflächen, hygienische Sanitärbereiche und frische Räume. Reinigungspläne werden individuell abgestimmt, damit Abläufe nicht gestört werden und alles zuverlässig sauber bleibt.' },
   { id: 'grundreinigung', group: 'innen', title: 'Grundreinigung / Start-Clean', alt: 'Einscheibenmaschine bei der Grundreinigung eines Fliesenbodens', text: 'Tiefenreinigung vor Start oder turnusmäßig – inklusive Detailarbeiten. Wir entfernen hartnäckige Verschmutzungen, setzen Böden instand und reinigen schwer zugängliche Zonen, damit Flächen wieder neuwertig wirken. Ideal nach Umbauten, Einzügen oder als frischer Reset für Bestandsflächen.' },
   { id: 'sanitaer', group: 'innen', title: 'Sanitärhygiene & Entkalkung', alt: 'Waschbecken und Armatur werden mit Handschuhen gereinigt', text: 'Sanitärgrundreinigung, Kalkentfernung & Hygienekonzepte: Wir entkalken Armaturen, reinigen Fugen und Oberflächen porentief und stellen eine dauerhaft angenehme, keimarme Umgebung sicher. Auf Wunsch mit dokumentierten Hygieneplänen.' },
@@ -55,7 +60,35 @@ export const SERVICES = Object.freeze([
   { id: 'entruempeln', group: 'hausmeister', title: 'Entrümpeln & Transporte', alt: 'Transporter wird bei einer Entrümpelung mit Möbeln und Kartons beladen', text: 'Keller, Dachboden, Gewerbeflächen oder Sperrmüll – wir räumen professionell und übernehmen auf Wunsch den Transport und die fachgerechte Entsorgung.' },
   { id: 'winterdienst', group: 'hausmeister', title: 'Winterdienst-Koordination', alt: 'Schneeschaufel und Streuwagen auf einem geräumten Gehweg', text: 'Wir organisieren und überwachen externe Winterdienste, kontrollieren die Ausführung und dokumentieren Einsätze – für sichere Wege und Zufahrten bei Schnee und Eis.' },
   { id: 'schluessel', group: 'hausmeister', title: 'Schlüssel & Zutritt', alt: 'Schlüssel steckt im Schloss einer Haustür', text: 'Übergaben, Protokoll und sicheres Handling. Wir managen Schlüssel und Zutrittsrechte nach Absprache und sorgen für nachvollziehbare Prozesse.' },
-]);
+];
+
+const SERVICE_SHORT = {
+  unterhaltsreinigung: 'Laufende Reinigung für Büro, Praxis, Kita, Handel und privat – planbar nach Intervall.',
+  grundreinigung: 'Tiefenreinigung vor dem Start oder turnusmäßig, inklusive Detailarbeiten.',
+  sanitaer: 'Kalkentfernung, porentief saubere Fugen und auf Wunsch dokumentierte Hygienepläne.',
+  kueche: 'Teeküchen und Sozialräume inklusive Geräte- und Oberflächenpflege.',
+  treppenhaus: 'Für WEG, Wohnanlagen und Gewerbe – gründlich, sicher und rutschhemmend.',
+  desinfektion: 'Für Kitas, Praxen und sensible Bereiche nach Vorgabe, mit Dokumentation.',
+  fenster: 'Glas und Rahmen innen und außen, Jalousien und Rollläden lamellenschonend.',
+  fassade: 'Materialschonend für Glas, Metall und Stein – gegen Schmutz, Algen und Ablagerungen.',
+  stein: 'Wege, Plätze und Mauern inklusive Fugenpflege; Graffiti entfernen wir je nach Untergrund.',
+  bau: 'Zwischen- und Endreinigung für eine bezugsfertige Übergabe.',
+  objektkontrolle: 'Planmäßige Rundgänge, Sichtprüfungen und Dokumentation.',
+  reparaturen: 'Kleine Instandsetzungen und Maler-Ausbesserungen – keine kompletten Anstriche.',
+  aussenanlagen: 'Rasen, Hecken, Beete und saisonale Arbeiten – einzeln oder im Abo.',
+  kehrdienst: 'Saubere Gehwege und Zufahrten, inklusive Laubentfernung.',
+  muell: 'Bereitstellen, Reinigen und Rücktransport – pünktlich an jedem Entsorgungstag.',
+  entruempeln: 'Keller, Dachboden oder Gewerbefläche – auf Wunsch mit Transport und Entsorgung.',
+  winterdienst: 'Wir organisieren, überwachen und dokumentieren externe Winterdienste.',
+  schluessel: 'Übergaben mit Protokoll und sicheres Schlüssel- und Zutrittsmanagement.',
+};
+
+export const SERVICES = Object.freeze(
+  SERVICES_RAW.map((s) => {
+    if (!SERVICE_SHORT[s.id]) throw new Error(`Kurztext fehlt: ${s.id}`);
+    return Object.freeze({ ...s, short: SERVICE_SHORT[s.id] });
+  }),
+);
 
 export const servicesInGroup = (groupId) => SERVICES.filter((s) => s.group === groupId);
 export const serviceById = (id) => {
@@ -81,18 +114,30 @@ export const TESTIMONIALS = Object.freeze([
 ]);
 
 export const STEPS = Object.freeze([
-  { title: 'Anfrage', text: 'Teilen Sie uns kurz Ihr Vorhaben mit – per Formular, Telefon oder WhatsApp. Wir melden uns zeitnah zurück.' },
-  { title: 'Abstimmung', text: 'Leistungsumfang, Intervalle und Reinigungspläne stimmen wir individuell auf Ihr Objekt ab, damit Abläufe nicht gestört werden. Sie haben einen festen Ansprechpartner.' },
-  { title: 'Ausführung', text: 'Wir arbeiten nach klaren Standards – mit Erfahrung, Sorgfalt und einem wachen Auge für jedes Detail. Innen wie außen, aus einer Hand.' },
-  { title: 'Kontrolle & Dokumentation', text: 'Planmäßige Rundgänge, Sichtprüfungen und transparente Dokumentation: Wir erkennen Mängel frühzeitig und halten Sie stets auf dem Laufenden.' },
+  { title: 'Anfrage', text: 'Per Formular, Telefon oder WhatsApp – wir melden uns zeitnah.' },
+  { title: 'Abstimmung', text: 'Umfang, Intervall und Reinigungsplan passend zu Ihrem Objekt, mit festem Ansprechpartner.' },
+  { title: 'Ausführung', text: 'Nach klaren Standards, mit Sorgfalt und Blick fürs Detail – innen wie außen.' },
+  { title: 'Kontrolle & Dokumentation', text: 'Planmäßige Rundgänge und transparente Dokumentation – Sie sind immer informiert.' },
 ]);
 
-/** Nur Zahlen, die sich direkt aus den Inhalten der Seite ergeben. */
+/** Nur Fakten, die bereits auf der Seite stehen (Standorte, Radius, fester Ansprechpartner). */
 export const FIGURES = Object.freeze([
-  { value: SERVICES.length, suffix: '', label: 'Leistungen aus einer Hand – innen, außen und rund ums Haus' },
-  { value: LOCATIONS.length, suffix: '', label: 'Standorte: Regensburg, Ergolding und Langquaid' },
-  { value: SITE.radiusKm, suffix: ' km', label: 'Einsatzradius rund um jeden Standort' },
-  { value: ABOS.length, suffix: '', label: 'Abo-Modelle mit festem Intervall' },
+  { value: LOCATIONS.length, prefix: '', suffix: '', label: 'Standorte' },
+  { value: SITE.radiusKm, prefix: '+', suffix: ' km', label: 'Radius je Standort' },
+  { value: 1, prefix: '', suffix: '', label: 'fester Ansprechpartner' },
+]);
+
+/**
+ * „Rundum-Paket“-Orbit: nur Leistungen, die CI laut Website anbietet.
+ * icon = Schlüssel in ORBIT_ICONS (_src/lib/orbit-icons.mjs), href = Sprungziel.
+ */
+export const ORBIT = Object.freeze([
+  { label: 'Gebäudereinigung', icon: 'building', href: '#innen' },
+  { label: 'Hausmeisterservice', icon: 'wrench', href: '#hausmeister' },
+  { label: 'Gartenpflege', icon: 'leaf', href: '#leistung-aussenanlagen' },
+  { label: 'Winterdienst', icon: 'snow', href: '#leistung-winterdienst' },
+  { label: 'Fensterreinigung', icon: 'window', href: '#leistung-fenster' },
+  { label: 'Dokumentation', icon: 'clipboard', href: '#ablauf' },
 ]);
 
 export const FAQ_HOME = Object.freeze([
@@ -100,6 +145,11 @@ export const FAQ_HOME = Object.freeze([
     q: 'Was kostet eine Gebäudereinigung oder ein Hausmeisterservice?',
     a: 'Der Preis richtet sich nach Objekt, Leistungsumfang und Intervall. Sie erhalten deshalb ein individuelles Angebot – das gilt auch für unsere Abo-Modelle: Preis auf Anfrage.',
     todo: 'TODO: vom Kunden – ggf. Richtpreise oder Mindestauftragswert ergänzen',
+  },
+  {
+    // Ausführlicher Text aus „Über uns“ und Intro der bisherigen Startseite
+    q: 'Was bedeutet „alles aus einer Hand“ bei CI Dienstleistungen?',
+    a: 'Wir kombinieren Gebäudereinigung und Hausmeisterservice zu einem verlässlichen Rundum-Paket – mit festen Ansprechpartnern, klaren Standards und transparenter Dokumentation. Ob Reparaturen, Reinigung oder zuverlässige Betreuung: Wir kümmern uns mit Erfahrung, Sorgfalt und einem wachen Auge für jedes Detail um alles rund um Ihre Immobilie. Unser Anspruch sind hygienisch saubere Innenräume, gepflegte Außenanlagen und ein reibungsloser Gebäudebetrieb.',
   },
   {
     q: 'In welchen Orten sind Sie im Einsatz?',
@@ -144,10 +194,11 @@ export const CITIES = Object.freeze([
     lead: 'CI Dienstleistungen reinigt und betreut Gebäude in Regensburg und im Umkreis von rund 40 km – vom Büro über die Praxis bis zur Wohnanlage. Ausgangspunkt ist unser Büro in der Benzstraße 20.',
     body: [
       'Wo täglich gearbeitet, behandelt und gewohnt wird, muss die Reinigung vor allem eines: zuverlässig nach Plan laufen, ohne den Betrieb zu stören. Deshalb stimmen wir Intervalle und Reinigungspläne individuell ab und arbeiten mit festen Ansprechpartnern.',
-      'Neben der Unterhalts- und Büroreinigung übernehmen wir in Regensburg die Treppenhausreinigung für Eigentümergemeinschaften und Wohnanlagen, die Fenster- und Glasreinigung sowie Desinfektionsreinigungen für Kitas und Praxen. Wer mehr als Sauberkeit braucht, bekommt mit unserem Hausmeisterservice Objektkontrollen und Kleinreparaturen gleich dazu.',
+      'Neben der Unterhalts- und Büroreinigung übernehmen wir in Regensburg die Treppenhausreinigung für Eigentümergemeinschaften und Wohnanlagen, die Fenster- und Glasreinigung sowie Desinfektionsreinigungen für Kitas und Praxen. Dazu kommen die Reinigung von Teeküchen und Sozialräumen und – wer mehr als Sauberkeit braucht – planmäßige Objektkontrollen durch unseren Hausmeisterservice.',
     ],
     location: 'regensburg',
-    focus: ['unterhaltsreinigung', 'treppenhaus', 'fenster', 'desinfektion', 'objektkontrolle', 'reparaturen'],
+    // Jede Leistung steht ausführlich auf genau einer Stadtseite (6/6/6) – kein Duplicate Content
+    focus: ['unterhaltsreinigung', 'treppenhaus', 'fenster', 'desinfektion', 'kueche', 'objektkontrolle'],
     places: ['Regensburg', 'Neutraubling', 'Lappersdorf', 'Pentling', 'Regenstauf', 'Obertraubling'],
     faq: [
       { q: 'Wo befindet sich CI Dienstleistungen in Regensburg?', a: 'Unser Büro liegt in der Benzstraße 20, 93053 Regensburg. Telefonisch erreichen Sie uns unter 0155 6858 1734.' },
@@ -164,10 +215,10 @@ export const CITIES = Object.freeze([
     lead: 'Im Landkreis Kelheim sind wir von unserem Standort in Langquaid aus im Einsatz – für Gebäudereinigung, Hausmeisterservice und die Pflege von Außenanlagen, im Umkreis von rund 40 km.',
     body: [
       'Bei Wohnhäusern, Gewerbeobjekten und Anlagen mit Grünflächen fällt ein großer Teil der Arbeit draußen an: Rasen und Hecken, Wege und Zufahrten, Mülltonnen, Laub im Herbst und Schnee im Winter. Diese Aufgaben bündeln wir mit der Reinigung im Gebäude – einzeln beauftragt oder als Abo mit festem Intervall.',
-      'So haben Sie für Kelheim, Langquaid und Umgebung einen Dienstleister, der Fassade und Treppenhaus ebenso im Blick hat wie die Außenanlage – und Mängel bei planmäßigen Rundgängen früh erkennt.',
+      'So haben Sie für Kelheim, Langquaid und Umgebung einen Dienstleister, der Fassade, Pflaster und Mauern ebenso im Blick hat wie die Außenanlage – bis hin zur fachgerechten Graffiti-Entfernung.',
     ],
     location: 'kelheim',
-    focus: ['aussenanlagen', 'kehrdienst', 'muell', 'winterdienst', 'fassade', 'grundreinigung'],
+    focus: ['aussenanlagen', 'kehrdienst', 'muell', 'winterdienst', 'fassade', 'stein'],
     places: ['Kelheim', 'Langquaid', 'Abensberg', 'Bad Abbach', 'Saal an der Donau', 'Mainburg'],
     faq: [
       { q: 'Von wo aus betreuen Sie den Landkreis Kelheim?', a: 'Von unserem Standort am Gewerbering 8 in 84085 Langquaid. Von hier betreuen wir Langquaid und den Landkreis Kelheim im Umkreis von rund 40 km.' },
@@ -184,10 +235,10 @@ export const CITIES = Object.freeze([
     lead: 'Für Landshut und Umgebung ist unser Standort in Ergolding zuständig, direkt vor den Toren der Stadt. Von dort übernehmen wir Gebäudereinigung und Hausmeisterservice im Umkreis von rund 40 km.',
     body: [
       'Neben der laufenden Betreuung übernehmen wir in Landshut auch einmalige Einsätze: die Bauendreinigung nach Neu- oder Umbau für eine bezugsfertige Übergabe, die Grundreinigung vor dem Einzug oder die Entrümpelung von Keller, Dachboden und Gewerbeflächen – auf Wunsch samt Transport und fachgerechter Entsorgung.',
-      'Für Büros, Praxen und Wohnanlagen bieten wir die regelmäßige Unterhaltsreinigung, Sanitärhygiene mit dokumentierten Hygieneplänen sowie ein geordnetes Schlüssel- und Zutrittsmanagement.',
+      'Für Büros, Praxen und Wohnanlagen bieten wir Sanitärhygiene mit dokumentierten Hygieneplänen, Kleinreparaturen und Maler-Ausbesserungen sowie ein geordnetes Schlüssel- und Zutrittsmanagement.',
     ],
     location: 'landshut',
-    focus: ['bau', 'grundreinigung', 'entruempeln', 'unterhaltsreinigung', 'sanitaer', 'schluessel'],
+    focus: ['bau', 'grundreinigung', 'entruempeln', 'sanitaer', 'reparaturen', 'schluessel'],
     places: ['Landshut', 'Ergolding', 'Altdorf', 'Essenbach', 'Kumhausen', 'Tiefenbach'],
     faq: [
       { q: 'Wer ist mein Ansprechpartner für Landshut?', a: 'Unser Standort in der Alten Regensburger Str. 24, 84030 Ergolding, ist Ihr Ansprechpartner für Landshut und Umgebung. Telefonisch erreichen Sie uns unter 0155 6858 1734.' },

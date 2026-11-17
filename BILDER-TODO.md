@@ -24,7 +24,7 @@ mit schriftlicher Einwilligung.
 |---|---|---|---|
 | Hero (Glasfassade, quer) | `_src/images/hero/ci-hero-desktop-2.png` | Fantasie-Bürogebäude, perfekter Himmel, keine Menschen | Eine echte, von CI betreute Glasfassade oder ein großes Fenster in der Region, frontal und leicht seitlich, ruhiger Hintergrund. **Wichtig für den Wisch-Effekt:** viel Glasfläche, gleichmäßiges Licht |
 | Hero (Glasfassade, hoch) | `_src/images/hero/ci-hero-mobile-2.png` | wie oben | Dasselbe Motiv im Hochformat (4:5) |
-| Über uns (Wohnhaus) | `_src/images/hero/hero-villa.jpg` | Rendering-Look, grünstichige Nachbearbeitung | Team vor dem Firmenfahrzeug oder vor einem betreuten Wohnhaus, Abendlicht, Gesichter erkennbar (stärkt Vertrauen) |
+| Wohnhaus (derzeit **nicht verwendet** – „Über uns“ zeigt jetzt den Rundum-Paket-Orbit) | `_src/images/hero/hero-villa.jpg` | Rendering-Look, grünstichige Nachbearbeitung | Team vor dem Firmenfahrzeug oder vor einem betreuten Wohnhaus, Abendlicht, Gesichter erkennbar – eignet sich z. B. als Bild für eine Stadtseite |
 
 ## Leistungen (18 Bilder, je 3:2)
 

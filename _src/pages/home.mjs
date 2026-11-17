@@ -1,7 +1,8 @@
 /** Startseite */
-import { SITE, SERVICE_GROUPS, SERVICES, servicesInGroup, ABOS, TESTIMONIALS, STEPS, FIGURES, FAQ_HOME, CITIES, LOCATIONS } from '../data.mjs';
-import { HERO_WIDE, HERO_TALL, ABOUT_IMAGE, SERVICE_IMAGE_BY_ID } from '../image-config.mjs';
-import { artPicture, preloadArt, picture, ICONS, button, overline, arrowLink, phoneLink, esc } from '../lib/html.mjs';
+import { SITE, SERVICE_GROUPS, SERVICES, servicesInGroup, ABOS, TESTIMONIALS, STEPS, FIGURES, FAQ_HOME, CITIES, LOCATIONS, ORBIT } from '../data.mjs';
+import { HERO_WIDE, HERO_TALL, SERVICE_IMAGE_BY_ID } from '../image-config.mjs';
+import { artPicture, preloadArt, picture, ICONS, button, overline, arrowLink, esc } from '../lib/html.mjs';
+import { orbitIcon } from '../lib/orbit-icons.mjs';
 import { sectionHead, serviceCard, faqList, radiusMap, contactList, locationAddress } from '../lib/sections.mjs';
 import { graph, localBusiness, serviceNodes, website, faqPage, webPage } from '../lib/schema.mjs';
 
@@ -22,7 +23,7 @@ function hero() {
         <div class="hero__copy">
           <p class="overline">Regensburg, Kelheim und Landshut</p>
           <h1 class="h-display hero__title" id="hero-title">Gebäudereinigung &amp; Hausmeisterservice aus einer Hand</h1>
-          <p class="hero__lead">Unterhalts- und Grundreinigung, Fenster und Fassaden, Außenanlagen und Kleinreparaturen – für Büros, Praxen, Wohnanlagen und Privathäuser in Regensburg, Kelheim und Landshut, plus rund 40&nbsp;km Umgebung.</p>
+          <p class="hero__lead">Reinigung, Pflege und Kleinreparaturen für Büros, Praxen, Wohnanlagen und Privathäuser – in Regensburg, Kelheim, Landshut und rund 40&nbsp;km Umgebung.</p>
           <div class="hero__actions">
             ${button('#kontakt', 'Jetzt anfragen')}
             <a class="phone-link" href="tel:${SITE.phoneE164}">${ICONS.phone(18)}<span><span class="phone-link__hint">oder anrufen:</span> ${SITE.phoneDisplay}</span></a>
@@ -100,12 +101,12 @@ function marquee() {
 function intro() {
   const rows = SERVICE_GROUPS.map((g) => {
     const count = servicesInGroup(g.id).length;
-    return `<li><a class="area-row" href="#${g.id}">
-              <span class="area-row__title">${g.title}</span>
-              <span class="area-row__text">${g.short}</span>
+    // Aufzählung als Schlagwort-Badges statt Fließtext
+    return `<li class="area-row">
+              <p class="area-row__title"><a href="#${g.id}">${g.title}<span class="area-row__arrow">${ICONS.arrow(18)}</span></a></p>
               <span class="area-row__count">${count} Leistungen</span>
-              <span class="area-row__arrow">${ICONS.arrow(18)}</span>
-            </a></li>`;
+              <ul class="tags">${g.tags.map((t) => `<li>${t}</li>`).join('')}</ul>
+            </li>`;
   }).join('\n            ');
   return `<section class="section intro" aria-labelledby="intro-title">
       <div class="wrap grid12">
@@ -113,7 +114,7 @@ function intro() {
           <h2 class="h-section" id="intro-title" data-reveal="lines">Sie haben ein Gebäude, aber keinen Alleskönner an der Hand?</h2>
         </div>
         <div class="intro__body">
-          <p class="lead">Kein Problem – den haben wir! Ob Reparaturen, Reinigung oder zuverlässige Betreuung: Wir kümmern uns um alles rund um Ihre Immobilie. Mit Erfahrung, Sorgfalt und einem wachen Auge für jedes Detail sorgen wir dafür, dass Ihr Objekt in bestem Glanz erstrahlt – innen wie außen. Lehnen Sie sich zurück – wir machen den Rest.</p>
+          <p class="lead">Kein Problem – den haben wir! Wir kümmern uns um alles rund um Ihre Immobilie, innen wie außen. Lehnen Sie sich zurück – wir machen den Rest.</p>
           <ul class="area-list" data-reveal="stagger">
             ${rows}
           </ul>
@@ -128,7 +129,6 @@ function serviceGroup(group) {
   return `<div class="service-group grid12" id="${group.id}">
         <header class="service-group__head">
           <h3 class="service-group__title">${group.title}</h3>
-          <p>${group.short}</p>
           <p class="service-group__count">${count} Leistungen</p>
         </header>
         <div class="card-grid" data-reveal="stagger">
@@ -144,7 +144,7 @@ function services() {
           label: 'Leistungen',
           id: 'leistungen-title',
           title: 'Gebäudereinigung und Hausmeisterservice im Detail',
-          lead: `${SITE.name} bietet ${SERVICES.length} Leistungen in drei Bereichen: Gebäudereinigung innen, Gebäudereinigung außen und Hausmeisterservice – einzeln beauftragt oder als Abo, in Regensburg, Kelheim und Landshut.`,
+          lead: `${SERVICES.length} Leistungen in drei Bereichen – einzeln beauftragt oder als Abo, in Regensburg, Kelheim und Landshut.`,
         })}
         ${SERVICE_GROUPS.map(serviceGroup).join('\n        ')}
       </div>
@@ -199,10 +199,30 @@ function beforeAfter() {
     </section>`;
 }
 
+/*
+ * „Rundum-Paket“-Orbit: Ring rotiert per CSS (nur transform), Icons bleiben
+ * durch Gegenrotation aufrecht. Beschriftungen sind echtes HTML (Google-lesbar),
+ * Icons aria-hidden. Mobil: 2×3-Raster ohne Rotation.
+ */
+function orbit() {
+  const items = ORBIT.map(
+    (o, i) => `<li class="orbit__item" style="--i:${i}">
+              <a class="orbit__link" href="${o.href}"><span class="orbit__badge">${orbitIcon(o.icon)}</span><span class="orbit__label">${o.label}</span></a>
+            </li>`,
+  ).join('\n            ');
+  return `<div class="orbit" data-autoplay>
+          <span class="orbit__ring" aria-hidden="true"></span>
+          <p class="orbit__center">Alles aus einer&nbsp;Hand</p>
+          <ul class="orbit__list" aria-label="Leistungen im Rundum-Paket">
+            ${items}
+          </ul>
+        </div>`;
+}
+
 function about() {
   const figures = FIGURES.map(
     (f) => `<div class="figure">
-            <p class="figure__value"><span data-count="${f.value}">${f.value}</span>${f.suffix}</p>
+            <p class="figure__value">${f.prefix}<span data-count="${f.value}">${f.value}</span>${f.suffix}</p>
             <p class="figure__label">${f.label}</p>
           </div>`,
   ).join('\n          ');
@@ -210,17 +230,16 @@ function about() {
       <div class="wrap grid12 about__grid">
         <div class="about__copy">
           ${overline('Über uns')}
-          <h2 class="h-section" id="about-title" data-reveal="lines">${SITE.name} – Ihr Experte in Ihrer Umgebung</h2>
-          <p class="lead">${SITE.name} kombiniert Gebäudereinigung und Hausmeisterservice zu einem verlässlichen Rundum-Paket – mit festen Ansprechpartnern, klaren Standards und transparenter Dokumentation.</p>
-          <p>Aktiv in Kelheim, Landshut und Regensburg, je Standort mit Umland im +40&nbsp;km Radius. Unser Anspruch: hygienisch saubere Innenräume, gepflegte Außenanlagen und ein reibungsloser Gebäudebetrieb – aus einer Hand.</p>
+          <h2 class="h-section" id="about-title" data-reveal="lines">Rundum-Paket für Gebäudereinigung &amp; Hausmeisterservice</h2>
+          <p class="lead">${SITE.name} verbindet Gebäudereinigung und Hausmeisterservice aus einer Hand – mit festem Ansprechpartner, klaren Standards und transparenter Dokumentation. Aktiv in Regensburg, Kelheim und Landshut, je Standort mit rund 40&nbsp;km Umland.</p>
           ${button('#kontakt', 'Jetzt anfragen', { variant: 'accent' })}
         </div>
-        <div class="about__media frame" data-reveal="image" data-parallax>
-          ${picture(ABOUT_IMAGE, { alt: 'Modernes Wohnhaus mit Garten am Abend – Hausmeisterservice und Gartenpflege von CI Dienstleistungen', sizes: '(min-width: 1360px) 600px, (min-width: 900px) 45vw, calc(100vw - 40px)' })}
+        <div class="about__orbit">
+          ${orbit()}
         </div>
       </div>
       <div class="wrap">
-        <div class="figures" aria-label="Kennzahlen">
+        <div class="figures" aria-label="Fakten">
           ${figures}
           <!-- TODO: echte Zahl vom Kunden – z. B. Jahre Erfahrung, betreute Objekte oder Mitarbeitende -->
         </div>
@@ -273,14 +292,13 @@ function abos() {
               <div><dt>Gebäudereinigung</dt><dd>${aboCell(a.reinigung)}</dd></div>
               <div><dt>Intervall</dt><dd>${a.interval}</dd></div>
             </dl>
-            <p class="abo__text">${a.text}</p>
             <p class="abo__price">Preis auf Anfrage</p>
             <a class="link-arrow abo__link" href="#kontakt" data-service="${esc(a.name)}"><span>Abo anfragen<span class="sr-only">: ${a.name}</span></span>${ICONS.arrow()}</a>
           </article>`,
   ).join('\n          ');
   return `<section class="section abos" id="abos" aria-labelledby="abos-title">
       <div class="wrap">
-        ${sectionHead({ label: 'Abo-Modelle', id: 'abos-title', title: 'Regelmäßige Betreuung im Abo', lead: 'Preis auf Anfrage – Leistungsumfang als Prozent dargestellt. Je höher das Paket, desto mehr Bereiche und desto kürzer das Intervall.', className: 'section-head--split' })}
+        ${sectionHead({ label: 'Abo-Modelle', id: 'abos-title', title: 'Regelmäßige Betreuung im Abo', lead: 'Preis auf Anfrage – der Leistungsumfang ist als Prozent dargestellt.', className: 'section-head--split' })}
         <div class="abo-grid" data-reveal="stagger">
           ${cards}
         </div>
@@ -314,8 +332,7 @@ function areas() {
     const loc = LOCATIONS.find((l) => l.id === c.location);
     return `<li class="area-city">
               <h3 class="area-city__name">${c.city}</h3>
-              <p class="area-city__loc">${loc.label}: ${locationAddress(loc)}</p>
-              <p class="area-city__note">${loc.note}</p>
+              <p class="area-city__loc">${ICONS.pin(16)}<span>${loc.label}: ${locationAddress(loc)}</span></p>
               ${arrowLink(`/${c.slug}`, `Gebäudereinigung ${c.city === 'Kelheim' ? 'im Landkreis Kelheim' : `in ${c.city}`}`)}
             </li>`;
   }).join('\n            ');

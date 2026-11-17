@@ -273,10 +273,27 @@
     }
   }
 
+  /**
+   * Der gepinnte Hero fügt nach dem Laden Scroll-Abstand ein. Wurde die Seite
+   * über einen Anker geöffnet (z. B. /#kontakt), springen wir danach erneut ans Ziel.
+   */
+  function restoreHashTarget() {
+    if (!location.hash || location.hash.length < 2) return;
+    var target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (!target) return;
+    var headerH = parseFloat(getComputedStyle(root).getPropertyValue('--header-h')) || 76;
+    var y = target.getBoundingClientRect().top + window.scrollY - headerH - 16;
+    if (lenis) lenis.scrollTo(y, { immediate: true, force: true });
+    else window.scrollTo(0, y);
+  }
+
+  var lenis = null;
+
   function init() {
     var mm = gsap.matchMedia();
+    if (!safely(function () { lenis = initLenis(); })) return;
     var steps = [
-      [initLenis], [initWipe, mm], [initStagger], [initImages, mm], [initMap],
+      [initWipe, mm], [initStagger], [initImages, mm], [initMap],
       [initCounters], [initSteps, mm], [initMagnetic, mm]
     ];
     for (var i = 0; i < steps.length; i++) {
@@ -286,6 +303,7 @@
     var fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
     fontsReady.then(function () {
       if (safely(initHeadlines)) ScrollTrigger.refresh();
+      restoreHashTarget();
     });
   }
 

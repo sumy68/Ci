@@ -39,18 +39,30 @@
 .area-row {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 4px 24px;
+  gap: 14px 24px;
   padding: 24px 0;
   border-bottom: 1px solid var(--line);
-  text-decoration: none;
 }
-.area-row__title { font-family: var(--serif); font-size: var(--fs-h3); line-height: 1.15; }
-.area-row__text { grid-column: 1; color: var(--ink-2); font-size: var(--fs-small); max-width: 34em; }
+.area-row__title { margin: 0; font-family: var(--serif); font-size: var(--fs-h3); line-height: 1.15; }
+.area-row__title a { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
 .area-row__count { grid-column: 2; grid-row: 1; align-self: center; font-size: 0.8125rem; letter-spacing: 0.04em; color: var(--ink-2); }
-.area-row__arrow { grid-column: 2; grid-row: 2; justify-self: end; color: var(--accent-ink); transition: transform .35s var(--ease-out); }
+.area-row__arrow { display: inline-flex; color: var(--accent-ink); transition: transform .35s var(--ease-out); }
+.area-row .tags { grid-column: 1 / -1; }
 @media (hover: hover) {
-  .area-row:hover .area-row__arrow { transform: translateX(4px); }
-  .area-row:hover .area-row__title { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
+  .area-row__title a:hover .area-row__arrow { transform: translateX(4px); }
+  .area-row__title a:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
+}
+
+/* Schlagwort-Badges statt Aufzählungen im Fließtext */
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tags li {
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--ink);
 }
 
 /* ---------- Leistungen ---------- */
@@ -198,26 +210,152 @@
 .compare__stage.is-dragging .compare__knob { transform: scale(.92); }
 
 /* ---------- Über uns + Kennzahlen (dunkel) ---------- */
-.about__grid { row-gap: 48px; align-items: center; }
+.about__grid { row-gap: 56px; align-items: center; }
 .about__copy .h-section { max-width: 12em; margin-bottom: 28px; }
-.about__copy p:not(.lead):not(.overline) { color: var(--night-muted); max-width: 34em; margin-bottom: 36px; }
-.about__copy .lead { margin-bottom: 20px; }
-.about__media { aspect-ratio: 4 / 3; }
+.about__copy .lead { margin-bottom: 36px; max-width: 30em; }
 @media (min-width: 900px) {
   .about__copy { grid-column: 1 / span 6; }
-  .about__media { grid-column: 8 / -1; aspect-ratio: 4 / 5; }
+  .about__orbit { grid-column: 7 / -1; }
 }
 .frame.has-parallax img { height: calc(100% + 80px); margin-top: -40px; }
 
+/* ---------- „Rundum-Paket“-Orbit ---------- */
+.orbit {
+  --size: 440px;
+  --r: 168px;
+  --badge: 64px;
+  --spin: 40s;
+  position: relative;
+  width: min(100%, var(--size));
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+.orbit__ring {
+  position: absolute;
+  inset: calc(50% - var(--r));
+  border: 1px dashed rgba(43, 183, 163, .45);
+  border-radius: 50%;
+}
+.orbit__ring::after {
+  content: "";
+  position: absolute;
+  inset: 22%;
+  border: 1px solid var(--night-line);
+  border-radius: 50%;
+}
+.orbit__center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 9em;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  font-family: var(--serif);
+  font-size: clamp(1.625rem, 1.2rem + 1vw, 2.125rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  text-align: center;
+  color: var(--night-text);
+}
+.orbit__list {
+  position: absolute;
+  inset: 0;
+  animation: orbit-spin var(--spin) linear infinite;
+}
+.orbit__item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform: rotate(calc(var(--i) * 60deg)) translateY(calc(var(--r) * -1)) rotate(calc(var(--i) * -60deg));
+}
+.orbit__link {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 9.5em;
+  margin-left: -4.75em;
+  margin-top: calc(var(--badge) / -2);
+  text-decoration: none;
+  color: var(--night-text);
+  animation: orbit-spin var(--spin) linear infinite reverse;   /* Gegenrotation: Icons bleiben aufrecht */
+}
+.orbit__badge {
+  display: grid;
+  place-items: center;
+  width: var(--badge);
+  height: var(--badge);
+  border-radius: 50%;
+  background: var(--night-2);
+  border: 1px solid var(--night-line);
+  color: var(--accent);
+  transition: transform .4s var(--ease-out), background-color .3s, border-color .3s, color .3s;
+}
+.orbit__label { font-size: 0.875rem; font-weight: 600; line-height: 1.25; text-align: center; }
+.orbit__link:hover .orbit__badge, .orbit__link:focus-visible .orbit__badge {
+  transform: scale(1.1);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--ink);
+}
+.orbit__link:focus-visible { outline: none; }
+.orbit__link:focus-visible .orbit__label { text-decoration: underline; text-underline-offset: 4px; }
+/* Hover/Fokus auf einem Icon pausiert die Rotation */
+.orbit:has(.orbit__link:hover, .orbit__link:focus-visible) .orbit__list,
+.orbit:has(.orbit__link:hover, .orbit__link:focus-visible) .orbit__link { animation-play-state: paused; }
+@supports not selector(:has(*)) {
+  .orbit__list:hover, .orbit__list:hover .orbit__link { animation-play-state: paused; }
+}
+/* Mit JS läuft der Ring nur, solange er sichtbar ist */
+.js .orbit:not(.is-running) .orbit__list,
+.js .orbit:not(.is-running) .orbit__link { animation-play-state: paused; }
+@keyframes orbit-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .orbit__list, .orbit__link { animation: none; }
+}
+@media (min-width: 600px) and (max-width: 899px) {
+  .orbit { --size: 420px; --r: 158px; }
+}
+/* Mobil: Ring wird zu eng -> 2×3-Raster ohne Rotation */
+@media (max-width: 599px) {
+  .orbit { width: 100%; aspect-ratio: auto; }
+  .orbit__ring { display: none; }
+  .orbit__center { position: static; width: auto; transform: none; margin-bottom: 20px; text-align: left; }
+  .orbit__list { position: static; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; animation: none; }
+  .orbit__item { position: static; width: auto; height: auto; transform: none; }
+  .orbit__link {
+    position: static;
+    align-items: flex-start;
+    width: auto;
+    margin: 0;
+    padding: 12px;
+    border: 1px solid var(--night-line);
+    border-radius: 14px;
+    animation: none;
+    text-align: left;
+  }
+  .orbit__badge { --badge: 44px; flex: none; }
+  .orbit__label { text-align: left; font-size: 0.8125rem; }
+}
+
 .figures {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   margin-top: clamp(64px, 8vw, 120px);
   border-top: 1px solid var(--night-line);
 }
-@media (min-width: 900px) { .figures { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 600px) { .figures { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .figure { padding: 28px 20px 0 0; }
-@media (min-width: 900px) {
+@media (max-width: 599px) {
+  .figure { display: flex; align-items: baseline; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--night-line); }
+  .figure .figure__value { font-size: 3rem; min-width: 3.6em; margin: 0; }
+}
+@media (min-width: 600px) {
   .figure { padding: 36px 32px 0; border-left: 1px solid var(--night-line); }
   .figure:first-child { border-left: 0; padding-left: 0; }
 }
@@ -310,7 +448,6 @@
 .abo__yes { color: var(--accent-ink); }
 .abo__no { color: #A6ACB2; }
 .abo__or { font-size: 0.8125rem; font-weight: 600; color: var(--ink); }
-.abo__text { flex: 1; font-size: 0.875rem; color: var(--ink-2); line-height: 1.55; }
 .abo__price { font-size: 0.875rem; font-weight: 600; margin-bottom: 8px; }
 .abo__link { margin-top: auto; padding-block: 6px; }
 
@@ -354,8 +491,8 @@
 .area-cities { border-top: 1px solid var(--line); }
 .area-city { padding: 28px 0; border-bottom: 1px solid var(--line); }
 .area-city__name { font-family: var(--serif); font-size: var(--fs-h3); line-height: 1.1; margin-bottom: 8px; }
-.area-city__loc { font-weight: 600; font-size: var(--fs-small); margin-bottom: 4px; }
-.area-city__note { color: var(--ink-2); font-size: var(--fs-small); margin-bottom: 12px; }
+.area-city__loc { display: flex; align-items: center; gap: 8px; font-size: var(--fs-small); color: var(--ink-2); margin-bottom: 12px; }
+.area-city__loc svg { flex: none; color: var(--accent-ink); }
 
 /* ---------- FAQ ---------- */
 @media (min-width: 900px) {

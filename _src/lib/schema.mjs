@@ -54,12 +54,13 @@ export function localBusiness({ areas = AREAS, url = `${SITE.origin}/` } = {}) {
   };
 }
 
-export function serviceNodes(services = SERVICES, areas = AREAS) {
+/** long=true: ausführliche Beschreibung (Stadtseiten), sonst die sichtbare Kurzfassung (Startseite). */
+export function serviceNodes(services = SERVICES, areas = AREAS, { long = false } = {}) {
   return services.map((s) => ({
     '@type': 'Service',
     '@id': `${SITE.origin}/#leistung-${s.id}`,
     name: s.title,
-    description: s.text,
+    description: long ? s.text : s.short,
     serviceType: s.title,
     provider: { '@id': BUSINESS_ID },
     areaServed: areaServed(areas),

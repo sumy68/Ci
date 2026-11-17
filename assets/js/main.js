@@ -199,17 +199,20 @@
     window.addEventListener('pageshow', function () { root.classList.remove('is-leaving'); });
   }
 
-  /* ---------- Laufband nur animieren, solange es sichtbar ist ---------- */
+  /* ---------- Endlos-Animationen (Laufband, Orbit) nur im Viewport laufen lassen ---------- */
   function initMarquee() {
-    var marquee = document.querySelector('.marquee');
-    if (!marquee) return;
+    var targets = $$('.marquee, [data-autoplay]');
+    if (!targets.length) return;
     if (!('IntersectionObserver' in window)) {
-      marquee.classList.add('is-running');
+      targets.forEach(function (t) { t.classList.add('is-running'); });
       return;
     }
-    new IntersectionObserver(function (entries) {
-      marquee.classList.toggle('is-running', entries[0].isIntersecting);
-    }).observe(marquee);
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        entry.target.classList.toggle('is-running', entry.isIntersecting);
+      });
+    });
+    targets.forEach(function (t) { io.observe(t); });
   }
 
   $$('[data-compare-stage]').forEach(initCompare);

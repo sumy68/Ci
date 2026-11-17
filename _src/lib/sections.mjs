@@ -10,14 +10,15 @@ export const sectionHead = ({ label, title, lead, id, className = '' }) => `<div
         ${lead ? `<p class="lead">${lead}</p>` : ''}
       </div>`;
 
-export function serviceCard(service, { headingLevel = 4, sizes, contactHref = '#kontakt' }) {
+/** long=false: Kurzfassung (Startseite); long=true: ausführlicher Text (Stadtseiten). */
+export function serviceCard(service, { headingLevel = 4, sizes, contactHref = '#kontakt', long = false }) {
   const set = SERVICE_IMAGE_BY_ID[service.id];
   const h = `h${headingLevel}`;
   return `<article class="card" id="leistung-${service.id}">
             <div class="card__media">${picture(set, { alt: service.alt, sizes })}</div>
             <div class="card__body">
               <${h} class="card__title">${service.title}</${h}>
-              <p class="card__text">${service.text}</p>
+              <p class="card__text">${long ? service.text : service.short}</p>
               <a class="link-arrow card__link" href="${contactHref}" data-service="${esc(service.title)}"><span>Anfragen<span class="sr-only">: ${service.title}</span></span>${ICONS.arrow()}</a>
             </div>
           </article>`;
