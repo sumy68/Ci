@@ -4,8 +4,8 @@
  * (gemeinsame Größe, Mitte) und erzeugt AVIF/WebP/JPG in mehreren Breiten
  * nach /assets/img/vorher-nachher/. Läuft automatisch bei `npm run build`.
  *
- * Cache-Sicherheit: Jede Ausgabedatei trägt einen Inhalts-Hash der Quelle im
- * Namen (z. B. fassade-vorher.3f2a9c1b-768.avif). Ändert sich ein Bild, ändert
+ * Dateinamen: SEO-Name (Leistung + Ort) + Breite + Inhalts-Hash am Ende,
+ * z. B. fassadenreinigung-regensburg-vorher-768.3f2a9c1b.avif (Cache-Busting). Ändert sich ein Bild, ändert
  * sich der Dateiname – Browser/CDN können nie eine alte Version liefern.
  * Veraltete Varianten desselben Bildes werden beim Build entfernt.
  *
@@ -14,6 +14,8 @@
 import sharp from 'sharp';
 import { createHash } from 'node:crypto';
 import { readFile, readdir, unlink, mkdir, access } from 'node:fs/promises';
+import { PAIR_NAMES } from './image-config.mjs';
+import { variantFile } from './lib/image-names.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -41,18 +43,19 @@ async function commonSize(buffers) {
   return { width: Math.min(...metas.map((m) => m.width)), height: Math.min(...metas.map((m) => m.height)) };
 }
 
-async function writeWidth(buffer, outBase, size, width) {
+async function writeWidth(buffer, set, size, width) {
   const height = Math.round((size.height / size.width) * width);
   const base = sharp(buffer).rotate().resize({ width: size.width, height: size.height, fit: 'cover', position: 'centre' }).resize({ width, height });
-  await base.clone().avif({ quality: QUALITY.avif, effort: 5 }).toFile(`${outBase}-${width}.avif`);
-  await base.clone().webp({ quality: QUALITY.webp }).toFile(`${outBase}-${width}.webp`);
-  await base.clone().jpeg({ quality: QUALITY.jpg, mozjpeg: true, progressive: true }).toFile(`${outBase}-${width}.jpg`);
+  const file = (ext) => path.join(OUT_DIR, variantFile(set, width, ext));
+  await base.clone().avif({ quality: QUALITY.avif, effort: 5 }).toFile(file('avif'));
+  await base.clone().webp({ quality: QUALITY.webp }).toFile(file('webp'));
+  await base.clone().jpeg({ quality: QUALITY.jpg, mozjpeg: true, progressive: true }).toFile(file('jpg'));
 }
 
-/** Entfernt Varianten desselben Bildes mit anderem (veraltetem) bzw. ohne Hash. */
-async function removeStale(prefix, currentName) {
+/** Entfernt alle Dateien im Ausgabeordner, die nicht zur aktuellen Ausgabe gehören (alte Namen/Hashes). */
+async function removeStale(keep) {
   const files = await readdir(OUT_DIR).catch(() => []);
-  const stale = files.filter((f) => f.startsWith(`${prefix}-`) || f.startsWith(`${prefix}.`)).filter((f) => !f.startsWith(`${currentName}-`));
+  const stale = files.filter((f) => !keep.has(f));
   await Promise.all(stale.map((f) => unlink(path.join(OUT_DIR, f))));
   return stale.length;
 }
@@ -65,21 +68,23 @@ export async function buildPair(id) {
   const size = await commonSize(buffers);
   const widths = widthsFor(size.width);
   await mkdir(OUT_DIR, { recursive: true });
-  const names = {};
+  const sides = {};
   for (const [i, side] of SIDES.entries()) {
-    const prefix = `${id}-${side}`;
-    const name = `${prefix}.${contentHash(buffers[i])}`;
-    names[side] = name;
-    const outBase = path.join(OUT_DIR, name);
-    const complete = (await Promise.all(widths.flatMap((w) => FORMATS.map((f) => exists(`${outBase}-${w}.${f}`))))).every(Boolean);
-    if (!complete) for (const w of widths) await writeWidth(buffers[i], outBase, size, w);
-    await removeStale(prefix, name);
+    // Bildset im Format von image-names.mjs: Name = Leistung + Ort + Seite, Hash = Inhalt
+    const set = { dir: 'vorher-nachher', name: `${PAIR_NAMES[id]}-${side}`, hash: contentHash(buffers[i]), widths, width: size.width, height: size.height };
+    sides[side] = set;
+    const files = widths.flatMap((w) => FORMATS.map((f) => path.join(OUT_DIR, variantFile(set, w, f))));
+    if (!(await Promise.all(files.map(exists))).every(Boolean)) for (const w of widths) await writeWidth(buffers[i], set, size, w);
   }
-  return { id, names, width: size.width, height: size.height, widths };
+  return { id, sides, width: size.width, height: size.height, widths };
 }
 
 export async function buildAllPairs() {
   const result = {};
   for (const id of PAIRS) result[id] = await buildPair(id);
+  // Veraltete Dateien (alte Namen/Hashes) aus dem Ausgabeordner entfernen
+  const keep = new Set(Object.values(result).filter(Boolean).flatMap((p) => Object.values(p.sides).flatMap((set) => p.widths.flatMap((w) => FORMATS.map((f) => variantFile(set, w, f))))));
+  const removed = await removeStale(keep);
+  if (removed) console.log(`  Vorher/Nachher: ${removed} veraltete Dateien entfernt`);
   return result;
 }

@@ -1,3 +1,4 @@
+import { GRIME_URL } from './lib/image-names.mjs';
 /**
  * Statischer Seiten-Build. Erzeugt alle HTML-Seiten im Projekt-Root
  * (GitHub Pages liefert /impressum aus impressum.html usw.), dazu
@@ -68,13 +69,17 @@ function checkLengths(pages) {
   return warnings;
 }
 
+/** Bild-Sitemap: je Seite die Inhaltsbilder (page.images = URL-Pfade, ohne Duplikate). */
+const imageTags = (p) =>
+  [...new Set(p.images ?? [])].map((u) => `\n    <image:image><image:loc>${SITE.origin}${u}</image:loc></image:image>`).join('');
+
 const sitemap = (pages) => `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${pages
   .map((p) => `  <url>
     <loc>${SITE.origin}${p.path}</loc>
     <lastmod>${TODAY}</lastmod>
-    <priority>${p.priority}</priority>
+    <priority>${p.priority}</priority>${imageTags(p)}
   </url>`)
   .join('\n')}
 </urlset>
@@ -151,7 +156,7 @@ async function main() {
   await write('robots.txt', robots());
   await write('site.webmanifest', manifest());
   await write('llms.txt', llmsTxt());
-  await write('assets/img/hero/schmutzfilm.svg', grimeSvg());
+  await write(GRIME_URL.replace(/^\//, ''), grimeSvg());
 
   console.log(`✓ ${pages.length} Seiten, Sitemap (${indexable.length} URLs), robots.txt, Manifest, llms.txt`);
   const warnings = checkLengths(pages);

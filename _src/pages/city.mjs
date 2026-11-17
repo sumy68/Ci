@@ -1,8 +1,8 @@
 /** Stadt-Landingpages (/gebaeudereinigung-…) */
 import { SITE, SERVICES, serviceById, locationById, CITIES } from '../data.mjs';
 import { SERVICE_IMAGE_BY_ID } from '../image-config.mjs';
-import { picture, preloadPicture, button, ICONS, arrowLink, overline } from '../lib/html.mjs';
-import { sectionHead, serviceRow, faqList, radiusMap, locationAddress, mapsUrlFor } from '../lib/sections.mjs';
+import { picture, preloadPicture, imgUrl, button, ICONS, arrowLink, overline } from '../lib/html.mjs';
+import { sectionHead, serviceRow, serviceAlt, faqList, radiusMap, locationAddress, mapsUrlFor } from '../lib/sections.mjs';
 import { contactSection } from './home.mjs';
 import { graph, localBusiness, serviceNodes, faqPage, breadcrumbs, webPage } from '../lib/schema.mjs';
 
@@ -27,7 +27,7 @@ function pageHead(city, loc) {
           </div>
         </div>
         <div class="page-head__media frame">
-          ${picture(SERVICE_IMAGE_BY_ID[lead.id], { alt: `${lead.title} in ${city.city} – ${lead.alt} (Symbolbild)`, sizes: HEAD_SIZES, priority: true })}
+          ${picture(SERVICE_IMAGE_BY_ID[lead.id], { alt: serviceAlt(lead, city.city), sizes: HEAD_SIZES, priority: true })}
         </div>
       </div>
     </section>`;
@@ -111,6 +111,8 @@ export function cityPage(city) {
     title: city.title,
     description: city.description,
     priority: '0.8',
+    // Bild-Sitemap: Leistungsbilder dieser Stadtseite (größte JPG-Variante)
+    images: city.focus.map((id) => imgUrl(SERVICE_IMAGE_BY_ID[id], 1000)),
     preload: preloadPicture(heroSet, HEAD_SIZES),
     bodyClass: 'page-city',
     jsonLd: graph([

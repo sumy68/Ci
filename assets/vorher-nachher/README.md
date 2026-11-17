@@ -5,9 +5,9 @@ Abschnitt „Gebäudereinigung im Detail“ auf der Startseite.
 
 | Slider | Dateien |
 |---|---|
-| 1 – Fassade | `fassade-vorher.jpg`, `fassade-nachher.jpg` |
-| 2 – Fenster/Glas | `fenster-vorher.jpg`, `fenster-nachher.jpg` |
-| 3 – Treppenhaus/Sanitär (innen) | `innen-vorher.jpg`, `innen-nachher.jpg` |
+| 1 – Fassade (→ fassadenreinigung-regensburg-…) | `fassade-vorher.jpg`, `fassade-nachher.jpg` |
+| 2 – Fenster/Glas (→ fensterreinigung-regensburg-…) | `fenster-vorher.jpg`, `fenster-nachher.jpg` |
+| 3 – Treppenhaus/Sanitär (→ treppenhausreinigung-regensburg-…) | `innen-vorher.jpg`, `innen-nachher.jpg` |
 
 **Derzeit:** KI-generierte Symbolbilder (auf der Seite als „Symbolbild“ gekennzeichnet).
 Bitte durch echte Kundenfotos ersetzen – siehe `BILDER-TODO.md`.
@@ -46,6 +46,7 @@ Bei **echten** Fotopaaren ist das nicht nötig – einfach die Dateien ersetzen.
 
 ## Cache-Sicherheit
 
-Die erzeugten Dateien tragen einen Inhalts-Hash im Namen
-(z. B. `fassade-vorher.5d6439b3-768.avif`). Neues Bild = neuer Dateiname,
+Die erzeugten Dateien tragen einen Inhalts-Hash am Ende des Namens
+und sind nach Leistung + Ort benannt
+(z. B. `fassadenreinigung-regensburg-vorher-768.5d6439b3.avif`). Neues Bild = neuer Dateiname,
 Browser und CDN können keine veraltete Version ausliefern.

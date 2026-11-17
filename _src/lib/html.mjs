@@ -1,3 +1,4 @@
+import { variantUrl } from './image-names.mjs';
 /** Kleine, reine Helfer für HTML-Ausgabe (keine Seiteneffekte). */
 
 const ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
@@ -15,10 +16,10 @@ export const slugify = (text) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
-const srcset = (set, ext) =>
-  set.widths.map((w) => `/assets/img/${set.dir}/${set.name}-${w}.${ext} ${w}w`).join(', ');
+// Dateinamen kommen zentral aus image-names.mjs (Leistung + Ort + Inhalts-Hash)
+const srcset = (set, ext) => set.widths.map((w) => `${variantUrl(set, w, ext)} ${w}w`).join(', ');
 
-export const imgUrl = (set, width, ext = 'jpg') => `/assets/img/${set.dir}/${set.name}-${width}.${ext}`;
+export const imgUrl = (set, width, ext = 'jpg') => variantUrl(set, width, ext);
 
 /**
  * <picture> mit AVIF, WebP und JPG-Fallback.

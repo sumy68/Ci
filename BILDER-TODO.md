@@ -5,6 +5,14 @@ Stand: 17.11.2026. Alle derzeit verwendeten Bilder wirken KI-generiert
 unrealistisch perfekte Lichtstimmung). Für Vertrauen und lokales SEO sollten
 sie durch **eigene Fotos von echten Einsätzen** ersetzt werden.
 
+## Dateinamen
+
+Alle erzeugten Bilder heißen nach dem Schema **Leistung + Ort + Breite + Inhalts-Hash**,
+z. B. `fensterreinigung-regensburg-1000.a1b2c3d4.jpg` (Leistungsbilder tragen den Ort der
+Stadtseite, auf der sie erscheinen). Die Namen entstehen automatisch
+(`_src/lib/image-names.mjs`, `_src/image-config.mjs`) – die Quelldateien in `_src/images`
+behalten ihre Namen.
+
 ## So tauschen Sie ein Bild aus
 
 1. Originalfoto (mind. 2000 px breit, Querformat 3:2, außer wo anders angegeben)
@@ -20,12 +28,12 @@ mit schriftlicher Einwilligung.
 
 ## Hero und große Bilder
 
-> Der Glas-Hero ist ein **KI-Symbolbild** (Alt-Text „Saubere Glasfassade – Gebäudereinigung Regensburg (Symbolbild)“). Nach dem Austausch `npm run images -- hero-glas` und `npm run build` ausführen.
+> Der Glas-Hero ist ein **KI-Symbolbild** (Alt-Text „Saubere Glasfassade – Gebäudereinigung Regensburg (Symbolbild)“). Nach dem Austausch `npm run images -- glasfassade` und `npm run build` ausführen.
 
 | Bild | Quelle | Wirkt KI-generiert, weil … | Motiv-Vorschlag für echtes Foto |
 |---|---|---|---|
-| Glas-Hero Desktop/Tablet (**KI-Symbolbild**) | `assets/hero/hero-glas-desktop.jpg` (1344 × 752) | KI-generiert, keine reale Fassade | Nahaufnahme einer echten, von CI gereinigten Glasfassade/Fensterfront in der Region, quer, ruhige helle Fläche **links** (dort liegt der Text), mind. 2400 px breit |
-| Glas-Hero Mobil (**KI-Symbolbild**) | `assets/hero/hero-glas-mobil.jpg` (752 × 1344) | KI-generiert, keine reale Fassade | Dasselbe Motiv im Hochformat, ruhige helle Fläche **oben** (dort liegt der Text), mind. 1200 px breit |
+| Glas-Hero Desktop/Tablet (**KI-Symbolbild**) | `assets/hero/gebaeudereinigung-regensburg-glasfassade-desktop.jpg` (1344 × 752) | KI-generiert, keine reale Fassade | Nahaufnahme einer echten, von CI gereinigten Glasfassade/Fensterfront in der Region, quer, ruhige helle Fläche **links** (dort liegt der Text), mind. 2400 px breit |
+| Glas-Hero Mobil (**KI-Symbolbild**) | `assets/hero/gebaeudereinigung-regensburg-glasfassade-mobil.jpg` (752 × 1344) | KI-generiert, keine reale Fassade | Dasselbe Motiv im Hochformat, ruhige helle Fläche **oben** (dort liegt der Text), mind. 1200 px breit |
 | Wohnhaus (derzeit **nicht verwendet** – „Über uns“ zeigt jetzt den Rundum-Paket-Orbit) | `_src/images/hero/hero-villa.jpg` | Rendering-Look, grünstichige Nachbearbeitung | Team vor dem Firmenfahrzeug oder vor einem betreuten Wohnhaus, Abendlicht, Gesichter erkennbar – eignet sich z. B. als Bild für eine Stadtseite |
 
 ## Leistungen (18 Bilder, je 3:2)

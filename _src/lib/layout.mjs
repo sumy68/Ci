@@ -1,17 +1,17 @@
+import { logoUrl, LOGO_WIDTHS, OG_IMAGE_URL } from './image-names.mjs';
 /** Seitenrahmen: <head>, Header, Footer, WhatsApp-Button, Skripte. */
 import { SITE, SERVICE_GROUPS, CITIES } from '../data.mjs';
 import { esc, ICONS, button } from './html.mjs';
 import { ACCORDION_SCRIPT } from './accordion.mjs';
 
-const LOGO_WIDTHS = [58, 116, 174];
 const YEAR = new Date().getFullYear();
 
 const logo = (variant, alt) => {
-  const set = (ext) => LOGO_WIDTHS.map((w, i) => `/assets/img/logo/logo-ci-dienstleistungen-${variant}-${w}.${ext} ${i + 1}x`).join(', ');
+  const set = (ext) => LOGO_WIDTHS.map((w, i) => `${logoUrl(variant, w, ext)} ${i + 1}x`).join(', ');
   return `<picture>
       <source type="image/avif" srcset="${set('avif')}">
       <source type="image/webp" srcset="${set('webp')}">
-      <img src="/assets/img/logo/logo-ci-dienstleistungen-${variant}-116.png" srcset="${set('png')}" alt="${esc(alt)}" width="58" height="40" decoding="async">
+      <img src="${logoUrl(variant, 116, 'png')}" srcset="${set('png')}" alt="${esc(alt)}" width="58" height="40" decoding="async">
     </picture>`;
 };
 
@@ -20,7 +20,7 @@ const BOOT_SCRIPT = `<script>(function(d){var c=d.classList;c.add('js');try{if(s
 
 export function head(page, { criticalCss, assets }) {
   const url = `${SITE.origin}${page.path}`;
-  const ogImage = `${SITE.origin}/assets/img/og-ci-dienstleistungen.jpg`;
+  const ogImage = `${SITE.origin}${OG_IMAGE_URL}`;
   return `<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">

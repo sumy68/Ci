@@ -11,6 +11,9 @@ export const sectionHead = ({ label, title, lead, id, className = '' }) => `<div
         ${lead ? `<p class="lead">${lead}</p>` : ''}
       </div>`;
 
+/** Natürlicher Alt-Text: Bildbeschreibung + Ort, ohne doppelte Keywords; KI-Bild = Symbolbild. */
+export const serviceAlt = (service, city) => `${service.alt} in ${city} (Symbolbild)`;
+
 /**
  * Editoriale Leistungszeile (Stadtseiten): Nummer, Bild, Titel, ausführlicher
  * Text und Anfrage-Link – statt eines Rasters identischer Karten.
@@ -25,7 +28,7 @@ export function serviceRow(service, { index, sizes, contactHref = '#kontakt', ci
     titleClass: 'svc-row__title',
     prefix: `<span class="svc-row__num" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span>`,
     content: `<div class="svc-row__detail">
-                <div class="svc-row__media frame">${picture(set, { alt: `${service.alt} – ${service.title} in ${city} (Symbolbild)`, sizes })}</div>
+                <div class="svc-row__media frame">${picture(set, { alt: serviceAlt(service, city), sizes })}</div>
                 <div class="svc-row__body">
                   <p>${service.text}</p>
                   <a class="link-arrow" href="${contactHref}" data-service="${esc(service.title)}"><span>Anfragen<span class="sr-only">: ${service.title}</span></span>${ICONS.arrow()}</a>

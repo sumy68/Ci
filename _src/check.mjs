@@ -91,6 +91,12 @@ async function checkSitemap() {
     if (!file) fail('sitemap.xml', `URL ohne Seite: ${loc}`);
     else if (/noindex/.test(await readFile(file, 'utf8'))) fail('sitemap.xml', `noindex-Seite in Sitemap: ${loc}`);
   }
+  // Bild-Sitemap: jede image:loc muss als Datei existieren
+  const images = all(/<image:loc>https:\/\/ci-dienstleistungen\.com([^<]*)<\/image:loc>/g, xml);
+  if (!images.length) fail('sitemap.xml', 'keine image:image-Einträge');
+  for (const [, loc] of images) {
+    if (!(await exists(path.join(ROOT, loc)))) fail('sitemap.xml', `Bild fehlt: ${loc}`);
+  }
 }
 
 const seen = { titles: new Set(), descs: new Set() };

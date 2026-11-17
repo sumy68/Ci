@@ -1,3 +1,4 @@
+import { GRIME_URL } from '../lib/image-names.mjs';
 /** Startseite */
 import { SITE, SERVICE_GROUPS, SERVICES, servicesInGroup, ABOS, TESTIMONIALS, STEPS, FIGURES, FAQ_HOME, CITIES, LOCATIONS, ORBIT } from '../data.mjs';
 import { HERO_GLASS_DESKTOP, HERO_GLASS_MOBILE, SERVICE_IMAGE_BY_ID } from '../image-config.mjs';
@@ -45,7 +46,7 @@ function wipeMedia() {
         <div class="wipe__dirty" aria-hidden="true" data-wipe-dirty>
           ${artPicture({ ...HERO_ART, decorative: true })}
           <span class="wipe__veil"></span>
-          <img class="wipe__grime" src="/assets/img/hero/schmutzfilm.svg" alt="" width="600" height="750" decoding="async">
+          <img class="wipe__grime" src="${GRIME_URL}" alt="" width="600" height="750" decoding="async">
         </div>
         <span class="hero__wash" aria-hidden="true"></span>
         <span class="wipe__glint" aria-hidden="true" data-wipe-glint></span>
@@ -155,7 +156,7 @@ const COMPARISONS = Object.freeze([
 const COMPARE_SIZES = '(min-width: 1360px) 820px, (min-width: 900px) 62vw, 94vw';
 
 /** Bildset im Format des picture()-Helfers für eine Seite (vorher/nachher) eines Paares. */
-const pairSet = (pair, side) => ({ dir: 'vorher-nachher', name: pair.names[side], widths: pair.widths, width: pair.width, height: pair.height });
+const pairSet = (pair, side) => pair.sides[side];
 
 function compareLayers(item, pair) {
   if (!pair) {
@@ -441,6 +442,12 @@ export function homePage({ pairs = {} } = {}) {
     ogTitle: 'Gebäudereinigung & Hausmeisterservice in Regensburg, Kelheim und Landshut',
     description,
     priority: '1.0',
+    // Bild-Sitemap: Hero (Desktop/Mobil) und alle Vorher/Nachher-Bilder
+    images: [
+      imgUrl(HERO_GLASS_DESKTOP, 1344),
+      imgUrl(HERO_GLASS_MOBILE, 752),
+      ...Object.values(pairs).filter(Boolean).flatMap((p) => Object.values(p.sides).map((set) => imgUrl(set, set.widths.at(-1)))),
+    ],
     preload: preloadArt(HERO_ART),
     bodyClass: 'page-home',
     jsonLd: graph([website(), webPage({ url, name: title, description }), localBusiness(), ...serviceNodes(), faqPage(FAQ_HOME, url)]),

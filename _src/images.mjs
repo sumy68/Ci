@@ -10,6 +10,10 @@ import { mkdir, writeFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { IMAGE_SETS, SERVICE_IMAGES } from './image-config.mjs';
+import { variantFile, sourcePath, logoUrl, LOGO_WIDTHS, LOGO_SCHEMA_URL, OG_IMAGE_URL } from './lib/image-names.mjs';
+
+/** URL (/assets/img/…) -> absoluter Dateipfad im Projekt */
+const urlToPath = (url) => path.join(ROOT, url.replace(/^\//, ''));
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, '_src/images');
@@ -24,8 +28,8 @@ async function ensureDir(dir) {
   await mkdir(dir, { recursive: true });
 }
 
-/** Schreibt eine Breite in drei Formaten und prüft das Größenbudget. */
-async function writeVariants(pipeline, outBase, budgetKb) {
+/** Schreibt eine Breite in drei Formaten und prüft das Größenbudget. fileFor(ext) -> Zielpfad */
+async function writeVariants(pipeline, fileFor, budgetKb) {
   const jobs = [
     ['avif', (p, q) => p.avif({ quality: q, effort: 6 }), QUALITY.avif],
     ['webp', (p, q) => p.webp({ quality: q }), QUALITY.webp],
@@ -34,7 +38,7 @@ async function writeVariants(pipeline, outBase, budgetKb) {
   const MIN_QUALITY = 50;
   const warnings = [];
   for (const [ext, encode, startQuality] of jobs) {
-    const file = `${outBase}.${ext}`;
+    const file = fileFor(ext);
     // Qualität schrittweise senken, bis das Budget eingehalten wird
     for (let q = startQuality; ; q -= 6) {
       await encode(pipeline.clone(), q).toFile(file);
@@ -49,18 +53,20 @@ async function writeVariants(pipeline, outBase, budgetKb) {
   return warnings;
 }
 
-async function buildSet({ src, rootSrc, name, dir, widths, budgetKb, aspect }) {
+async function buildSet(set) {
+  const { src, dir, widths, budgetKb, aspect } = set;
   const outDir = path.join(OUT, dir);
   await ensureDir(outDir);
-  // rootSrc: Quelle relativ zum Projekt-Root (z. B. /assets/hero), sonst unter _src/images
-  const base = sharp(rootSrc ? path.join(ROOT, rootSrc) : path.join(SRC, src)).rotate();
+  // Quelle: rootSrc (relativ zum Projekt-Root, z. B. /assets/hero) oder unter _src/images
+  const base = sharp(sourcePath(set)).rotate();
   const meta = await base.metadata();
   const warnings = [];
   for (const width of widths) {
     if (width > meta.width) throw new Error(`${src}: ${width}px würde hochskaliert (${meta.width}px)`);
     const height = aspect ? Math.round(width / aspect) : undefined;
     const resized = base.clone().resize({ width, height, fit: 'cover', position: 'attention' });
-    warnings.push(...(await writeVariants(resized, path.join(outDir, `${name}-${width}`), budgetKb)));
+    // SEO-Name + Inhalts-Hash am Ende (lib/image-names.mjs)
+    warnings.push(...(await writeVariants(resized, (ext) => path.join(outDir, variantFile(set, width, ext)), budgetKb)));
   }
   return warnings;
 }
@@ -70,16 +76,16 @@ async function buildLogos() {
   const outDir = path.join(OUT, 'logo');
   await ensureDir(outDir);
   const src = path.join(SRC, 'logo/logo-weiss.png');
-  const widths = [58, 116, 174];
+  const widths = LOGO_WIDTHS;
   const variants = { hell: null, dunkel: INK };
   for (const [variant, tint] of Object.entries(variants)) {
     for (const width of widths) {
       let p = sharp(src).resize({ width });
       if (tint) p = p.ensureAlpha().tint(tint).linear(0.05, 0);
-      const outBase = path.join(outDir, `logo-ci-dienstleistungen-${variant}-${width}`);
-      await p.clone().png({ compressionLevel: 9, palette: true }).toFile(`${outBase}.png`);
-      await p.clone().webp({ quality: 90, alphaQuality: 100 }).toFile(`${outBase}.webp`);
-      await p.clone().avif({ quality: 60 }).toFile(`${outBase}.avif`);
+      // ci-dienstleistungen-logo-<variante>-<breite>.<hash>.<format>
+      await p.clone().png({ compressionLevel: 9, palette: true }).toFile(urlToPath(logoUrl(variant, width, 'png')));
+      await p.clone().webp({ quality: 90, alphaQuality: 100 }).toFile(urlToPath(logoUrl(variant, width, 'webp')));
+      await p.clone().avif({ quality: 60 }).toFile(urlToPath(logoUrl(variant, width, 'avif')));
     }
   }
 }
@@ -128,6 +134,9 @@ async function buildIcons() {
   for (const [file, size, ratio] of plan) {
     await (await iconOnInk(size, ratio)).toFile(path.join(outDir, file));
   }
+  // Quadratisches Logo für Schema.org (fester, sprechender Name)
+  await ensureDir(path.join(OUT, 'logo'));
+  await (await iconOnInk(512, 0.62)).toFile(urlToPath(LOGO_SCHEMA_URL));
   const ico = await Promise.all(
     [16, 32, 48].map(async (size) => ({ size, data: await (await iconOnInk(size, 0.8)).toBuffer() })),
   );
@@ -138,7 +147,7 @@ async function buildIcons() {
 async function buildOgImage() {
   const W = 1200;
   const H = 630;
-  const photo = await sharp(path.join(ROOT, 'assets/hero/hero-glas-desktop.jpg'))
+  const photo = await sharp(path.join(ROOT, 'assets/hero/gebaeudereinigung-regensburg-glasfassade-desktop.jpg'))
     .resize({ width: W, height: H, fit: 'cover', position: 'attention' })
     .toBuffer();
   const shade = Buffer.from(
@@ -150,7 +159,7 @@ async function buildOgImage() {
   await sharp(photo)
     .composite([{ input: shade }, { input: logo, left: 64, top: H - 64 - 103 }])
     .jpeg({ quality: 82, mozjpeg: true })
-    .toFile(path.join(OUT, 'og-ci-dienstleistungen.jpg'));
+    .toFile(urlToPath(OG_IMAGE_URL));
 }
 
 async function main() {

@@ -1,3 +1,4 @@
+import { LOGO_SCHEMA_URL } from './image-names.mjs';
 /**
  * JSON-LD-Bausteine (Schema.org). NAP-Daten kommen ausschließlich aus SITE,
  * damit Footer, Kontakt und Schema garantiert identisch sind.
@@ -24,7 +25,7 @@ export function localBusiness({ areas = AREAS, url = `${SITE.origin}/` } = {}) {
     name: SITE.name,
     description: 'Gebäudereinigung und Hausmeisterservice aus einer Hand in Regensburg, Kelheim und Landshut – je Standort mit rund 40 km Umkreis. ' + SITE.radiusNote,
     url,
-    logo: `${SITE.origin}/assets/img/icons/icon-512.png`,
+    logo: `${SITE.origin}${LOGO_SCHEMA_URL}`,
     image: `${SITE.origin}${imgUrl(HERO_GLASS_DESKTOP, 1344)}`,
     telephone: SITE.phoneE164,
     email: SITE.email,
