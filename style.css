@@ -5,7 +5,7 @@
   --red: #40E0D0;           /* Tuerkis – Akzent */
   --accent: #40E0D0;        /* Tuerkis – Akzent */
   --accent-strong: #20C9BB; /* Tuerkis – Hover */
-  --nav-h: 90px;
+  --nav-h: 76px;
   --anthracite: #5F6368;    /* Marken-Anthrazit */
 }
 
@@ -27,69 +27,207 @@ body{
 }
 main{ flex: 1 0 auto; }
 
-/* ===== HEADER ===== */
+/* ===== HEADER / NAVIGATION ===== */
 .site-header{
+  --nav-bg: rgba(31,33,37,.88);       /* #1f2125 mit leichter Transparenz */
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(35,38,42,0.9);
-  backdrop-filter: blur(4px);
-  border-bottom: 1px solid rgba(255,255,255,.06);
+  isolation: isolate;
+  transition: box-shadow .3s ease;
 }
+/* Hintergrund als eigene Ebene: backdrop-filter am Header selbst wuerde
+   position:fixed-Kinder (Mobil-Overlay) an den Header binden */
+.site-header::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--nav-bg);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: opacity .3s ease;
+}
+.site-header.is-scrolled,
+.site-header:not(.site-header--overlay){
+  box-shadow: 0 4px 20px rgba(0,0,0,.25);
+}
+
+/* Startseite: transparent ueber dem Hero, ab ~50px dunkel */
+.site-header--overlay{
+  position: fixed;
+  left: 0;
+  right: 0;
+}
+.site-header--overlay:not(.is-scrolled):not(.is-menu-open)::before{ opacity: 0; }
 
 .nav-wrap{
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
-  min-height: var(--nav-h);
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 16px;
-}
-
-.brand{ display: flex; align-items: center; }
-
-.logo-box{
+  height: var(--nav-h);
   display: flex;
   align-items: center;
+  gap: 32px;
 }
-.logo-box img{
-  height: 56px;      /* passend zur Navbar (50-60px) */
+
+.brand{
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-right: auto;
+  border-radius: 6px;
+}
+.brand img{
+  height: 46px;
   width: auto;
   display: block;
-  object-fit: contain;
 }
 
-/* Desktop Navi-Links */
+.nav-menu{
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
 .nav-links{
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: clamp(18px, 1.8vw, 28px);
+  gap: 32px;
+  list-style: none;
 }
-.nav-links a{
-  color: #fff;
-  text-decoration: none;
-  opacity: 1;
-  font-weight: 800;
-  font-size: clamp(16px, 1.3vw, 19px);
+.nav-link{
+  position: relative;
+  display: inline-block;
+  padding: 6px 0;
+  color: rgba(255,255,255,.85);
+  font-size: 15px;
+  font-weight: 500;
   line-height: 1.2;
-  white-space: nowrap;   /* kein Umbruch wie "Abo-/Modelle" */
+  letter-spacing: .01em;
+  text-decoration: none;
+  white-space: nowrap;
+  border-radius: 4px;
+  transition: color .2s ease;
 }
-.nav-links a:hover{ color: var(--accent); }
+.nav-link::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .25s cubic-bezier(.2,.8,.2,1);
+}
+.nav-link:hover,
+.nav-link.is-active{ color: #fff; }
+.nav-link:hover::after,
+.nav-link.is-active::after{ transform: scaleX(1); }
 
-/* CTAs */
-.nav-cta{
+.nav-actions{
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  gap: 12px;
+  gap: 24px;
 }
 
-/* Kontakt-Buttons im mobilen Menue – auf Desktop ausgeblendet (dort oben rechts in .nav-cta) */
-.nav-links__cta{ display: none; }
+/* Telefon: dezenter Link, kein Button */
+.nav-phone{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  border-radius: 6px;
+  transition: color .2s ease;
+}
+.nav-phone svg{ color: var(--accent); flex-shrink: 0; }
+.nav-phone:hover{ color: var(--accent); }
 
+/* Primaerer CTA in der Navbar */
+.btn-nav{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 20px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #17191c;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .2s ease, transform .15s ease;
+}
+.btn-nav:hover{
+  background: var(--accent-strong);
+  transform: translateY(-1px);
+}
+
+/* Nur mobil sichtbar */
+.nav-phone-icon,
+.burger{ display: none; }
+
+.nav-phone-icon{
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border-radius: 10px;
+}
+.nav-phone-icon svg{ width: 22px; height: 22px; }
+
+.burger{
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  margin-right: -8px;
+  background: none;
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #fff;
+  position: relative;
+}
+.burger span,
+.burger span::before,
+.burger span::after{
+  position: absolute;
+  left: 11px;
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform .25s ease, opacity .2s ease;
+}
+.burger span{ top: 21px; }
+.burger span::before,
+.burger span::after{ content: ""; left: 0; }
+.burger span::before{ top: -7px; }
+.burger span::after{ top: 7px; }
+.burger[aria-expanded="true"] span{ background: transparent; }
+.burger[aria-expanded="true"] span::before{ transform: translateY(7px) rotate(45deg); background: #fff; }
+.burger[aria-expanded="true"] span::after{ transform: translateY(-7px) rotate(-45deg); background: #fff; }
+
+/* Sichtbarer Fokus fuer Tastaturnutzer */
+a:focus-visible,
+button:focus-visible{
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.btn-nav:focus-visible,
+.wa-fab:focus-visible{
+  outline-color: #fff;
+}
+
+/* Bestehende Buttons (Seiteninhalt) */
 .btn{
   white-space: nowrap;
   display: inline-flex;
@@ -103,7 +241,6 @@ main{ flex: 1 0 auto; }
   background: var(--accent);
   box-shadow: 0 2px 8px rgba(64, 224, 208, .28);
   transition: transform .15s ease, filter .2s ease, background .2s ease;
-  white-space: nowrap;
 }
 .btn:hover{
   transform: translateY(-2px);
@@ -131,44 +268,41 @@ main{ flex: 1 0 auto; }
   filter: brightness(1.05);
 }
 
-/* Burger Menu */
-.burger{
-  display: none;
-  margin-left: auto;
-  background: none;
-  border: 0;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  position: relative;
-  z-index: 1100;
+/* ===== SCHWEBENDER WHATSAPP-BUTTON ===== */
+.wa-fab{
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 900;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #25D366;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(0,0,0,.28);
+  transition: transform .2s ease, box-shadow .2s ease;
 }
-.burger span,
-.burger::before,
-.burger::after{
-  content: "";
-  display: block;
-  height: 2px;
-  background: var(--text);
-  margin: 7px 6px;
-  transition: transform .25s ease, opacity .25s ease;
+.wa-fab:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.32);
 }
-.burger[aria-expanded="true"] span{ opacity: 0; }
-.burger[aria-expanded="true"]::before{ transform: translateY(9px) rotate(45deg); }
-.burger[aria-expanded="true"]::after{ transform: translateY(-9px) rotate(-45deg); }
+.menu-open .wa-fab{ visibility: hidden; }
 
 /* ===== HERO MIT BILD ===== */
 .hero{
   position: relative;
   display: grid;
   place-items: center;
-  margin-top: 0; /* buendig an die sticky Navbar andocken, kein Zwischenraum */
-  min-height: calc(88svh - var(--nav-h));
+  margin-top: 0; /* Navbar liegt transparent darueber (fixed) */
+  min-height: 88svh;
   overflow: hidden;
 }
 
 @supports (height: 100dvh){
-  .hero{ min-height: calc(88dvh - var(--nav-h)); }
+  .hero{ min-height: 88dvh; }
 }
 
 /* BILD */
@@ -185,6 +319,26 @@ main{ flex: 1 0 auto; }
   -webkit-user-select: none;
   z-index: 0;
   pointer-events: none;
+}
+
+/* Scroll-Sentinel: Navbar wird dunkel, sobald diese 50px verlassen sind */
+.nav-sentinel{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 50px;
+  pointer-events: none;
+}
+
+/* Dezenter dunkler Verlauf oben: Navbar-Links bleiben ueber dem Bild lesbar */
+.hero__topfade{
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 200px;
+  background: linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,0));
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* Overlay */
@@ -225,7 +379,7 @@ main{ flex: 1 0 auto; }
 
 /* Mobile Hero (Hochformat-Bild fuellt volle Hoehe, mittig) */
 @media (max-width: 768px){
-  .hero{ min-height: calc(100svh - var(--nav-h)); }
+  .hero{ min-height: 100svh; }
   .hero__img{ object-position: center; }
   .hero__title{
     font-size: clamp(24px, 6.5vw, 40px); /* "HAUSMEISTERSERVICE" & "GEBÄUDEREINIGUNG" je 1 Zeile */
@@ -237,72 +391,99 @@ main{ flex: 1 0 auto; }
 }
 
 /* ===== RESPONSIVE NAVIGATION ===== */
-/* Burger ab 1200px: darunter passen Links + Buttons nicht sauber in eine Zeile */
-@media (max-width: 1200px){
-  .nav-cta{ display: none; }
+/* Etwas engere Abstaende auf kleinen Desktops */
+@media (max-width: 1180px) and (min-width: 1025px){
+  .nav-wrap{ gap: 24px; }
+  .nav-menu{ gap: 28px; }
+  .nav-links{ gap: 24px; }
+  .nav-actions{ gap: 18px; }
+}
+
+/* Mobil/Tablet: Logo links, Telefon-Icon + Hamburger rechts, Vollbild-Overlay */
+@media (max-width: 1024px){
+  .nav-wrap{
+    gap: 4px;
+    padding: 0 16px;
+  }
+  .brand img{ height: 44px; }
+
+  .nav-phone-icon{ display: inline-flex; }
   .burger{ display: block; }
-  
-  .nav-links{
+
+  .nav-menu{
     position: fixed;
-    top: 0;
-    right: -100%;
-    bottom: 0;
-    /* Viewport-Hoehe erzwingen: ein Vorfahre mit transform ist Containing-Block,
-       daher greift top/bottom:0 nicht -> Panel volle Hoehe via vh/dvh */
+    inset: 0;
+    z-index: -2;               /* unter Logo/Burger, im Header-Stacking-Context */
     height: 100vh;
     height: 100dvh;
-    overflow-y: auto;
-    width: min(78vw, 320px);
-    background: var(--green-footer);
     flex-direction: column;
-    justify-content: flex-start;
     align-items: stretch;
-    padding: 96px 20px 24px;
-    gap: 6px;
-    box-shadow: -6px 0 18px rgba(0,0,0,.35);
-    transition: right .35s cubic-bezier(.2,.8,.2,1);
-    z-index: 1000;
-    pointer-events: none;
+    justify-content: space-between;
+    gap: 32px;
+    padding: calc(var(--nav-h) + 24px) 24px calc(24px + env(safe-area-inset-bottom));
+    background: #1f2125;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s ease, visibility 0s linear .25s;
   }
-  
-  .nav-links.open{
-    right: 0;
-    pointer-events: auto;
+  .is-menu-open .nav-menu{
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .25s ease;
   }
-  
-  .nav-links a{
-    display: block;
-    width: 100%;
-    padding: 12px 10px;
-    font-size: 17px;
-    border-radius: 10px;
-  }
-  .nav-links a:hover{ background: rgba(255,255,255,.06); }
 
-  /* Kontakt-Buttons unten im Slide-in-Menue */
-  .nav-links__cta{
-    margin-top: auto;               /* nach unten schieben */
-    display: flex;
+  .nav-links{
     flex-direction: column;
-    gap: 10px;
-    padding-top: 16px;
+    align-items: stretch;
+    gap: 0;
   }
-  .nav-links__cta .btn{
+  .nav-links li{ border-bottom: 1px solid rgba(255,255,255,.08); }
+  .nav-link{
     display: flex;
     align-items: center;
-    justify-content: center;
     width: 100%;
-    min-height: 48px;               /* gut tippbar */
-    padding: 12px 16px;
+    min-height: 64px;
+    padding: 0 4px;
+    font-size: 26px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .nav-link::after{ display: none; }
+  .nav-link.is-active{ color: var(--accent); }
+
+  .nav-actions{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .nav-phone{
+    justify-content: center;
+    min-height: 52px;
+    border: 1px solid rgba(255,255,255,.18);
     border-radius: 12px;
     font-size: 17px;
   }
-  .nav-links__cta .btn:hover{ background: var(--accent-strong); }
-
-  .logo-box img{ height: 48px; }
+  .btn-nav{
+    min-height: 56px;
+    border-radius: 12px;
+    font-size: 17px;
+  }
 }
 
+/* Scroll sperren, solange das Menue offen ist */
+html.menu-open,
 body.menu-open{ overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce){
+  .site-header::before,
+  .nav-link,
+  .nav-link::after,
+  .nav-menu,
+  .btn-nav,
+  .wa-fab{ transition: none; }
+}
 
 /* ===== INTRO TEXT ===== */
 .intro{
