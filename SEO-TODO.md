@@ -26,8 +26,10 @@ Alle Stellen sind im Quelltext als `TODO` markiert und werden zentral in
 
 ## 2. Rechtliches (vor dem nächsten Release prüfen lassen)
 
-- Erledigt (17.11.2026): Impressum auf **§ 5 DDG**, **§§ 7–10 DDG** und **§ 18 Abs. 2 MStV** umgestellt; Datenschutz beschreibt jetzt den tatsächlichen Stand (Hosting GitHub Pages, Formspree, WhatsApp-Link, Google Maps nur als Link, lokale Schriften, keine Cookies/kein Tracking, TDDDG). Instagram-Abschnitt entfernt (kein Link vorhanden).
-- **Offen – „TODO: Datenschutz prüfen“ (HTML-Kommentare in /datenschutz):** Vertragspartner/Drittlandübermittlung GitHub; Einordnung des sessionStorage-Werts nach § 25 TDDDG; AV-Vertrag, Drittlandübermittlung und Speicherdauer bei Formspree; Rechtsgrundlage/Hinweise WhatsApp-Nutzung; bestehende AV-Verträge nach Art. 28 DSGVO; aktuelle Anschrift des BayLDA.
+- Datenschutz: Abschnitt zum **Kontaktformular-Dienst Formspree** (Datenübermittlung in die USA) fehlt.
+- Datenschutz: **Hosting-Anbieter** eintragen (derzeit GitHub Pages, GitHub Inc.).
+- Datenschutz: Abschnitt **Google Maps** beschreibt eine Karte, die auf der Website nicht eingebunden ist – ggf. entfernen. Ebenso Abschnitt **Instagram** (derzeit kein Link vorhanden).
+- Erledigt (17.11.2026): Impressum auf **§ 5 DDG**, **§§ 7–10 DDG** und **§ 18 Abs. 2 MStV** umgestellt.
 - **Offen – Impressum:** EU-OS-Plattform wurde zum 20.07.2025 eingestellt – Hinweis/Link ggf. entfernen (rechtlich prüfen).
 - Impressum: Zeilen „Unternehmensform: Einzelkaufmann“ und „Unternehmensgegenstand: Hausmeisterservice“ wurden entfernt (stammten aus dem Initial-Commit `6ba1742`). **Vom Kunden bestätigen:** Rechtsform, ggf. Handelsregister, ggf. Handwerkskammer/USt-IdNr. (als TODO-Kommentar im Impressum markiert).
 - Impressum: Abschnitt **Bildnachweis** zu KI-generierten Symbolbildern ergänzt; Footer verlinkt darauf.

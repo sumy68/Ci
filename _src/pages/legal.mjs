@@ -57,39 +57,31 @@ const DATENSCHUTZ_BODY = `
           <h2>1. Verantwortlicher</h2>
           <p><strong>${SITE.name}</strong><br>Inhaber: <strong>${SITE.owner}</strong><br>${SITE.address.street}, ${SITE.address.zip} ${SITE.address.city}<br>Telefon: ${tel}<br>E-Mail: ${mail}</p>
           <h2>2. Allgemeine Hinweise</h2>
-          <p>Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Vorschriften (DSGVO, BDSG, TDDDG). Diese Hinweise informieren über Art, Umfang und Zwecke der Verarbeitung sowie über Ihre Rechte.</p>
+          <p>Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Vorschriften (DSGVO, BDSG). Diese Hinweise informieren über Art, Umfang und Zwecke der Verarbeitung sowie über Ihre Rechte.</p>
           <h2>3. Hosting &amp; Server-Logfiles</h2>
-          <p>Diese Website wird über GitHub Pages bereitgestellt (Anbieter: GitHub, Inc., USA).</p>
-          <!-- TODO: Datenschutz prüfen – Vertragspartner (GitHub, Inc. bzw. GitHub B.V.), Auftragsverarbeitung und Drittlandübermittlung (z. B. EU-US Data Privacy Framework) bestätigen -->
+          <p>Wir hosten die Website bei einem externen Dienstleister (Auftragsverarbeiter).<br><em>Hosting-Anbieter:</em> <!-- TODO: vom Kunden – Name/Adresse des Hosters eintragen (derzeit GitHub Pages, GitHub Inc.) --></p>
           <p>Beim Aufruf werden automatisch sogenannte Server-Logfiles verarbeitet: IP-Adresse, Datum/Uhrzeit, URL, Referrer, übertragene Datenmenge, User-Agent. Die Verarbeitung erfolgt zur technischen Bereitstellung, Stabilität und Sicherheit (Art. 6 Abs. 1 lit. f DSGVO). Logdaten werden vom Hoster nach kurzer Zeit automatisch gelöscht, sofern keine sicherheitsrelevante Aufbewahrung erforderlich ist.</p>
-          <h2>4. Cookies, lokale Speicherung &amp; kein Tracking</h2>
-          <p>Diese Website setzt keine Cookies und verwendet keine Analyse- oder Tracking-Dienste.</p>
-          <p>Für eine kurze Überblendung beim Wechsel zwischen unseren Seiten wird im Sitzungsspeicher Ihres Browsers (sessionStorage) vorübergehend ein technischer Wert abgelegt, der beim nächsten Seitenaufruf sofort wieder gelöscht wird. Personenbezogene Daten werden dabei nicht gespeichert.</p>
-          <!-- TODO: Datenschutz prüfen – Einordnung des sessionStorage-Werts nach § 25 Abs. 2 Nr. 2 TDDDG (unbedingt erforderlich?) bestätigen oder Überblendung ohne Speicherung umsetzen -->
+          <h2>4. Cookies &amp; Einwilligung</h2>
+          <p>Wir verwenden derzeit keine Tracking-Cookies. Technisch erforderliche Cookies (falls eingesetzt) beruhen auf Art. 6 Abs. 1 lit. f DSGVO. Dienste Dritter (z. B. Google Maps) können eigene Cookies setzen – siehe unten.</p>
           <h2>5. Kontaktaufnahme (Formular, E-Mail, Telefon)</h2>
           <p>Angaben aus Ihrer Kontaktaufnahme verarbeiten wir zur Bearbeitung Ihres Anliegens und für Rückfragen (Art. 6 Abs. 1 lit. b DSGVO – vorvertragliche/vertragliche Maßnahmen; sowie lit. f – berechtigtes Interesse an effizienter Kommunikation). Die Daten werden gelöscht, wenn der Zweck entfällt und keine gesetzlichen Aufbewahrungspflichten entgegenstehen.</p>
-          <p><em>Kontaktformular:</em> Wenn Sie das Kontaktformular nutzen, werden Ihre Angaben (Name, E-Mail-Adresse sowie – soweit angegeben – Telefonnummer, Adresse des Objekts, gewünschte Leistung und Ihre Nachricht) an den Formulardienst Formspree (Anbieter mit Sitz in den USA) übermittelt, der sie uns per E-Mail weiterleitet.</p>
-          <!-- TODO: Datenschutz prüfen – Auftragsverarbeitungsvertrag mit Formspree, Drittlandübermittlung (DPF/Standardvertragsklauseln) und Speicherdauer bei Formspree ergänzen -->
-          <h2>6. WhatsApp</h2>
-          <p>Über einen Link bzw. den WhatsApp-Button können Sie uns per WhatsApp kontaktieren (Anbieter für Nutzer in der EU: WhatsApp Ireland Limited). Beim bloßen Besuch unserer Website werden keine Daten an WhatsApp übertragen. Erst wenn Sie den Link anklicken und WhatsApp nutzen, werden Daten an WhatsApp übermittelt; dafür gelten die Datenschutzhinweise von WhatsApp.</p>
-          <!-- TODO: Datenschutz prüfen – Rechtsgrundlage und Hinweise zur geschäftlichen Nutzung von WhatsApp (z. B. WhatsApp Business, Speicherdauer der Nachrichten) ergänzen -->
-          <h2>7. Google Maps (nur Link)</h2>
-          <p>Unsere Adressangaben sind mit Google Maps verlinkt (Anbieter: Google Ireland Limited). Es ist keine Karte auf dieser Website eingebunden. Daten werden erst an Google übermittelt, wenn Sie einen solchen Link anklicken und Google Maps aufrufen; dort gelten die <a href="https://policies.google.com/privacy?hl=de" target="_blank" rel="noopener">Datenschutzhinweise von Google</a>.</p>
-          <h2>8. Schriftarten und Programmbibliotheken</h2>
-          <p>Schriftarten und Programmbibliotheken (z. B. für Animationen) werden ausschließlich von unserem eigenen Webserver geladen. Es besteht keine Verbindung zu Google Fonts oder anderen externen Content-Delivery-Netzwerken.</p>
-          <!-- Entfernt: Abschnitt „Externe Profile/Links (Instagram)“ – auf der Website ist kein Instagram-Link vorhanden. TODO: Datenschutz prüfen – bei späterer Verlinkung eines Profils wieder ergänzen -->
-          <h2>9. Empfänger / Auftragsverarbeiter</h2>
-          <p>Empfänger personenbezogener Daten sind die oben genannten Dienstleister (Hosting, Formulardienst), soweit dies für den jeweiligen Zweck erforderlich ist.</p>
-          <!-- TODO: Datenschutz prüfen – bestehende Auftragsverarbeitungsverträge nach Art. 28 DSGVO bestätigen -->
-          <h2>10. Speicherdauer</h2>
+          <!-- TODO: rechtlich prüfen – das Kontaktformular übermittelt Daten an Formspree (USA); Abschnitt zum Formulardienst ergänzen -->
+          <h2>6. Eingebundene Inhalte: Google Maps</h2>
+          <p>Auf <em>index.html</em> ist eine Karte von Google Maps (Google Ireland Limited) eingebunden. Beim Aufruf können Daten (u. a. IP-Adresse, Browser-Informationen) an Google übermittelt und Cookies gesetzt werden.<br><em>Rechtsgrundlage:</em> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an ansprechender Darstellung) bzw. – sofern ein Consent-Banner verwendet wird – Art. 6 Abs. 1 lit. a DSGVO (Einwilligung).<br>Weitere Infos: <a href="https://policies.google.com/privacy?hl=de" target="_blank" rel="noopener">Datenschutzerklärung von Google</a>.</p>
+          <!-- TODO: rechtlich prüfen – auf der Website ist derzeit keine Google-Maps-Karte eingebunden; Abschnitt ggf. entfernen.
+               Hinweis aus der alten Fassung: Für maximale DSGVO-Konformität kann eine Karte erst nach Klick/Einwilligung geladen werden („Zwei-Klick-Lösung“). -->
+          <h2>7. Externe Profile/Links (Instagram)</h2>
+          <p>Auf unserer Website verlinken wir zu Instagram. Es erfolgt keine automatische Datenübertragung an Instagram, solange Sie dem Link nicht folgen. Beim Aufruf der Plattform gelten die dortigen Datenschutzbestimmungen.</p>
+          <h2>8. Empfänger / Auftragsverarbeiter</h2>
+          <p>Externe Dienstleister (z. B. Hosting) verarbeiten Daten ausschließlich auf Grundlage von Auftragsverarbeitungsverträgen nach Art. 28 DSGVO.</p>
+          <h2>9. Speicherdauer</h2>
           <p>Wir speichern personenbezogene Daten nur solange, wie es für den jeweiligen Zweck erforderlich ist oder gesetzliche Aufbewahrungsfristen bestehen. Danach werden die Daten gelöscht oder anonymisiert.</p>
-          <h2>11. Ihre Rechte</h2>
+          <h2>10. Ihre Rechte</h2>
           <p>Sie haben Rechte auf Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung (Art. 18), Datenübertragbarkeit (Art. 20) sowie Widerspruch gegen Verarbeitungen (Art. 21 DSGVO). Erteilte Einwilligungen können Sie jederzeit mit Wirkung für die Zukunft widerrufen (Art. 7 Abs. 3 DSGVO).</p>
           <p>Zudem besteht ein Beschwerderecht bei einer Aufsichtsbehörde. Zuständig in Bayern ist u. a. das <em>Bayerische Landesamt für Datenschutzaufsicht (BayLDA), Promenade&nbsp;27, 91522&nbsp;Ansbach</em>.</p>
-          <!-- TODO: Datenschutz prüfen – aktuelle Anschrift des BayLDA verifizieren (lda.bayern.de) -->
-          <h2>12. Sicherheit (TLS/SSL)</h2>
-          <p>Diese Website wird ausschließlich über eine verschlüsselte TLS/SSL-Verbindung (https) bereitgestellt.</p>
-          <h2>13. Aktualität</h2>
+          <h2>11. Sicherheit (TLS/SSL)</h2>
+          <p>Diese Website sollte über eine TLS/SSL-Verschlüsselung bereitgestellt werden (https).</p>
+          <h2>12. Aktualität</h2>
           <p>Diese Datenschutzerklärung ist aktuell gültig (Stand: ${BUILD_DATE}). Wir behalten uns Anpassungen bei geänderter Rechtslage oder technischen Änderungen vor.</p>`;
 
 const legalPage = ({ slug, crumb, title, description, h1, lead, body }) => {
@@ -125,7 +117,7 @@ export const datenschutzPage = () =>
     title: 'Datenschutzerklärung | CI Dienstleistungen Regensburg',
     description: 'Datenschutzerklärung von CI Dienstleistungen: Verarbeitung personenbezogener Daten, Rechtsgrundlagen, Speicherdauer und Ihre Rechte nach der DSGVO.',
     h1: 'Datenschutz&shy;erklärung',
-    lead: 'Informationen zur Verarbeitung personenbezogener Daten nach DSGVO und TDDDG.',
+    lead: 'Informationen zur Verarbeitung personenbezogener Daten nach DSGVO.',
     body: DATENSCHUTZ_BODY,
   });
 
