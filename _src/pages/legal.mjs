@@ -31,7 +31,12 @@ const IMPRESSUM_BODY = `
           <h2>Anbieterkennzeichnung</h2>
           <p><strong>${SITE.name}</strong><br>Inhaber: <strong>${SITE.owner}</strong><br>Büro: ${SITE.address.street}, ${SITE.address.zip} ${SITE.address.city}<br>Lager: Gewerbering 8, 84085 Langquaid</p>
           <h2>Unternehmensangaben</h2>
-          <p>Unternehmensform: Einzelkaufmann<br>Unternehmensgegenstand: Hausmeisterservice<br>Steuernummer: 211/232/12752</p>
+          <!-- Entfernt: „Unternehmensform: Einzelkaufmann“ und „Unternehmensgegenstand: Hausmeisterservice“
+               (stammten aus dem Initial-Commit 6ba1742 vom 20.01.2026). -->
+          <!-- TODO: vom Kunden bestätigen – Rechtsform (z. B. Einzelunternehmen, e. K.) -->
+          <!-- TODO: vom Kunden bestätigen – ggf. Handelsregister (Registergericht, Registernummer) -->
+          <!-- TODO: vom Kunden bestätigen – ggf. Handwerkskammer/Berufsbezeichnung, USt-IdNr. -->
+          <p>Steuernummer: 211/232/12752</p>
           <h2>Kontakt</h2>
           <p>Telefon: ${tel}<br>E-Mail: ${mail}</p>
           <h2>Verantwortlich i.S.d. § 55 Abs. 2 RStV</h2>
@@ -44,7 +49,9 @@ const IMPRESSUM_BODY = `
           <h2>Haftung für Links</h2>
           <p>Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Daher können wir für diese fremden Inhalte keine Gewähr übernehmen. Verantwortlich ist stets der jeweilige Betreiber.</p>
           <h2>Urheberrecht</h2>
-          <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Vervielfältigung, Bearbeitung und Verbreitung außerhalb der Grenzen des Urheberrechtes bedürfen der Zustimmung des jeweiligen Autors.</p>`;
+          <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Vervielfältigung, Bearbeitung und Verbreitung außerhalb der Grenzen des Urheberrechtes bedürfen der Zustimmung des jeweiligen Autors.</p>
+          <h2 id="bildnachweis">Bildnachweis</h2>
+          <p>Einige Bilder auf dieser Website wurden mithilfe künstlicher Intelligenz erstellt und dienen als Symbolbilder. Sie zeigen keine konkreten Kundenprojekte.</p>`;
 
 const DATENSCHUTZ_BODY = `
           <h2>1. Verantwortlicher</h2>
@@ -109,7 +116,7 @@ export const datenschutzPage = () =>
     crumb: 'Datenschutz',
     title: 'Datenschutzerklärung | CI Dienstleistungen Regensburg',
     description: 'Datenschutzerklärung von CI Dienstleistungen: Verarbeitung personenbezogener Daten, Rechtsgrundlagen, Speicherdauer und Ihre Rechte nach der DSGVO.',
-    h1: 'Datenschutzerklärung',
+    h1: 'Datenschutz&shy;erklärung',
     lead: 'Informationen zur Verarbeitung personenbezogener Daten nach DSGVO.',
     body: DATENSCHUTZ_BODY,
   });

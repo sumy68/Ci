@@ -15,6 +15,8 @@ import { homePage } from './pages/home.mjs';
 import { cityPage } from './pages/city.mjs';
 import { impressumPage, datenschutzPage, notFoundPage, legacyRedirect } from './pages/legal.mjs';
 import { grimeSvg } from './grime.mjs';
+import { buildAllPairs } from './before-after.mjs';
+import { protectBreaks } from './lib/nowrap.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TODAY = new Date().toISOString().slice(0, 10);
@@ -136,10 +138,14 @@ ${CITIES.map((c) => `- [Gebäudereinigung ${c.city}](${SITE.origin}/${c.slug})`)
 
 async function main() {
   const ctx = await prepareAssets();
-  const indexable = [homePage(), ...CITIES.map(cityPage)];
+  const pairs = await buildAllPairs();
+  const missing = Object.entries(pairs).filter(([, v]) => !v).map(([k]) => k);
+  if (missing.length) console.warn(`Vorher/Nachher ohne Bilder (Platzhalter): ${missing.join(', ')}`);
+  const indexable = [homePage({ pairs }), ...CITIES.map(cityPage)];
   const pages = [...indexable, impressumPage(), datenschutzPage(), notFoundPage()];
 
-  for (const page of pages) await write(page.file, documentHtml(page, ctx));
+  // Telefonnummern, E-Mails, PLZ+Ort usw. vor Zeilenumbrüchen schützen
+  for (const page of pages) await write(page.file, protectBreaks(documentHtml(page, ctx)));
   await write('Datenschutzerklärung.html', legacyRedirect({ file: 'Datenschutzerklärung.html', target: '/datenschutz' }));
   await write('sitemap.xml', sitemap(indexable));
   await write('robots.txt', robots());

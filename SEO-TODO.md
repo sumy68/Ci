@@ -30,6 +30,8 @@ Alle Stellen sind im Quelltext als `TODO` markiert und werden zentral in
 - Datenschutz: **Hosting-Anbieter** eintragen (derzeit GitHub Pages, GitHub Inc.).
 - Datenschutz: Abschnitt **Google Maps** beschreibt eine Karte, die auf der Website nicht eingebunden ist – ggf. entfernen. Ebenso Abschnitt **Instagram** (derzeit kein Link vorhanden).
 - Impressum: Verweise auf **TMG/RStV** sind seit 2024 durch **DDG/MStV** ersetzt.
+- Impressum: Zeilen „Unternehmensform: Einzelkaufmann“ und „Unternehmensgegenstand: Hausmeisterservice“ wurden entfernt (stammten aus dem Initial-Commit `6ba1742`). **Vom Kunden bestätigen:** Rechtsform, ggf. Handelsregister, ggf. Handwerkskammer/USt-IdNr. (als TODO-Kommentar im Impressum markiert).
+- Impressum: Abschnitt **Bildnachweis** zu KI-generierten Symbolbildern ergänzt; Footer verlinkt darauf.
 
 ## 3. Nächste Schritte außerhalb der Website
 

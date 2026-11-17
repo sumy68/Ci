@@ -24,10 +24,11 @@ export const imgUrl = (set, width, ext = 'jpg') => `/assets/img/${set.dir}/${set
  * <picture> mit AVIF, WebP und JPG-Fallback.
  * Bilder oberhalb des Falzes: priority=true (kein lazy, fetchpriority=high).
  */
-export function picture(set, { alt, sizes, priority = false, className = '', imgClass = '' }) {
+export function picture(set, { alt, sizes, priority = false, eager = false, className = '', imgClass = '' }) {
   if (alt === undefined) throw new Error(`Alt-Text fehlt für ${set.name}`);
   const fallbackWidth = set.widths.find((w) => w >= 768) ?? set.widths.at(-1);
-  const loading = priority ? 'fetchpriority="high"' : 'loading="lazy"';
+  // priority: LCP-Bild; eager: sichtbar, aber ohne Priorität (z. B. dekorative Kopie)
+  const loading = priority ? 'fetchpriority="high"' : eager ? 'loading="eager"' : 'loading="lazy"';
   return `<picture${className ? ` class="${className}"` : ''}>
   <source type="image/avif" srcset="${srcset(set, 'avif')}" sizes="${sizes}">
   <source type="image/webp" srcset="${srcset(set, 'webp')}" sizes="${sizes}">

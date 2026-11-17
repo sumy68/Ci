@@ -15,6 +15,7 @@ export const SITE = Object.freeze({
   formAction: 'https://formspree.io/f/xqayqdyy',
   priceRange: '€€',
   radiusKm: 40,
+  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Benzstra%C3%9Fe%2020%2C%2093053%20Regensburg',
   address: Object.freeze({
     street: 'Benzstraße 20',
     zip: '93053',

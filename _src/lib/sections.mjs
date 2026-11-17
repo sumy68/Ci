@@ -10,16 +10,19 @@ export const sectionHead = ({ label, title, lead, id, className = '' }) => `<div
         ${lead ? `<p class="lead">${lead}</p>` : ''}
       </div>`;
 
-/** long=false: Kurzfassung (Startseite); long=true: ausführlicher Text (Stadtseiten). */
-export function serviceCard(service, { headingLevel = 4, sizes, contactHref = '#kontakt', long = false }) {
+/**
+ * Editoriale Leistungszeile (Stadtseiten): Nummer, Bild, Titel, ausführlicher
+ * Text und Anfrage-Link – statt eines Rasters identischer Karten.
+ */
+export function serviceRow(service, { index, sizes, contactHref = '#kontakt', city }) {
   const set = SERVICE_IMAGE_BY_ID[service.id];
-  const h = `h${headingLevel}`;
-  return `<article class="card" id="leistung-${service.id}">
-            <div class="card__media">${picture(set, { alt: service.alt, sizes })}</div>
-            <div class="card__body">
-              <${h} class="card__title">${service.title}</${h}>
-              <p class="card__text">${long ? service.text : service.short}</p>
-              <a class="link-arrow card__link" href="${contactHref}" data-service="${esc(service.title)}"><span>Anfragen<span class="sr-only">: ${service.title}</span></span>${ICONS.arrow()}</a>
+  return `<article class="svc-row" id="leistung-${service.id}">
+            <p class="svc-row__num" aria-hidden="true">${String(index + 1).padStart(2, '0')}</p>
+            <div class="svc-row__media frame">${picture(set, { alt: `${service.alt} – ${service.title} in ${city} (Symbolbild)`, sizes })}</div>
+            <div class="svc-row__body">
+              <h3 class="svc-row__title">${service.title}</h3>
+              <p>${service.text}</p>
+              <a class="link-arrow" href="${contactHref}" data-service="${esc(service.title)}"><span>Anfragen<span class="sr-only">: ${service.title}</span></span>${ICONS.arrow()}</a>
             </div>
           </article>`;
 }
@@ -81,13 +84,19 @@ export function radiusMap({ highlight = null, idSuffix = 'home' } = {}) {
 
 export const locationAddress = (loc) => `${loc.street}, ${loc.zipCity}`;
 
+/** Google-Maps-Suche für einen Standort (keine Einbettung, nur Link). */
+export const mapsUrlFor = (loc) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationAddress(loc))}`;
+
 export function contactList() {
   const main = LOCATIONS[0];
+  // Alle vier Einträge identisch: Label + Link, einheitlicher Hover, keine Icon-Kacheln
+  const row = (label, href, text, external = false) =>
+    `<li><span class="contact-list__label">${label}</span><a class="contact-link" href="${href}"${external ? ' target="_blank" rel="noopener"' : ''}>${text}${external ? '<span class="sr-only"> (öffnet neues Fenster)</span>' : ''}</a></li>`;
   return `<ul class="contact-list">
-          <li><span class="contact-list__icon">${ICONS.phone(18)}</span><div><span class="contact-list__label">Telefon</span><a href="tel:${SITE.phoneE164}">${SITE.phoneDisplay}</a></div></li>
-          <li><span class="contact-list__icon">${ICONS.whatsapp(18)}</span><div><span class="contact-list__label">WhatsApp</span><a href="${SITE.whatsapp}" target="_blank" rel="noopener noreferrer">Nachricht schreiben<span class="sr-only"> (öffnet neues Fenster)</span></a></div></li>
-          <li><span class="contact-list__icon">${ICONS.mail(18)}</span><div><span class="contact-list__label">E-Mail</span><a href="mailto:${SITE.email}">${SITE.email}</a></div></li>
-          <li><span class="contact-list__icon">${ICONS.pin(18)}</span><div><span class="contact-list__label">Büro</span><span>${locationAddress(main)}</span></div></li>
+          ${row('Telefon', `tel:${SITE.phoneE164}`, SITE.phoneDisplay)}
+          ${row('WhatsApp', SITE.whatsapp, 'Nachricht schreiben', true)}
+          ${row('E-Mail', `mailto:${SITE.email}`, SITE.email)}
+          ${row('Büro', SITE.mapsUrl, locationAddress(main), true)}
         </ul>
         <!-- TODO: vom Kunden – Öffnungszeiten / telefonische Erreichbarkeit ergänzen -->`;
 }

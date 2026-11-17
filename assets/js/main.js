@@ -215,7 +215,62 @@
     targets.forEach(function (t) { io.observe(t); });
   }
 
+  /* ---------- Leistungsverzeichnis: Vorschaubild folgt dem Mauszeiger (nur Desktop) ---------- */
+  function initIndexPreview() {
+    var box = document.querySelector('[data-index-preview]');
+    if (!box || reduceMotion) return;
+    var mq = window.matchMedia('(min-width: 1025px) and (hover: hover) and (pointer: fine)');
+    var img = box.querySelector('img');
+    var BOX_W = 240;
+    var GAP = 24;
+    var state = { x: 0, y: 0, cx: 0, cy: 0, active: false, raf: 0 };
+
+    var loop = function () {
+      state.cx += (state.x - state.cx) * 0.18;
+      state.cy += (state.y - state.cy) * 0.18;
+      // Rechts vom Zeiger, am Bildschirmrand nach links ausweichen
+      var ox = state.cx + GAP + BOX_W > window.innerWidth ? -(BOX_W + GAP) : GAP;
+      box.style.transform = 'translate3d(' + (state.cx + ox) + 'px,' + (state.cy - 80) + 'px,0)';
+      var moving = Math.abs(state.x - state.cx) > 0.3 || Math.abs(state.y - state.cy) > 0.3;
+      state.raf = state.active || moving ? window.requestAnimationFrame(loop) : 0;
+    };
+    var show = function (src) {
+      if (src && img.getAttribute('src') !== src) img.setAttribute('src', src);
+      box.classList.add('is-visible');
+      state.active = true;
+      if (!state.raf) state.raf = window.requestAnimationFrame(loop);
+    };
+    var hide = function () {
+      box.classList.remove('is-visible');
+      state.active = false;
+    };
+
+    $$('[data-preview-group]').forEach(function (row) {
+      var first = row.querySelector('[data-preview]');
+      row.addEventListener('pointerenter', function (e) {
+        if (!mq.matches) return;
+        state.x = state.cx = e.clientX;
+        state.y = state.cy = e.clientY;
+        row.classList.add('is-hover');
+        show(first && first.getAttribute('data-preview'));
+      });
+      row.addEventListener('pointermove', function (e) {
+        if (!mq.matches) return;
+        state.x = e.clientX;
+        state.y = e.clientY;
+        var item = e.target.closest('[data-preview]');
+        if (item) show(item.getAttribute('data-preview'));
+      });
+      row.addEventListener('pointerleave', function () {
+        row.classList.remove('is-hover');
+        hide();
+      });
+    });
+    window.addEventListener('scroll', function () { if (state.active) hide(); }, { passive: true });
+  }
+
   $$('[data-compare-stage]').forEach(initCompare);
+  initIndexPreview();
   initMarquee();
   initCompareTabs();
   initFab();

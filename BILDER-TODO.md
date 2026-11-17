@@ -49,23 +49,24 @@ mit schriftlicher Einwilligung.
 | Winterdienst-Koordination | `winterdienst.jpg` | Geräumter, gestreuter Gehweg am Morgen, Streuwagen |
 | Schlüssel & Zutritt | `schluessel.jpg` | Schlüsselübergabe mit Protokoll, Schlüsselkasten |
 
-## Vorher-/Nachher-Slider (neu)
+## Vorher-/Nachher-Slider
 
-Derzeit werden **Platzhalter** verwendet: dasselbe Foto, für „Vorher“ per CSS-Filter
-gealtert, und als „Symbolbilder“ gekennzeichnet. Benötigt werden echte Fotopaare.
+> **Vorher/Nachher-Bilder sind KI-Symbolbilder – durch echte Kundenfotos ersetzen.**
+> Auf der Website sind sie als „Symbolbild“ bzw. „KI-generierte Symbolbilder“ gekennzeichnet
+> (Hinweis im Abschnitt, Bildunterschrift, Alt-Texte, Footer und Bildnachweis im Impressum).
+
+Die Originale liegen in `/assets/vorher-nachher/` (Anleitung: `assets/vorher-nachher/README.md`).
+Dateien gleichnamig ersetzen und `npm run build` ausführen – Zuschnitt und AVIF/WebP/JPG
+werden automatisch erzeugt.
 
 **Aufnahmeregeln für Fotopaare:** gleicher Standpunkt (Stativ oder Markierung am
-Boden), gleiche Brennweite, gleiches Licht, Querformat 16:10, mind. 2000 px breit.
+Boden), gleiche Brennweite, gleiches Licht, Querformat 16:9, mind. 1600 px breit.
 
-| Vergleich | Platzhalter-ID | Motiv-Vorschlag |
+| Slider | Dateien | Motiv-Vorschlag für echte Fotos |
 |---|---|---|
-| Treppenhaus | `treppenhaus` | Verschmutzte Stufen/Podest (Straßenschmutz, Streusalzränder) → nach der Reinigung |
-| Graffiti an Klinker | `stein` | Wand mit Graffiti → nach der Entfernung |
-| Bodenbelag | `grundreinigung` | Matter, fleckiger Boden → nach Grundreinigung und Pflege |
-| Optional: Fenster | – | Verschmutzte Scheibe mit Wasserflecken → klare Scheibe (passt zum Hero) |
-| Optional: Pflaster | – | Bemooste Terrasse → nach Hochdruckreinigung |
+| 1 – Fassade | `fassade-vorher.jpg`, `fassade-nachher.jpg` | Fassadenabschnitt mit Algen/Grauschleier → nach der Reinigung |
+| 2 – Fenster/Glas | `fenster-vorher.jpg`, `fenster-nachher.jpg` | Glasfront mit Wasserflecken und verschmutzten Rahmen → klare Scheibe |
+| 3 – Treppenhaus/Sanitär | `innen-vorher.jpg`, `innen-nachher.jpg` | Verschmutzte Stufen/Podest oder Sanitärbereich → nach der Reinigung |
 
-Technisch: Die Vorher-Bilder werden in `_src/pages/home.mjs` (Funktion
-`comparisonFigure`) eingebunden; nach Lieferung echter Paare den CSS-Filter
-`.compare__img--before img` in `_src/css/main.css` entfernen und den Hinweis
-„Symbolbilder“ streichen.
+Sobald echte Fotos vorliegen: Hinweis „KI-generierte Symbolbilder“ in `_src/pages/home.mjs`
+(Funktion `beforeAfter`) sowie „(Symbolbild)“ in den Alt-Texten entfernen.

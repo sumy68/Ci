@@ -15,8 +15,10 @@ const FILES = [
   ['gsap/dist/ScrollTrigger.min.js', 'assets/js/vendor/ScrollTrigger.min.js'],
   ['gsap/dist/SplitText.min.js', 'assets/js/vendor/SplitText.min.js'],
   ['lenis/dist/lenis.min.js', 'assets/js/vendor/lenis.min.js'],
-  ['@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2', 'assets/fonts/instrument-serif-400.woff2'],
-  ['@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2', 'assets/fonts/manrope-variable.woff2'],
+  // Eine Grotesk-Familie für die ganze Seite, nur die benötigten Schnitte
+  ['@fontsource/schibsted-grotesk/files/schibsted-grotesk-latin-400-normal.woff2', 'assets/fonts/schibsted-grotesk-400.woff2'],
+  ['@fontsource/schibsted-grotesk/files/schibsted-grotesk-latin-500-normal.woff2', 'assets/fonts/schibsted-grotesk-500.woff2'],
+  ['@fontsource/schibsted-grotesk/files/schibsted-grotesk-latin-700-normal.woff2', 'assets/fonts/schibsted-grotesk-700.woff2'],
 ];
 
 for (const [from, to] of FILES) {

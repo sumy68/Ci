@@ -3,33 +3,57 @@
    Tokens, Basis, Header/Navigation, Hero + Wisch-Effekt, Laufband, Seitenkopf
    ===================================================================== */
 
+/* Eine Grotesk-Familie für die ganze Seite: Schibsted Grotesk 400/500/700 */
 @font-face {
-  font-family: "Instrument Serif";
-  src: url("/assets/fonts/instrument-serif-400.woff2") format("woff2");
+  font-family: "Schibsted Grotesk";
+  src: url("/assets/fonts/schibsted-grotesk-400.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Manrope";
-  src: url("/assets/fonts/manrope-variable.woff2") format("woff2");
-  font-weight: 200 800;
+  font-family: "Schibsted Grotesk";
+  src: url("/assets/fonts/schibsted-grotesk-500.woff2") format("woff2");
+  font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
-/* Metrisch angeglichene Fallbacks gegen Layout-Sprünge beim Schrifttausch */
 @font-face {
-  font-family: "Serif Fallback";
-  src: local("Times New Roman"), local("Times");
-  size-adjust: 94%;
-  ascent-override: 98%;
+  font-family: "Schibsted Grotesk";
+  src: url("/assets/fonts/schibsted-grotesk-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+/* Metrisch angeglichene Fallbacks je Schnitt (gemessen: Laufweite Schibsted/Arial
+   400 = 102,6 %, 500 = 104,1 %, 700 = 101,2 %) – gleicher Umbruch vor und nach
+   dem Schrifttausch, dadurch kein Layout-Sprung (CLS) bei font-display: swap. */
+@font-face {
+  font-family: "Grotesk Fallback";
+  src: local("Arial"), local("ArialMT"), local("Helvetica");
+  font-weight: 400;
+  size-adjust: 102.6%;
+  ascent-override: 95.5%;
+  descent-override: 25.3%;
+  line-gap-override: 0%;
 }
 @font-face {
-  font-family: "Sans Fallback";
-  src: local("Arial"), local("Helvetica");
-  size-adjust: 104%;
-  ascent-override: 102%;
-  descent-override: 29%;
+  font-family: "Grotesk Fallback";
+  src: local("Arial"), local("ArialMT"), local("Helvetica");
+  font-weight: 500;
+  size-adjust: 104.1%;
+  ascent-override: 94.1%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Grotesk Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Helvetica Bold");
+  font-weight: 700;
+  size-adjust: 101.2%;
+  ascent-override: 96.9%;
+  descent-override: 25.7%;
+  line-gap-override: 0%;
 }
 
 :root {
@@ -47,15 +71,17 @@
   --night-muted: #9AA0A7;
   --placeholder: #E9ECEC;
 
-  --serif: "Instrument Serif", "Serif Fallback", Georgia, serif;
-  --sans: "Manrope", "Sans Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Eine Familie für alles: Überschriften 700, Text 400, Auszeichnungen 500 */
+  --sans: "Schibsted Grotesk", "Grotesk Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: var(--sans);
 
   --fs-body: 1.0625rem;        /* 17px */
   --fs-small: 0.9375rem;       /* 15px */
   --fs-lead: clamp(1.125rem, 1rem + 0.45vw, 1.3125rem);
-  --fs-h1: clamp(2.5rem, 1.2rem + 4.3vw, 5rem);       /* 40 → 80px */
-  --fs-h2: clamp(2.125rem, 1.3rem + 2.7vw, 3.75rem);  /* 34 → 60px */
-  --fs-h3: clamp(1.5rem, 1.2rem + 0.9vw, 2rem);
+  --fs-hero: clamp(2.5rem, 0.6rem + 7.2vw, 6.875rem);  /* 40 → 110px, Hero-H1 */
+  --fs-h1: clamp(2.375rem, 1.3rem + 3.6vw, 4.5rem);    /* 38 → 72px, Unterseiten */
+  --fs-h2: clamp(2rem, 1.3rem + 2.2vw, 3.375rem);      /* 32 → 54px */
+  --fs-h3: clamp(1.375rem, 1.15rem + 0.7vw, 1.75rem);
 
   --space-section: clamp(72px, 4.5rem + 6vw, 152px);
   --gutter: clamp(20px, 3.4vw, 48px);
@@ -103,6 +129,38 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 button, input, select, textarea { font: inherit; color: inherit; }
 main:focus { outline: none; }
 
+/* Keine Umbrüche in Telefonnummern, E-Mails usw. (siehe _src/lib/nowrap.mjs) */
+.tel, .nowrap { white-space: nowrap; }
+/* Keine einzelnen Wörter allein in der letzten Zeile */
+h1, h2, h3, h4 { text-wrap: balance; overflow-wrap: break-word; }
+p, li, dd, blockquote { text-wrap: pretty; }
+
+/* Einheitliche Links im Fließtext (nur Inhalt – Footer/Navigation haben eigene Stile) */
+main p a:not([class]), main li a:not([class]), .faq__a a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(22, 24, 27, .35);
+  transition: color .2s, text-decoration-color .2s;
+}
+main p a:not([class]):hover, main li a:not([class]):hover { color: var(--accent-ink); text-decoration-color: currentColor; }
+
+/* Kontaktangaben: überall gleich – ohne Unterstreichung, einheitlicher Hover */
+.contact-link {
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  transition: color .2s;
+}
+.contact-link:hover, .contact-link:focus-visible {
+  color: var(--accent-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.section--night .contact-link:hover, .footer .contact-link:hover { color: var(--accent); }
+
 :focus-visible {
   outline: 2px solid var(--accent-ink);
   outline-offset: 3px;
@@ -148,30 +206,22 @@ main:focus { outline: none; }
 
 /* ---------- Typografie ---------- */
 .h-display, .h-section {
-  font-family: var(--serif);
-  font-weight: 400;
+  font-family: var(--display);
+  font-weight: 700;
   letter-spacing: -0.02em;
+  line-height: 1.05;
   text-wrap: balance;
   font-kerning: normal;
 }
-.h-display { font-size: var(--fs-h1); line-height: 1.02; }
-.h-section { font-size: var(--fs-h2); line-height: 1.04; letter-spacing: -0.018em; }
+.h-display { font-size: var(--fs-h1); }
+.h-section { font-size: var(--fs-h2); }
+/* Abschnitts-Label: schlichter Text ohne Strich/Großbuchstaben */
 .overline {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  margin: 0 0 20px;
-  font-size: 0.8125rem;           /* 13px */
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  display: block;
+  margin: 0 0 16px;
+  font-size: 0.9375rem;
+  font-weight: 500;
   color: var(--ink-2);
-}
-.overline::before {
-  content: "";
-  width: 20px;
-  height: 2px;
-  background: var(--accent);
-  border-radius: 2px;
 }
 .lead { font-size: var(--fs-lead); line-height: 1.55; color: var(--ink-2); max-width: 36em; }
 
@@ -190,7 +240,7 @@ main:focus { outline: none; }
   border-radius: 14px;
   background: var(--btn-bg);
   color: var(--btn-fg);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 1rem;
   letter-spacing: 0.005em;
   text-decoration: none;
@@ -218,6 +268,8 @@ main:focus { outline: none; }
 .btn[data-size="small"] { min-height: 44px; padding: 5px 5px 5px 18px; gap: 12px; font-size: 0.9375rem; border-radius: 12px; }
 .btn[data-size="small"] .btn__icon { width: 34px; height: 34px; border-radius: 8px; }
 .btn--block { width: 100%; justify-content: space-between; }
+/* Sehr schmale Geräte: Button-Text darf umbrechen (nie die Telefonnummer) */
+@media (max-width: 400px) { .btn { white-space: normal; max-width: 100%; } .btn__label { min-width: 0; } }
 @media (hover: hover) {
   .btn:hover { --btn-bg: #2A2E33; }
   .btn--accent:hover { --btn-bg: #3CC8B4; }
@@ -228,7 +280,7 @@ main:focus { outline: none; }
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-weight: 600;
+  font-weight: 500;
   text-decoration: none;
   color: var(--ink);
   padding-block: 8px;
@@ -245,7 +297,7 @@ main:focus { outline: none; }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--accent-ink);
   text-decoration: none;
 }
@@ -321,7 +373,7 @@ main:focus { outline: none; }
   align-items: center;
   gap: 8px;
   font-size: 0.9375rem;
-  font-weight: 600;
+  font-weight: 500;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -385,7 +437,7 @@ main:focus { outline: none; }
   .nav-links { flex-direction: column; gap: 4px; }
   .nav-link {
     display: block;
-    font-family: var(--serif);
+    font-family: var(--display); font-weight: 700; letter-spacing: -0.02em;
     font-size: clamp(2.5rem, 9vw, 3.5rem);
     line-height: 1.15;
     font-weight: 400;
@@ -400,49 +452,66 @@ main:focus { outline: none; }
 }
 html.menu-open, html.menu-open body { overflow: hidden; }
 
-/* ---------- Hero (Startseite) ---------- */
+/* ---------- Hero (Startseite) ----------
+   H1 über die volle Breite, darunter Untertitel | Button + Telefon,
+   darunter Panorama (21/9 Desktop, 4/3 mobil) mit Abzieher-Wisch. */
 .hero {
   position: relative;
-  padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + clamp(24px, 4vw, 56px));
+  padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + clamp(28px, 4vw, 56px));
   padding-bottom: clamp(40px, 5vw, 72px);
 }
 .nav-sentinel { position: absolute; top: 0; left: 0; width: 1px; height: 40px; pointer-events: none; }
-.hero__grid { display: grid; gap: 40px; }
-.hero__title { max-width: 11.5em; margin-bottom: 28px; }
-.hero__lead { max-width: 34em; font-size: var(--fs-lead); line-height: 1.55; color: var(--ink-2); margin-bottom: 36px; }
-.hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
-.hero__scroll { display: none; }
-
-@media (min-width: 900px) {
-  .hero { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; justify-content: center; }
-  .hero__grid {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--gap);
-    align-items: center;
-  }
-  .hero__copy { grid-column: 1 / span 7; padding-bottom: 24px; }
-  .hero__media { grid-column: 8 / -1; }
+.hero__title {
+  margin: 0 0 clamp(28px, 3.4vw, 48px);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: var(--fs-hero);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  hyphens: manual;
 }
+@media (min-width: 640px) { .hero__line { display: block; } }
+@media (max-width: 639px) {
+  /* Lange Komposita trennen nur an den gesetzten &shy;-Stellen (Gebäude-reinigung, Hausmeister-service) */
+  .hero__title { hyphens: manual; -webkit-hyphens: manual; overflow-wrap: break-word; }
+}
+.hero__bar {
+  display: grid;
+  gap: 24px;
+  align-items: end;
+  margin-bottom: clamp(28px, 3.4vw, 48px);
+}
+.hero__lead { margin: 0; max-width: 38em; font-size: var(--fs-lead); line-height: 1.55; color: var(--ink-2); text-wrap: pretty; }
+.hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
+@media (min-width: 900px) {
+  .hero__bar { grid-template-columns: minmax(0, 1fr) auto; column-gap: 48px; }
+}
+
+/* Hinweis „Scrollen zum Sauberwischen“ liegt auf dem Panorama (nur Desktop + Motion) */
+.hero__scroll { display: none; }
 @media (min-width: 1025px) {
   .hero__scroll {
     position: absolute;
-    left: 50%;
-    bottom: 24px;
+    left: 24px;
+    bottom: 20px;
+    z-index: 4;
     display: inline-flex;
     align-items: center;
     gap: 8px;
     margin: 0;
-    font-size: 0.8125rem;
-    letter-spacing: 0.08em;
-    color: var(--ink-2);
-    transform: translateX(-50%);
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: rgba(17, 19, 21, .62);
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 500;
     transition: opacity .4s;
   }
   .hero__scroll-arrow { display: inline-block; transform: rotate(90deg); }
   .hero__scroll-arrow svg { animation: nudge 1.8s var(--ease-out) infinite; }
   .hero__scroll.is-gone { opacity: 0; }
   .hero__scroll.is-gone svg { animation: none; }
-  html:not(.js-motion) .hero__scroll, html.motion-off .hero__scroll { display: none; }
+  html:not(.js-motion) .hero__scroll, html.motion-off .hero__scroll, .wipe.is-clean .hero__scroll { display: none; }
 }
 @keyframes nudge { 0%, 100% { transform: translateX(-2px); } 50% { transform: translateX(4px); } }
 
@@ -450,13 +519,13 @@ html.menu-open, html.menu-open body { overflow: hidden; }
 .wipe {
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius-lg);
+  border-radius: 20px;
   background: var(--placeholder);
   aspect-ratio: 4 / 3;
   isolation: isolate;
 }
 @media (min-width: 900px) {
-  .wipe { aspect-ratio: 4 / 5; max-height: calc(100dvh - var(--header-h) - 96px); margin-left: auto; width: 100%; }
+  .wipe { aspect-ratio: 21 / 9; }
 }
 .wipe picture, .wipe img { width: 100%; height: 100%; }
 .wipe img { object-fit: cover; }
@@ -566,10 +635,10 @@ html.js-motion:not(.motion-off) .wipe__glint { display: block; }
 /* Mit JS läuft das Band nur, solange es im Viewport ist */
 .js .marquee:not(.is-running) .marquee__track { animation-play-state: paused; }
 .marquee__item {
-  font-family: var(--serif);
+  font-family: var(--display); font-weight: 500;
   font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem);
   line-height: 1;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   white-space: nowrap;
   padding-inline: clamp(20px, 2.4vw, 36px);
 }
@@ -583,7 +652,7 @@ html.js-motion:not(.motion-off) .wipe__glint { display: block; }
   padding-bottom: clamp(48px, 6vw, 96px);
 }
 .page-head__lead { font-size: var(--fs-lead); color: var(--ink-2); max-width: 34em; margin: 24px 0 32px; }
-.page-head__grid { display: grid; gap: 40px; }
+.page-head__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; }
 .page-head .h-display { max-width: 13em; }
 @media (min-width: 900px) {
   .page-head__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: end; }

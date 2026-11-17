@@ -41,12 +41,12 @@ export function head(page, { criticalCss, assets }) {
   <meta property="og:image" content="${ogImage}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Glasfassade eines Bürogebäudes mit dem Logo von CI Dienstleistungen">
+  <meta property="og:image:alt" content="Glasfassade eines Bürogebäudes mit dem Logo von CI Dienstleistungen (Symbolbild)">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${esc(page.ogTitle ?? page.title)}">
   <meta name="twitter:description" content="${esc(page.description)}">
   <meta name="twitter:image" content="${ogImage}">
-  <link rel="preload" href="/assets/fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/schibsted-grotesk-700.woff2" as="font" type="font/woff2" crossorigin>
   ${page.preload ?? ''}
   ${BOOT_SCRIPT}
   <style>${criticalCss}</style>
@@ -105,10 +105,9 @@ export function footer({ isHome, currentPath }) {
         <p class="footer__claim">Gebäudereinigung und Hausmeisterservice aus einer Hand – in Regensburg, Kelheim und Landshut.</p>
         <address class="footer__nap">
           <strong>${SITE.name}</strong><br>
-          ${SITE.address.street}<br>
-          ${SITE.address.zip} ${SITE.address.city}<br>
-          <a href="tel:${SITE.phoneE164}">${SITE.phoneDisplay}</a><br>
-          <a href="mailto:${SITE.email}">${SITE.email}</a>
+          <a class="contact-link" href="${SITE.mapsUrl}" target="_blank" rel="noopener">${SITE.address.street}<br>${SITE.address.zip} ${SITE.address.city}<span class="sr-only"> (Google Maps, öffnet neues Fenster)</span></a><br>
+          <a class="contact-link" href="tel:${SITE.phoneE164}">${SITE.phoneDisplay}</a><br>
+          <a class="contact-link" href="mailto:${SITE.email}">${SITE.email}</a>
         </address>
       </div>
       ${footerList('Leistungen', [...SERVICE_GROUPS.map((g) => [`${base}#${g.id}`, g.title]), [`${base}#abos`, 'Abo-Modelle']])}
@@ -118,6 +117,7 @@ export function footer({ isHome, currentPath }) {
     </div>
     <div class="wrap footer__bottom">
       <p>© ${YEAR} ${SITE.name}, Inhaber ${SITE.owner}</p>
+      <p class="footer__ai"><a href="/impressum#bildnachweis">Teilweise KI-generierte Symbolbilder</a></p>
     </div>
   </footer>`;
 }

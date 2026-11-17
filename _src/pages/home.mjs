@@ -1,37 +1,32 @@
 /** Startseite */
 import { SITE, SERVICE_GROUPS, SERVICES, servicesInGroup, ABOS, TESTIMONIALS, STEPS, FIGURES, FAQ_HOME, CITIES, LOCATIONS, ORBIT } from '../data.mjs';
-import { HERO_WIDE, HERO_TALL, SERVICE_IMAGE_BY_ID } from '../image-config.mjs';
-import { artPicture, preloadArt, picture, ICONS, button, overline, arrowLink, esc } from '../lib/html.mjs';
+import { HERO_WIDE, SERVICE_IMAGE_BY_ID } from '../image-config.mjs';
+import { preloadPicture, picture, imgUrl, ICONS, button, overline, arrowLink, esc } from '../lib/html.mjs';
 import { orbitIcon } from '../lib/orbit-icons.mjs';
-import { sectionHead, serviceCard, faqList, radiusMap, contactList, locationAddress } from '../lib/sections.mjs';
+import { sectionHead, faqList, radiusMap, contactList, locationAddress } from '../lib/sections.mjs';
 import { graph, localBusiness, serviceNodes, website, faqPage, webPage } from '../lib/schema.mjs';
 
-const HERO_ART = Object.freeze({
-  wide: HERO_WIDE,
-  tall: HERO_TALL,
-  breakpoint: 900,
-  wideSizes: 'calc(100vw - 40px)',
-  tallSizes: '(min-width: 1360px) 520px, 40vw',
-});
+/* Panorama über die volle Containerbreite (max. 1320 px). */
+const HERO_SIZES = '(min-width: 1416px) 1320px, 94vw';
 
-const CARD_SIZES = '(min-width: 1360px) 400px, (min-width: 900px) 30vw, (min-width: 600px) 46vw, calc(100vw - 40px)';
-
+/*
+ * Hero: H1 sehr groß über die volle Breite (2 Zeilen), darunter eine Zeile
+ * Untertitel | Button + Telefon, darunter das Panorama mit Abzieher-Wisch.
+ */
 function hero() {
   return `<section class="hero" id="top" aria-labelledby="hero-title">
       <div class="nav-sentinel" data-nav-sentinel aria-hidden="true"></div>
-      <div class="wrap hero__grid">
-        <div class="hero__copy">
-          <p class="overline">Regensburg, Kelheim und Landshut</p>
-          <h1 class="h-display hero__title" id="hero-title">Gebäudereinigung &amp; Hausmeisterservice aus einer Hand</h1>
-          <p class="hero__lead">Reinigung, Pflege und Kleinreparaturen für Büros, Praxen, Wohnanlagen und Privathäuser – in Regensburg, Kelheim, Landshut und rund 40&nbsp;km Umgebung.</p>
+      <div class="wrap">
+        <h1 class="hero__title" id="hero-title"><span class="hero__line">Gebäude&shy;reinigung &amp;</span> <span class="hero__line">Hausmeister&shy;service</span></h1>
+        <div class="hero__bar">
+          <p class="hero__lead">Gebäudereinigung und Hausmeisterservice aus einer Hand – für Büros, Praxen, Wohnanlagen und Privathäuser in Regensburg, Kelheim und Landshut.</p>
           <div class="hero__actions">
             ${button('#kontakt', 'Jetzt anfragen')}
-            <a class="phone-link" href="tel:${SITE.phoneE164}">${ICONS.phone(18)}<span><span class="phone-link__hint">oder anrufen:</span> ${SITE.phoneDisplay}</span></a>
+            <a class="phone-link" href="tel:${SITE.phoneE164}">${ICONS.phone(18)}<span>${SITE.phoneDisplay}</span></a>
           </div>
         </div>
         ${wipeMedia()}
       </div>
-      <p class="hero__scroll" aria-hidden="true" data-scroll-hint>Scrollen <span class="hero__scroll-arrow">${ICONS.arrow(14)}</span></p>
     </section>`;
 }
 
@@ -43,13 +38,14 @@ function hero() {
 function wipeMedia() {
   return `<div class="hero__media wipe" data-wipe>
           <div class="wipe__clean">
-            ${artPicture({ ...HERO_ART, alt: 'Moderne Glasfassade eines Bürogebäudes – Gebäudereinigung und Hausmeisterservice von CI Dienstleistungen' })}
+            ${picture(HERO_WIDE, { alt: 'Moderne Glasfassade eines Bürogebäudes – Gebäudereinigung und Hausmeisterservice von CI Dienstleistungen in Regensburg (Symbolbild)', sizes: HERO_SIZES, priority: true })}
           </div>
           <div class="wipe__dirty" aria-hidden="true" data-wipe-dirty>
-            ${artPicture({ ...HERO_ART, decorative: true })}
+            ${picture(HERO_WIDE, { alt: '', sizes: HERO_SIZES, eager: true })}
             <span class="wipe__veil"></span>
             <img class="wipe__grime" src="/assets/img/hero/schmutzfilm.svg" alt="" width="600" height="750" decoding="async">
           </div>
+          <p class="hero__scroll" aria-hidden="true" data-scroll-hint>Scrollen zum Sauberwischen <span class="hero__scroll-arrow">${ICONS.arrow(14)}</span></p>
           <span class="wipe__glint" aria-hidden="true" data-wipe-glint></span>
           <div class="wipe__tool" aria-hidden="true" data-wipe-tool>
             <span class="wipe__film"></span>
@@ -99,15 +95,6 @@ function marquee() {
 }
 
 function intro() {
-  const rows = SERVICE_GROUPS.map((g) => {
-    const count = servicesInGroup(g.id).length;
-    // Aufzählung als Schlagwort-Badges statt Fließtext
-    return `<li class="area-row">
-              <p class="area-row__title"><a href="#${g.id}">${g.title}<span class="area-row__arrow">${ICONS.arrow(18)}</span></a></p>
-              <span class="area-row__count">${count} Leistungen</span>
-              <ul class="tags">${g.tags.map((t) => `<li>${t}</li>`).join('')}</ul>
-            </li>`;
-  }).join('\n            ');
   return `<section class="section intro" aria-labelledby="intro-title">
       <div class="wrap grid12">
         <div class="intro__head">
@@ -115,25 +102,32 @@ function intro() {
         </div>
         <div class="intro__body">
           <p class="lead">Kein Problem – den haben wir! Wir kümmern uns um alles rund um Ihre Immobilie, innen wie außen. Lehnen Sie sich zurück – wir machen den Rest.</p>
-          <ul class="area-list" data-reveal="stagger">
-            ${rows}
-          </ul>
         </div>
       </div>
     </section>`;
 }
 
-function serviceGroup(group) {
-  const cards = servicesInGroup(group.id).map((s) => serviceCard(s, { sizes: CARD_SIZES })).join('\n          ');
-  const count = servicesInGroup(group.id).length;
-  return `<div class="service-group grid12" id="${group.id}">
-        <header class="service-group__head">
-          <h3 class="service-group__title">${group.title}</h3>
-          <p class="service-group__count">${count} Leistungen</p>
-        </header>
-        <div class="card-grid" data-reveal="stagger">
-          ${cards}
+/*
+ * Editoriales Leistungsverzeichnis: Kategorie-Zeilen mit Nummer, rechts die
+ * Einzelleistungen als zweispaltige Textliste. data-preview = kleines Bild,
+ * das auf Desktop beim Hover dem Mauszeiger folgt (rein dekorativ).
+ */
+function serviceIndexRow(group, index) {
+  const items = servicesInGroup(group.id)
+    .map((s) => `<li class="index-item" id="leistung-${s.id}" data-preview="${imgUrl(SERVICE_IMAGE_BY_ID[s.id], 480, 'webp')}">
+              <h4 class="index-item__title">${s.title}</h4>
+              <p class="index-item__text">${s.short}</p>
+            </li>`)
+    .join('\n            ');
+  return `<div class="index-row grid12" id="${group.id}" data-preview-group>
+        <p class="index-row__num" aria-hidden="true">${String(index + 1).padStart(2, '0')}</p>
+        <div class="index-row__head">
+          <h3 class="index-row__title">${group.title}</h3>
+          <p class="index-row__count">${servicesInGroup(group.id).length} Leistungen</p>
         </div>
+        <ul class="index-list">
+            ${items}
+        </ul>
       </div>`;
 }
 
@@ -145,40 +139,59 @@ function services() {
           id: 'leistungen-title',
           title: 'Gebäudereinigung und Hausmeisterservice im Detail',
           lead: `${SERVICES.length} Leistungen in drei Bereichen – einzeln beauftragt oder als Abo, in Regensburg, Kelheim und Landshut.`,
+          className: 'section-head--split',
         })}
-        ${SERVICE_GROUPS.map(serviceGroup).join('\n        ')}
+        <div class="index">
+        ${SERVICE_GROUPS.map(serviceIndexRow).join('\n        ')}
+        </div>
+        <div class="index-preview" aria-hidden="true" data-index-preview><img alt="" width="480" height="320" decoding="async"></div>
       </div>
     </section>`;
 }
 
-/* Vorher/Nachher: vorhandene Bilder als Platzhalter (Vorher-Look per CSS-Filter). */
+/*
+ * Vorher/Nachher: Bildpaare aus /assets/vorher-nachher (siehe _src/before-after.mjs).
+ * Derzeit KI-Symbolbilder – durch echte Kundenfotos ersetzen (BILDER-TODO.md).
+ */
 const COMPARISONS = Object.freeze([
-  { id: 'treppenhaus', label: 'Treppenhaus', text: 'Stufen, Podeste und Geländer in einer Wohnanlage.' },
-  { id: 'stein', label: 'Graffiti an Klinker', text: 'Graffiti-Entfernung mit untergrundgerechter Technik.' },
-  { id: 'grundreinigung', label: 'Bodenbelag', text: 'Grundreinigung eines Fliesenbodens vor dem Einzug.' },
+  { id: 'fassade', label: 'Fassade', keyword: 'Fassadenreinigung Regensburg', text: 'Steinfassade mit Algen und Ablagerungen – materialschonend gereinigt.' },
+  { id: 'fenster', label: 'Fenster & Glas', keyword: 'Fensterreinigung Regensburg', text: 'Verschmutzte Glasfront und Rahmen – wieder klare Durchsicht.' },
+  { id: 'innen', label: 'Treppenhaus', keyword: 'Treppenhausreinigung Regensburg', text: 'Stufen, Podest und Wände in einer Wohnanlage.' },
 ]);
 
-function comparisonFigure(item, index) {
-  const set = SERVICE_IMAGE_BY_ID[item.id];
-  const sizes = '(min-width: 1360px) 820px, (min-width: 900px) 62vw, calc(100vw - 40px)';
-  const pic = (alt, cls) => picture(set, { alt, sizes, className: cls });
+const COMPARE_SIZES = '(min-width: 1360px) 820px, (min-width: 900px) 62vw, 94vw';
+
+/** Bildset im Format des picture()-Helfers für eine Seite (vorher/nachher) eines Paares. */
+const pairSet = (pair, side) => ({ dir: 'vorher-nachher', name: `${pair.id}-${side}`, widths: pair.widths, width: pair.width, height: pair.height });
+
+function compareLayers(item, pair) {
+  if (!pair) {
+    // Neutraler Platzhalter, bis Bilder im Ordner /assets/vorher-nachher liegen
+    return `<div class="compare__img compare__img--before compare__ph" role="img" aria-label="${item.keyword} – vorher (Platzhalter)"><span>Vorher</span></div>
+              <div class="compare__img compare__img--after compare__ph compare__ph--after" role="img" aria-label="${item.keyword} – nachher (Platzhalter)"><span>Nachher</span></div>`;
+  }
+  return `${picture(pairSet(pair, 'vorher'), { alt: `${item.keyword} – vorher (Symbolbild)`, sizes: COMPARE_SIZES, className: 'compare__img compare__img--before' })}
+              ${picture(pairSet(pair, 'nachher'), { alt: `${item.keyword} – nachher (Symbolbild)`, sizes: COMPARE_SIZES, className: 'compare__img compare__img--after' })}`;
+}
+
+function comparisonFigure(item, index, pairs) {
   return `<figure class="compare" id="vergleich-${item.id}" data-compare${index === 0 ? '' : ' hidden'}>
-            <!-- TODO: vom Kunden – echtes Vorher-/Nachher-Fotopaar „${item.label}“ (siehe BILDER-TODO.md) -->
             <div class="compare__stage" data-compare-stage style="--pos: 50%">
-              ${pic(`${item.label} vor der Reinigung (Symbolbild)`, 'compare__img compare__img--before')}
-              ${pic(`${item.label} nach der Reinigung (Symbolbild)`, 'compare__img compare__img--after')}
+              ${compareLayers(item, pairs[item.id])}
               <span class="compare__tag compare__tag--before" aria-hidden="true">Vorher</span>
               <span class="compare__tag compare__tag--after" aria-hidden="true">Nachher</span>
               <div class="compare__handle" role="slider" tabindex="0" aria-label="Vorher-Nachher-Vergleich ${item.label}" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50 Prozent Nachher sichtbar" data-compare-handle>
                 <span class="compare__knob">${ICONS.arrow(14)}${ICONS.arrow(14)}</span>
               </div>
             </div>
+            <figcaption class="compare__caption">Symbolbild</figcaption>
           </figure>`;
 }
 
-function beforeAfter() {
+function beforeAfter(pairs) {
   const tabs = COMPARISONS.map(
     (c, i) => `<li><button class="compare-tab" type="button" aria-controls="vergleich-${c.id}" aria-pressed="${i === 0}" data-compare-tab>
+              <span class="compare-tab__num" aria-hidden="true">${i + 1}</span>
               <span class="compare-tab__label">${c.label}</span>
               <span class="compare-tab__text">${c.text}</span>
             </button></li>`,
@@ -190,10 +203,10 @@ function beforeAfter() {
           <ul class="compare-tabs">
             ${tabs}
           </ul>
-          <p class="compare-section__note">Symbolbilder. Fotos aus echten Projekten folgen.</p>
+          <p class="compare-section__note">KI-generierte Symbolbilder. Fotos aus echten Projekten folgen.</p>
         </div>
         <div class="compare-section__stage">
-          ${COMPARISONS.map(comparisonFigure).join('\n          ')}
+          ${COMPARISONS.map((c, i) => comparisonFigure(c, i, pairs)).join('\n          ')}
         </div>
       </div>
     </section>`;
@@ -277,30 +290,32 @@ const aboCell = (value) => {
   return `<span class="abo__no">${ICONS.dash()}<span class="sr-only">nicht enthalten</span></span>`;
 };
 
+/** Vergleichstabelle statt fünf identischer Karten. Empfehlung dezent über die Spalte. */
 function abos() {
-  const cards = ABOS.map(
-    (a) => `<article class="abo${a.recommended ? ' abo--recommended' : ''}">
-            ${a.recommended ? '<p class="abo__badge">Unsere Empfehlung</p>' : ''}
-            <h3 class="abo__name">${a.name}</h3>
-            <div class="abo__meter" role="img" aria-label="Leistungsumfang ${a.percent} Prozent">
-              <span class="abo__percent">${a.percent}&thinsp;%</span>
-              <span class="abo__bar"><span style="--p:${a.percent / 100}"></span></span>
-            </div>
-            <dl class="abo__list">
-              <div><dt>Gartenpflege</dt><dd>${aboCell(a.garten)}</dd></div>
-              <div><dt>Hausmeisterservice</dt><dd>${aboCell(a.hausmeister)}</dd></div>
-              <div><dt>Gebäudereinigung</dt><dd>${aboCell(a.reinigung)}</dd></div>
-              <div><dt>Intervall</dt><dd>${a.interval}</dd></div>
-            </dl>
-            <p class="abo__price">Preis auf Anfrage</p>
-            <a class="link-arrow abo__link" href="#kontakt" data-service="${esc(a.name)}"><span>Abo anfragen<span class="sr-only">: ${a.name}</span></span>${ICONS.arrow()}</a>
-          </article>`,
-  ).join('\n          ');
+  const rec = (a) => (a.recommended ? ' class="is-recommended"' : '');
+  const row = (label, cell) => `<tr><th scope="row">${label}</th>${ABOS.map((a) => `<td${rec(a)}>${cell(a)}</td>`).join('')}</tr>`;
+  const head = ABOS.map(
+    (a) => `<th scope="col"${rec(a)}>${a.recommended ? '<span class="abo-table__badge">Empfehlung</span>' : ''}<span class="abo-table__name">${a.name}</span></th>`,
+  ).join('');
+  const meter = (a) => `<span class="abo-table__percent">${a.percent}&nbsp;%</span><span class="abo-table__bar" aria-hidden="true"><span style="--p:${a.percent / 100}"></span></span>`;
+  const link = (a) => `<a class="link-arrow" href="#kontakt" data-service="${esc(a.name)}"><span>Anfragen<span class="sr-only">: ${a.name}</span></span>${ICONS.arrow()}</a>`;
   return `<section class="section abos" id="abos" aria-labelledby="abos-title">
       <div class="wrap">
         ${sectionHead({ label: 'Abo-Modelle', id: 'abos-title', title: 'Regelmäßige Betreuung im Abo', lead: 'Preis auf Anfrage – der Leistungsumfang ist als Prozent dargestellt.', className: 'section-head--split' })}
-        <div class="abo-grid" data-reveal="stagger">
-          ${cards}
+        <div class="abo-table__scroll" tabindex="0" role="region" aria-label="Vergleich der Abo-Modelle (seitlich scrollbar)">
+          <table class="abo-table">
+            <caption class="sr-only">Vergleich der fünf Abo-Modelle: Leistungsumfang, enthaltene Leistungen, Intervall und Preis</caption>
+            <thead><tr><td></td>${head}</tr></thead>
+            <tbody>
+              ${row('Leistungsumfang', meter)}
+              ${row('Gartenpflege', (a) => aboCell(a.garten))}
+              ${row('Hausmeisterservice', (a) => aboCell(a.hausmeister))}
+              ${row('Gebäudereinigung', (a) => aboCell(a.reinigung))}
+              ${row('Intervall', (a) => a.interval)}
+              ${row('Preis', () => 'auf Anfrage')}
+              ${row('<span class="sr-only">Anfrage</span>', link)}
+            </tbody>
+          </table>
         </div>
       </div>
     </section>`;
@@ -417,7 +432,8 @@ export function contactSection({ id = 'kontakt', title = 'Erzählen Sie uns von 
     </section>`;
 }
 
-export function homePage() {
+/** pairs: Ergebnis von buildAllPairs() (Vorher/Nachher-Bildpaare oder null). */
+export function homePage({ pairs = {} } = {}) {
   const url = `${SITE.origin}/`;
   const title = 'Gebäudereinigung & Hausmeisterservice Regensburg | CI';
   const description = 'Gebäudereinigung & Hausmeisterservice aus einer Hand in Regensburg, Kelheim und Landshut: Reinigung, Pflege, Reparaturen. Jetzt unverbindlich anfragen.';
@@ -428,9 +444,9 @@ export function homePage() {
     ogTitle: 'Gebäudereinigung & Hausmeisterservice in Regensburg, Kelheim und Landshut',
     description,
     priority: '1.0',
-    preload: preloadArt(HERO_ART),
+    preload: preloadPicture(HERO_WIDE, HERO_SIZES),
     bodyClass: 'page-home',
     jsonLd: graph([website(), webPage({ url, name: title, description }), localBusiness(), ...serviceNodes(), faqPage(FAQ_HOME, url)]),
-    main: [hero(), marquee(), intro(), services(), beforeAfter(), about(), process(), abos(), testimonials(), areas(), faq(), contactSection()].join('\n\n    '),
+    main: [hero(), marquee(), intro(), services(), beforeAfter(pairs), about(), process(), abos(), testimonials(), areas(), faq(), contactSection()].join('\n\n    '),
   };
 }

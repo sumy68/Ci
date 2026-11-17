@@ -71,12 +71,17 @@
     }
     var hero = wipe.closest('.hero');
 
-    // Desktop: Hero kurz pinnen, Wisch synchron zum Scrollen
+    // Desktop: Hero kurz pinnen, sobald das Panorama vollständig sichtbar ist,
+    // dann Wisch synchron zum Scrollen. Start wird nur beim Refresh gemessen.
+    var pinStart = function () {
+      var bottom = wipe.getBoundingClientRect().bottom + window.scrollY;
+      return Math.max(0, Math.round(bottom - (window.innerHeight - 24)));
+    };
     mm.add(DESKTOP, function () {
       var tl = wipeTimeline(wipe, tool, dirty, glint);
       ScrollTrigger.create({
         trigger: hero,
-        start: 'top top',
+        start: pinStart,
         end: '+=80%',
         pin: true,
         scrub: 0.6,
@@ -107,11 +112,30 @@
   }
 
   /* ---------- Überschriften: Zeilen gleiten aus einer Maske ---------- */
+  /*
+   * Überschriften erst zerlegen, wenn sie sich dem Viewport nähern (eine
+   * Bildschirmhöhe vorher) – statt alle beim Start. Das hält jede Aufgabe kurz.
+   */
   function initHeadlines() {
     if (!SplitText) return;
-    $$('[data-reveal="lines"]').forEach(function (el) {
-      // autoSplit: bei Resize/Drehung neu teilen, damit Zeilenumbrüche stimmen
-      SplitText.create(el, {
+    var heads = $$('[data-reveal="lines"]');
+    if (!('IntersectionObserver' in window)) {
+      heads.forEach(splitHeadline);
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        io.unobserve(entry.target);
+        safely(splitHeadline, entry.target);
+      });
+    }, { rootMargin: '0px 0px 100% 0px' });
+    heads.forEach(function (el) { io.observe(el); });
+  }
+
+  function splitHeadline(el) {
+    // autoSplit: bei Resize/Drehung neu teilen, damit Zeilenumbrüche stimmen
+    SplitText.create(el, {
         type: 'lines',
         mask: 'lines',
         linesClass: 'reveal-line',
@@ -126,7 +150,6 @@
           });
         }
       });
-    });
   }
 
   /* ---------- Karten & Listen: sanft versetzt einblenden ---------- */
@@ -289,22 +312,34 @@
 
   var lenis = null;
 
+  /** Gibt den Hauptthread kurz frei, damit keine langen Aufgaben (TBT) entstehen. */
+  var yieldToMain = function () {
+    return new Promise(function (resolve) { window.setTimeout(resolve, 0); });
+  };
+
   function init() {
     var mm = gsap.matchMedia();
     if (!safely(function () { lenis = initLenis(); })) return;
+    // Wisch zuerst (oberhalb des Falzes), danach die übrigen Schritte je in eigener Aufgabe
     var steps = [
       [initWipe, mm], [initStagger], [initImages, mm], [initMap],
       [initCounters], [initSteps, mm], [initMagnetic, mm]
     ];
-    for (var i = 0; i < steps.length; i++) {
-      if (!safely.apply(null, steps[i])) return;
-    }
-    // Zeilen erst nach dem Laden der Schriften teilen (korrekte Umbrüche)
     var fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
-    fontsReady.then(function () {
-      if (safely(initHeadlines)) ScrollTrigger.refresh();
-      restoreHashTarget();
-    });
+    steps.reduce(function (chain, step) {
+      return chain.then(function (ok) {
+        if (!ok) return false;
+        return yieldToMain().then(function () { return safely.apply(null, step); });
+      });
+    }, Promise.resolve(true))
+      .then(function (ok) {
+        if (!ok) return;
+        // Zeilen erst nach dem Laden der Schriften teilen (korrekte Umbrüche)
+        return fontsReady.then(yieldToMain).then(function () {
+          if (safely(initHeadlines)) ScrollTrigger.refresh();
+          restoreHashTarget();
+        });
+      });
   }
 
   // Erst nach dem ersten Rendern initialisieren
