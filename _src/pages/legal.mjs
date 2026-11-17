@@ -4,8 +4,8 @@ import { button, arrowLink, overline } from '../lib/html.mjs';
 import { graph, breadcrumbs, webPage } from '../lib/schema.mjs';
 
 const BUILD_DATE = new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-const tel = `<a href="tel:${SITE.phoneE164}">${SITE.phoneDisplay}</a>`;
-const mail = `<a href="mailto:${SITE.email}">${SITE.email}</a>`;
+const tel = `<a class="contact-link" href="tel:${SITE.phoneE164}">${SITE.phoneDisplay}</a>`;
+const mail = `<a class="contact-link" href="mailto:${SITE.email}">${SITE.email}</a>`;
 
 function legalShell({ crumb, title, lead, body }) {
   return `<section class="page-head page-head--legal" aria-labelledby="page-title">

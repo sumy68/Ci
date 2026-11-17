@@ -147,19 +147,21 @@ main p a:not([class]), main li a:not([class]), .faq__a a {
 main p a:not([class]):hover, main li a:not([class]):hover { color: var(--accent-ink); text-decoration-color: currentColor; }
 
 /* Kontaktangaben: überall gleich – ohne Unterstreichung, einheitlicher Hover */
-.contact-link {
+.contact-link, .phone-link, .nav-phone {
   color: inherit;
-  font: inherit;
   text-decoration: none;
   transition: color .2s;
 }
-.contact-link:hover, .contact-link:focus-visible {
+.contact-link { font: inherit; }
+.contact-link:hover, .contact-link:focus-visible,
+.phone-link:hover, .phone-link:focus-visible,
+.nav-phone:hover, .nav-phone:focus-visible {
   color: var(--accent-ink);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
 }
-.section--night .contact-link:hover, .footer .contact-link:hover { color: var(--accent); }
+.section--night .contact-link:hover, .footer .contact-link:hover, .phone-link--light:hover { color: var(--accent); }
 
 :focus-visible {
   outline: 2px solid var(--accent-ink);
@@ -286,12 +288,9 @@ main p a:not([class]):hover, main li a:not([class]):hover { color: var(--accent-
   padding-block: 8px;
 }
 .phone-link svg { color: var(--accent-ink); flex: none; }
-.phone-link > span { border-bottom: 1px solid var(--line); transition: border-color .25s; }
 .phone-link__hint { font-weight: 400; color: var(--ink-2); }
-.phone-link:hover > span { border-color: var(--ink); }
 .phone-link--light { color: var(--night-text); }
 .phone-link--light svg { color: var(--accent); }
-.phone-link--light > span { border-color: var(--night-line); }
 
 .link-arrow {
   display: inline-flex;
@@ -507,7 +506,6 @@ html.menu-open, html.menu-open body { overflow: hidden; }
   text-wrap: pretty;
 }
 .hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
-.hero .phone-link > span { border-color: rgba(22, 24, 27, .3); }
 
 /* Aufhellung hinter dem Textbereich (über Bild/Schmutz-Ebene, unter Abzieher + Text):
    sichert AA-Kontrast für dunklen Text – auch auf der beschlagenen Scheibe. */

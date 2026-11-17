@@ -80,7 +80,7 @@ export function header({ isHome }) {
           <a class="nav-phone" href="tel:${SITE.phoneE164}">${ICONS.phone(17)}<span>${SITE.phoneDisplay}</span></a>
           ${button(`${base}#kontakt`, 'Jetzt anfragen', { magnetic: true, extra: ' data-size="small"' })}
         </div>
-        <p class="nav-menu__meta">${SITE.address.street}, ${SITE.address.zip} ${SITE.address.city}<br>${SITE.email}</p>
+        <p class="nav-menu__meta"><a class="contact-link" href="${SITE.mapsUrl}" target="_blank" rel="noopener">${SITE.address.street}, ${SITE.address.zip} ${SITE.address.city}<span class="sr-only"> (Google Maps, öffnet neues Fenster)</span></a><br><a class="contact-link" href="mailto:${SITE.email}">${SITE.email}</a></p>
       </nav>
       <a class="nav-phone-icon" href="tel:${SITE.phoneE164}" aria-label="Anrufen: ${SITE.phoneDisplay}">${ICONS.phone(19)}</a>
       <button class="burger" type="button" data-burger aria-controls="site-menu" aria-expanded="false" aria-label="Menü öffnen">

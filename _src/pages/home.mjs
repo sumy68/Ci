@@ -361,7 +361,7 @@ function faq() {
       <div class="wrap grid12">
         <div class="faq-section__head">
           ${sectionHead({ label: 'Häufige Fragen', id: 'faq-title', title: 'Gut zu wissen' })}
-          <p class="faq-section__more">Ihre Frage ist nicht dabei? Rufen Sie uns an: <a href="tel:${SITE.phoneE164}">${SITE.phoneDisplay}</a></p>
+          <p class="faq-section__more">Ihre Frage ist nicht dabei? Rufen Sie uns an: <a class="contact-link" href="tel:${SITE.phoneE164}">${SITE.phoneDisplay}</a></p>
           <!-- TODO: vom Kunden – Angaben zur Betriebshaftpflicht/Versicherung, dann als FAQ ergänzen -->
         </div>
         <div class="faq-section__list">
