@@ -934,3 +934,18 @@ html.menu-open .wa-fab { opacity: 0; pointer-events: none; }
   .footer__copy { margin: 0 0 6px; color: var(--night-muted); }
   .footer .footer__ai a { display: inline; padding: 0; margin: 0; color: var(--night-muted); text-decoration: none; font-size: 0.8125rem; }
 }
+
+/* ---------- Footer Desktop/Tablet (≥ 768 px): kompakter, größeres Logo ---------- */
+@media (min-width: 768px) {
+  /* Weißraum zwischen letztem Abschnitt (Formular) und Footer */
+  main > .section:last-child { padding-bottom: 80px; }
+  .footer { padding: 64px 0 calc(32px + env(safe-area-inset-bottom, 0px)); }
+  .footer__logo img { width: 87px; margin-bottom: 20px; }   /* ≈ 60 px hoch */
+  .footer__claim { max-width: 34ch; font-size: 1.125rem; line-height: 1.4; }
+  .footer ul { gap: 12px; }
+  .footer__bottom { align-items: baseline; margin-top: 40px; padding-top: 24px; }
+  /* KI-Hinweis wie das Copyright: gleiche Farbe/Größe, ohne Unterstreichung, gleiche Grundlinie */
+  .footer__ai { font-size: inherit; }
+  .footer__ai a { color: var(--night-muted); text-decoration: none; }
+  .footer__ai a:hover { color: var(--night-text); }
+}
