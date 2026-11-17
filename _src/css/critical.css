@@ -731,9 +731,20 @@ html.js-motion:not(.wipe-done):not(.motion-off) .marquee__track { animation-play
     --gutter: 20px;              /* Seitenränder 20 px */
     --space-section: 60px;       /* Abschnittsabstand 56–64 px */
   }
-  .site-header__bar { gap: 8px; }
-  /* Logo als Touch-Ziel ≥ 44 px, ohne die Optik zu ändern */
-  .brand { padding-block: 5px; }
+  /* Header: Logo größer (≈ 46 px hoch), Icons ohne Kasten, je 44 px Touch-Fläche, mittig auf einer Höhe */
+  .site-header__bar { gap: 4px; padding-inline: 20px; }
+  .brand img { width: 66px; }
+  .nav-wa-icon, .nav-phone-icon, .burger { width: 44px; height: 44px; border: 0; border-radius: 10px; background: none; }
+  .nav-wa-icon svg, .nav-phone-icon svg { width: 22px; height: 22px; }
+  .nav-wa-icon { margin-right: 0; }
+  .burger { margin-right: -11px; }   /* Striche bündig mit dem rechten Rand (20 px) */
+  .burger span, .burger span::before, .burger span::after { width: 22px; height: 2px; }
+  .burger span::before { transform: translateY(-7px); }
+  .burger span::after { transform: translateY(7px); }
+
+  /* Laufband kleiner */
+  .marquee__item { font-size: 1.5rem; padding-inline: 16px; }
+  .marquee { padding-block: 14px; }
 
   /* Fließtext: lange Komposita dürfen trennen statt überzulaufen (lang="de") */
   p, li, dd, blockquote, td, figcaption {

@@ -93,14 +93,19 @@ export function header({ isHome }) {
   </header>`;
 }
 
-const footerList = (title, items) => `<div class="footer__col">
+/* Linkgruppe: Desktop mit festem Titel; mobil (< 768 px) als geschlossene Klappgruppe
+   (Button nutzt das Akkordeon-Skript, Zustand nur in aria-expanded). */
+const footerList = (id, title, items) => `<div class="footer__col footer__col--${id}">
         <p class="footer__title">${title}</p>
-        <ul>${items.map(([href, label]) => `<li><a href="${href}">${label}</a></li>`).join('')}</ul>
+        <button class="footer__toggle" type="button" aria-expanded="false" aria-controls="footer-${id}" data-acc-trigger>${title}<span class="acc__icon" aria-hidden="true"></span></button>
+        <ul id="footer-${id}">${items.map(([href, label]) => `<li><a href="${href}">${label}</a></li>`).join('')}</ul>
       </div>`;
 
 export function footer({ isHome, currentPath }) {
   const base = isHome ? '' : '/';
   const mark = (href, label) => [href, href === currentPath ? `<span aria-current="page">${label}</span>` : label];
+  // Mobil: Impressum/Datenschutz in der Fußzeile statt eigener Spalte (gleiche Links)
+  const legal = [mark('/impressum', 'Impressum'), mark('/datenschutz', 'Datenschutz')];
   return `<footer class="footer" data-footer>
     <div class="wrap footer__grid">
       <div class="footer__brand">
@@ -111,15 +116,17 @@ export function footer({ isHome, currentPath }) {
           <a class="contact-link" href="${SITE.mapsUrl}" target="_blank" rel="noopener">${SITE.address.street}<br>${SITE.address.zip} ${SITE.address.city}<span class="sr-only"> (Google Maps, öffnet neues Fenster)</span></a><br>
           <a class="contact-link" href="tel:${SITE.phoneE164}">${SITE.phoneDisplay}</a><br>
           <a class="contact-link" href="mailto:${SITE.email}">${SITE.email}</a>
+          <span class="footer__wa"><br><a class="contact-link" href="${SITE.whatsapp}" target="_blank" rel="noopener noreferrer">WhatsApp<span class="sr-only"> (öffnet neues Fenster)</span></a></span>
         </address>
       </div>
-      ${footerList('Leistungen', [...SERVICE_GROUPS.map((g) => [`${base}#${g.id}`, g.title]), [`${base}#abos`, 'Abo-Modelle']])}
-      ${footerList('Einsatzgebiete', CITIES.map((c) => mark(`/${c.slug}`, `Gebäudereinigung ${c.city}`)))}
-      ${footerList('Unternehmen', [[`${base}#ueber-uns`, 'Über uns'], [`${base}#kundenmeinungen`, 'Kundenmeinungen'], [`${base}#standort`, 'Standort'], [`${base}#faq`, 'Häufige Fragen'], [`${base}#kontakt`, 'Kontakt']])}
-      ${footerList('Rechtliches', [mark('/impressum', 'Impressum'), mark('/datenschutz', 'Datenschutz')])}
+      ${footerList('leistungen', 'Leistungen', [...SERVICE_GROUPS.map((g) => [`${base}#${g.id}`, g.title]), [`${base}#abos`, 'Abo-Modelle']])}
+      ${footerList('einsatzgebiete', 'Einsatzgebiete', CITIES.map((c) => mark(`/${c.slug}`, `Gebäudereinigung ${c.city}`)))}
+      ${footerList('unternehmen', 'Unternehmen', [[`${base}#ueber-uns`, 'Über uns'], [`${base}#kundenmeinungen`, 'Kundenmeinungen'], [`${base}#standort`, 'Standort'], [`${base}#faq`, 'Häufige Fragen'], [`${base}#kontakt`, 'Kontakt']])}
+      ${footerList('rechtliches', 'Rechtliches', [mark('/impressum', 'Impressum'), mark('/datenschutz', 'Datenschutz')])}
     </div>
     <div class="wrap footer__bottom">
-      <p>© ${YEAR} ${SITE.name}, Inhaber ${SITE.owner}</p>
+      <p class="footer__legal">${legal.map(([href, label]) => (label.startsWith('<span') ? label : `<a href="${href}">${label}</a>`)).join(' <span aria-hidden="true">·</span> ')}</p>
+      <p class="footer__copy">© ${YEAR} ${SITE.name}, Inhaber ${SITE.owner}</p>
       <p class="footer__ai"><a href="/impressum#bildnachweis">Teilweise KI-generierte Symbolbilder</a></p>
     </div>
   </footer>`;
