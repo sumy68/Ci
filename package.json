@@ -1,0 +1,19 @@
+{
+  "name": "ci-dienstleistungen-website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "images": "node _src/images.mjs",
+    "vendor": "node _src/vendor.mjs",
+    "build": "node _src/build.mjs",
+    "check": "node _src/check.mjs",
+    "serve": "python3 _src/serve.py 8080"
+  },
+  "devDependencies": {
+    "@fontsource-variable/manrope": "5.2.8",
+    "@fontsource/instrument-serif": "5.2.8",
+    "gsap": "3.13.0",
+    "lenis": "1.3.4",
+    "sharp": "0.34.5"
+  }
+}

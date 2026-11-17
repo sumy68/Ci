@@ -1,4 +1,4 @@
-/* Navigation: Scroll-Zustand, Mobil-Overlay, aktiver Abschnitt */
+/* Navigation: Scroll-Zustand, Ein-/Ausblenden, Mobil-Overlay, aktiver Abschnitt */
 (function () {
   'use strict';
 
@@ -10,6 +10,8 @@
   var root = document.documentElement;
   var LABEL_OPEN = 'Menü öffnen';
   var LABEL_CLOSE = 'Menü schließen';
+  var HIDE_AFTER = 120; // px – darunter bleibt der Header immer sichtbar
+  var DELTA = 6;        // px – Mindestbewegung gegen Flackern
 
   /* ---------- Mobil-Menü ---------- */
   var isOpen = function () {
@@ -22,7 +24,10 @@
     header.classList.toggle('is-menu-open', open);
     root.classList.toggle('menu-open', open);
     document.body.classList.toggle('menu-open', open);
+    // Smooth-Scroll (Lenis) pausieren, solange das Overlay offen ist
+    document.dispatchEvent(new CustomEvent('ci:menu', { detail: { open: open } }));
     if (open) {
+      header.classList.remove('is-hidden');
       var first = menu.querySelector('a');
       if (first) first.focus({ preventScroll: true });
     }
@@ -37,9 +42,26 @@
   });
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && isOpen()) {
+    if (!isOpen()) return;
+    if (e.key === 'Escape') {
       setMenu(false);
       burger.focus();
+      return;
+    }
+    // Fokus im geöffneten Overlay halten (Menü-Links + Burger)
+    if (e.key === 'Tab') {
+      var phoneIcon = header.querySelector('.nav-phone-icon');
+      var focusables = Array.prototype.slice.call(menu.querySelectorAll('a, button'))
+        .concat(phoneIcon ? [phoneIcon, burger] : [burger]);
+      var first = focusables[0];
+      var last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     }
   });
 
@@ -50,7 +72,7 @@
   };
   if (desktop.addEventListener) desktop.addEventListener('change', onBreakpoint);
 
-  /* ---------- Transparent -> dunkel ab ~50px Scroll ---------- */
+  /* ---------- Transparent -> weiß/blur ab dem ersten Scrollen ---------- */
   // Sentinel statt Scroll-Listener: funktioniert unabhängig vom Scroll-Container
   var sentinel = document.querySelector('[data-nav-sentinel]');
   if (sentinel && 'IntersectionObserver' in window) {
@@ -61,12 +83,33 @@
     header.classList.add('is-scrolled');
   }
 
+  /* ---------- Beim Runterscrollen ausblenden, beim Hochscrollen zeigen ---------- */
+  var lastY = window.scrollY;
+  var ticking = false;
+  var update = function () {
+    ticking = false;
+    var y = window.scrollY;
+    if (Math.abs(y - lastY) < DELTA) return;
+    var hide = y > lastY && y > HIDE_AFTER && !isOpen() && !header.contains(document.activeElement);
+    header.classList.toggle('is-hidden', hide);
+    lastY = y;
+  };
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      ticking = true;
+      window.requestAnimationFrame(update);
+    }
+  }, { passive: true });
+  header.addEventListener('focusin', function () {
+    header.classList.remove('is-hidden');
+  });
+
   /* ---------- Aktiver Abschnitt ---------- */
   var links = Array.prototype.slice.call(menu.querySelectorAll('.nav-link[href^="#"]'));
   if (!links.length || !('IntersectionObserver' in window)) return;
 
   // Abschnitte ohne eigenen Menüpunkt einem Menüpunkt zuordnen
-  var ALIASES = { standort: 'ueber-uns' };
+  var ALIASES = { 'vorher-nachher': 'leistungen' };
 
   var setActive = function (id) {
     var target = ALIASES[id] || id;

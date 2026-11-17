@@ -1,0 +1,9 @@
+# GitHub Pages (Jekyll): interne Dateien nicht veröffentlichen.
+# Ordner/Dateien mit "_" am Anfang (z. B. _src) ignoriert Jekyll automatisch.
+exclude:
+  - package.json
+  - package-lock.json
+  - node_modules
+  - BILDER-TODO.md
+  - SEO-TODO.md
+  - README.md
