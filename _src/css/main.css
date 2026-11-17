@@ -46,26 +46,86 @@
 }
 .index-row__title { font-family: var(--display); font-weight: 700; letter-spacing: -0.02em; font-size: var(--fs-h3); line-height: 1.1; margin: 0 0 6px; }
 .index-row__count { margin: 0; font-size: var(--fs-small); color: var(--ink-2); }
-.index-list { display: grid; grid-template-columns: minmax(0, 1fr); column-gap: var(--gap); }
-.index-item { padding: 14px 0; border-top: 1px solid var(--line); scroll-margin-top: calc(var(--header-h) + 16px); }
-.index-item__title { margin: 0 0 4px; font-size: 1rem; font-weight: 700; line-height: 1.35; letter-spacing: -0.01em; }
-.index-item__text { margin: 0; font-size: var(--fs-small); line-height: 1.55; color: var(--ink-2); }
+/* ---------- Akkordeon (gemeinsam für Leistungsverzeichnis + Stadtseiten) ----------
+   Zustand nur über aria-expanded des Buttons; Panel per :has() gesteuert.
+   grid-template-rows 0fr ↔ 1fr animiert und kehrt bei erneutem Klick vom
+   aktuellen Wert um. Zugeklappt: visibility hidden (nicht fokussierbar),
+   Inhalt bleibt im HTML (SEO). */
+.acc__title { margin: 0; font: inherit; }
+.acc__trigger {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+  padding: 14px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.acc__label { flex: 1; min-width: 0; }
+.acc__trigger:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 4px; border-radius: 6px; }
+.acc__icon { position: relative; flex: none; width: 14px; height: 14px; color: var(--ink-2); }
+.acc__icon::before, .acc__icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 14px;
+  height: 1.5px;
+  margin-top: -0.75px;
+  border-radius: 1px;
+  background: currentColor;
+  transition: transform .3s var(--ease-out);
+}
+.acc__icon::after { transform: rotate(90deg); }                 /* Plus */
+.acc__trigger[aria-expanded="true"] .acc__icon::after { transform: rotate(0deg); }  /* Minus */
+.acc__trigger:hover .acc__icon, .acc__trigger[aria-expanded="true"] .acc__icon { color: var(--accent-ink); }
+.acc__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition: grid-template-rows .35s var(--ease-out), visibility 0s linear .35s;
+}
+.acc__inner { min-height: 0; overflow: hidden; }
+.acc:has(> .acc__title > [aria-expanded="true"]) > .acc__panel {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition: grid-template-rows .35s var(--ease-out), visibility 0s;
+}
+/* Ohne JS bzw. ohne :has()-Unterstützung: alles offen, nichts geht verloren */
+html:not(.js) .acc__panel { grid-template-rows: 1fr; visibility: visible; }
+html:not(.js) .acc__icon { display: none; }
+@supports not selector(:has(*)) {
+  .acc__panel { grid-template-rows: 1fr; visibility: visible; }
+  .acc__icon { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .acc__panel, .acc__icon::before, .acc__icon::after { transition: none !important; }
+}
+
+.index-list { display: grid; grid-template-columns: minmax(0, 1fr); column-gap: var(--gap); align-items: start; }
+.index-item { border-top: 1px solid var(--line); scroll-margin-top: calc(var(--header-h) + 16px); }
+.index-item__title { font-size: 1rem; font-weight: 700; line-height: 1.35; letter-spacing: -0.01em; }
+.index-item__text { margin: 0; padding: 0 30px 16px 0; font-size: var(--fs-small); line-height: 1.55; color: var(--ink-2); }
 @media (min-width: 640px) {
   .index-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   /* Erste Zeile ohne doppelte Linie */
-  .index-item:nth-child(-n + 2) { border-top: 0; padding-top: 4px; }
+  .index-item:nth-child(-n + 2) { border-top: 0; }
 }
-@media (max-width: 639px) { .index-item:first-child { border-top: 0; padding-top: 4px; } }
+@media (max-width: 639px) { .index-item:first-child { border-top: 0; } }
 @media (min-width: 900px) {
   .index-row__num { grid-column: 1 / span 1; padding-top: 8px; }
   .index-row__head { grid-column: 2 / span 4; }
   .index-list { grid-column: 6 / -1; }
 }
 @media (hover: hover) and (pointer: fine) {
-  .index-row { transition: background-color .3s; }
   .index-row.is-hover .index-row__title { color: var(--accent-ink); }
-  .index-item { transition: color .2s; }
-  .index-item:hover .index-item__title { color: var(--accent-ink); }
+  .index-item .acc__trigger:hover .acc__label { color: var(--accent-ink); }
 }
 /* Vorschaubild folgt dem Mauszeiger (nur Desktop, rein dekorativ) */
 .index-preview {
@@ -89,34 +149,48 @@
 .index-preview img { width: 100%; height: 100%; object-fit: cover; }
 @media (max-width: 1024px), (hover: none) { .index-preview { display: none; } }
 
-/* ---------- Leistungszeilen auf Stadtseiten (statt Kartenraster) ---------- */
+/* ---------- Leistungszeilen auf Stadtseiten (Akkordeon) ---------- */
 .svc-rows { border-top: 1px solid var(--ink); }
-.svc-row {
-  display: grid;
-  gap: 20px;
-  padding-block: clamp(28px, 3.5vw, 48px);
-  border-bottom: 1px solid var(--line);
-  scroll-margin-top: calc(var(--header-h) + 16px);
-}
-.svc-row__num { margin: 0; font-size: var(--fs-small); font-weight: 500; color: var(--ink-2); }
+.svc-row { border-bottom: 1px solid var(--line); scroll-margin-top: calc(var(--header-h) + 16px); }
+.svc-row__title { font-family: var(--display); font-weight: 700; letter-spacing: -0.02em; font-size: var(--fs-h3); line-height: 1.15; }
+.svc-row__title .acc__trigger { gap: 20px; padding: clamp(18px, 2.2vw, 26px) 0; }
+.svc-row__num { flex: none; width: 2.2em; font-family: var(--sans); font-size: var(--fs-small); font-weight: 500; letter-spacing: 0; color: var(--ink-2); }
+.svc-row__title .acc__trigger:hover .acc__label { color: var(--accent-ink); }
+.svc-row__detail { display: grid; gap: 20px; padding: 0 0 clamp(24px, 3vw, 40px); }
 .svc-row__media { aspect-ratio: 3 / 2; border-radius: 14px; }
-.svc-row__title { font-family: var(--display); font-weight: 700; letter-spacing: -0.02em; font-size: var(--fs-h3); line-height: 1.15; margin: 0 0 12px; }
 .svc-row__body p { color: var(--ink-2); max-width: 36em; }
 @media (min-width: 900px) {
-  .svc-row { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: start; }
-  .svc-row__num { grid-column: 1 / span 1; padding-top: 6px; }
+  .svc-row__detail { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: start; }
   .svc-row__media { grid-column: 2 / span 4; }
   .svc-row__body { grid-column: 7 / -1; }
 }
 
 /* ---------- Vorher / Nachher ---------- */
+/* Layout: mobil Kopf -> Bild -> Liste -> Hinweis; Desktop 5/12 Text | 7/12 Bild,
+   Bild oben bündig mit dem Label, unten bündig mit der Liste (stretch). */
+.compare-layout { display: grid; grid-template-columns: minmax(0, 1fr); }
+.compare-layout__head .section-head { margin-bottom: 24px; }
+.section-head--compact .lead { font-size: var(--fs-body); line-height: 1.6; margin-top: 16px; }
+.compare-layout__tabs { margin: 24px 0 0; }
+.compare-layout__note { margin: 20px 0 0; }
 @media (min-width: 900px) {
-  .compare-section__aside { grid-column: 1 / span 4; }
-  .compare-section__stage { grid-column: 5 / -1; }
+  .compare-layout {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: auto auto auto;
+    column-gap: var(--gap);
+    align-items: stretch;
+  }
+  .compare-layout__head { grid-column: 1 / span 5; grid-row: 1; }
+  .compare-layout__tabs { grid-column: 1 / span 5; grid-row: 2; margin: 0; align-self: end; }
+  .compare-layout__stage { grid-column: 6 / -1; grid-row: 1 / span 2; max-height: 560px; }
+  .compare-layout__note { grid-column: 1 / -1; grid-row: 3; margin-top: 24px; }
+  /* Bild füllt die Höhe der linken Spalte; beide Ebenen identisch zugeschnitten */
+  .compare-layout__stage > .compare,
+  .compare-layout__stage .compare__stage { height: 100%; }
+  .compare-layout__stage .compare__stage { aspect-ratio: auto; min-height: 380px; }
 }
-.compare-section__aside .section-head { margin-bottom: 32px; }
 /* Tabs als nummerierte Textliste mit Linie statt Kästen */
-.compare-tabs { margin-bottom: 24px; border-top: 1px solid var(--line); }
+.compare-tabs { border-top: 1px solid var(--line); }
 .compare-tab {
   display: grid;
   grid-template-columns: 2em minmax(0, 1fr);
@@ -143,16 +217,23 @@
 .compare-tab:hover { color: var(--ink); }
 .compare-section__note { font-size: 0.75rem; color: var(--ink-2); }
 /* Alle Paare im selben Rasterfeld übereinander -> weicher Crossfade beim Wechsel */
-.compare-section__stage { margin-top: 24px; display: grid; }
-.compare-section__stage > .compare { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity .5s var(--ease-out), visibility 0s linear .5s; }
-.compare-section__stage > .compare.is-active { opacity: 1; visibility: visible; transition: opacity .5s var(--ease-out); }
-@media (min-width: 900px) { .compare-section__stage { margin-top: 0; } }
+.compare-section__stage { display: grid; }
+/* Inaktive Paare: display none -> ihre Bilder laden erst bei Auswahl (Performance).
+   Überblendung trotzdem weich: display wird diskret mit-animiert (@starting-style). */
+.compare-section__stage > .compare {
+  grid-area: 1 / 1;
+  display: none;
+  opacity: 0;
+  transition: opacity .5s var(--ease-out), display .5s allow-discrete;
+}
+.compare-section__stage > .compare.is-active { display: block; opacity: 1; }
+@starting-style { .compare-section__stage > .compare.is-active { opacity: 0; } }
 
 .compare { margin: 0; }
 .compare__stage {
   --pos: 50%;
   position: relative;
-  aspect-ratio: 16 / 9;              /* = Format der Bildpaare (1344 × 752) */
+  aspect-ratio: 4 / 3;               /* Bildpaare (16:9) werden identisch per cover zugeschnitten */
   overflow: hidden;
   border-radius: 20px;
   background: var(--placeholder);
@@ -164,6 +245,11 @@
 .compare__img, .compare__img img { position: absolute; inset: 0; width: 100%; height: 100%; }
 .compare__img img { object-fit: cover; pointer-events: none; }
 .compare__img--after { clip-path: inset(0 0 0 var(--pos)); }
+/* Tablet/Mobil: volle Breite, 4:3, max. 280 px hoch */
+@media (max-width: 899px) {
+  .compare-section__stage > .compare, .compare__stage { width: 100%; }
+  .compare__stage { max-height: 280px; }
+}
 /* Neutraler Platzhalter, solange kein Bildpaar im Ordner liegt */
 .compare__ph { display: grid; place-items: center; background: #E4E7E9; color: #6B7178; font-weight: 500; }
 .compare__ph--after { background: #F1F3F4; }

@@ -1,6 +1,7 @@
 /** Seitenrahmen: <head>, Header, Footer, WhatsApp-Button, Skripte. */
 import { SITE, SERVICE_GROUPS, CITIES } from '../data.mjs';
 import { esc, ICONS, button } from './html.mjs';
+import { ACCORDION_SCRIPT } from './accordion.mjs';
 
 const LOGO_WIDTHS = [58, 116, 174];
 const YEAR = new Date().getFullYear();
@@ -49,6 +50,7 @@ export function head(page, { criticalCss, assets }) {
   <link rel="preload" href="/assets/fonts/schibsted-grotesk-700.woff2" as="font" type="font/woff2" crossorigin>
   ${page.preload ?? ''}
   ${BOOT_SCRIPT}
+  ${ACCORDION_SCRIPT}
   <style>${criticalCss}</style>
   <link rel="preload" href="${assets.css}" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="${assets.css}"></noscript>

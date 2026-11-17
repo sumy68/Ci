@@ -3,6 +3,7 @@ import { SITE, SERVICE_GROUPS, SERVICES, servicesInGroup, ABOS, TESTIMONIALS, ST
 import { HERO_GLASS_DESKTOP, HERO_GLASS_MOBILE, SERVICE_IMAGE_BY_ID } from '../image-config.mjs';
 import { artPicture, preloadArt, picture, imgUrl, ICONS, button, overline, arrowLink, esc } from '../lib/html.mjs';
 import { orbitIcon } from '../lib/orbit-icons.mjs';
+import { accordionParts } from '../lib/accordion.mjs';
 import { sectionHead, faqList, radiusMap, contactList, locationAddress } from '../lib/sections.mjs';
 import { graph, localBusiness, serviceNodes, website, faqPage, webPage } from '../lib/schema.mjs';
 
@@ -102,10 +103,14 @@ function marquee() {
  */
 function serviceIndexRow(group, index) {
   const items = servicesInGroup(group.id)
-    .map((s) => `<li class="index-item" id="leistung-${s.id}" data-preview="${imgUrl(SERVICE_IMAGE_BY_ID[s.id], 480, 'webp')}">
-              <h4 class="index-item__title">${s.title}</h4>
-              <p class="index-item__text">${s.short}</p>
-            </li>`)
+    .map((s) => {
+      // Titel sichtbar (Keywords), Kurztext klappt auf – bleibt als HTML im Quelltext
+      const acc = accordionParts({ id: `leistung-${s.id}`, label: s.title, level: 4, titleClass: 'index-item__title', content: `<p class="index-item__text">${s.short}</p>` });
+      return `<li class="index-item acc" id="leistung-${s.id}" data-preview="${imgUrl(SERVICE_IMAGE_BY_ID[s.id], 480, 'webp')}">
+              ${acc.trigger}
+              ${acc.panel}
+            </li>`;
+    })
     .join('\n            ');
   return `<div class="index-row grid12" id="${group.id}" data-preview-group>
         <p class="index-row__num" aria-hidden="true">${String(index + 1).padStart(2, '0')}</p>
@@ -150,7 +155,7 @@ const COMPARISONS = Object.freeze([
 const COMPARE_SIZES = '(min-width: 1360px) 820px, (min-width: 900px) 62vw, 94vw';
 
 /** Bildset im Format des picture()-Helfers für eine Seite (vorher/nachher) eines Paares. */
-const pairSet = (pair, side) => ({ dir: 'vorher-nachher', name: `${pair.id}-${side}`, widths: pair.widths, width: pair.width, height: pair.height });
+const pairSet = (pair, side) => ({ dir: 'vorher-nachher', name: pair.names[side], widths: pair.widths, width: pair.width, height: pair.height });
 
 function compareLayers(item, pair) {
   if (!pair) {
@@ -186,18 +191,20 @@ function beforeAfter(pairs) {
               <span class="compare-tab__text">${c.text}</span>
             </button></li>`,
   ).join('\n            ');
+  // Reihenfolge im DOM = mobile Reihenfolge: Kopf, Bild, Liste, Hinweis.
+  // Desktop: Raster 5/12 Text | 7/12 Bild, Bild oben/unten bündig mit der linken Spalte.
   return `<section class="section compare-section" id="vorher-nachher" aria-labelledby="compare-title">
-      <div class="wrap grid12">
-        <div class="compare-section__aside">
-          ${sectionHead({ label: 'Vorher und nachher', id: 'compare-title', title: 'Der Unterschied liegt im Detail', lead: 'Ziehen Sie den Regler, um zu vergleichen – mit Maus, Finger oder den Pfeiltasten.' })}
-          <ul class="compare-tabs">
-            ${tabs}
-          </ul>
-          <p class="compare-section__note">KI-generierte Symbolbilder. Fotos aus echten Projekten folgen.</p>
+      <div class="wrap compare-layout">
+        <div class="compare-layout__head">
+          ${sectionHead({ label: 'Vorher und nachher', id: 'compare-title', title: 'Der Unterschied liegt im Detail', lead: 'Ziehen Sie den Regler, um zu vergleichen – mit Maus, Finger oder den Pfeiltasten.', className: 'section-head--compact' })}
         </div>
-        <div class="compare-section__stage">
+        <div class="compare-layout__stage compare-section__stage">
           ${COMPARISONS.map((c, i) => comparisonFigure(c, i, pairs)).join('\n          ')}
         </div>
+        <ul class="compare-tabs compare-layout__tabs">
+            ${tabs}
+        </ul>
+        <p class="compare-section__note compare-layout__note">KI-generierte Symbolbilder. Fotos aus echten Projekten folgen.</p>
       </div>
     </section>`;
 }

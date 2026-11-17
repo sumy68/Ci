@@ -31,13 +31,21 @@ Platzhalter.
 
 ## Deckungsgleichheit (aktuelle Symbolbilder)
 
-Die KI-generierten Paare waren nicht exakt deckungsgleich (lokal neu gemalte
-Details – Kanten sprangen an der Slider-Linie). Deshalb wurde jedes
-Vorher-Bild aus den Pixeln des Nachher-Bildes erzeugt und die Verschmutzung
-des ursprünglichen Vorher-Bildes kantenabhängig übertragen:
+Die KI-generierten Paare waren nicht deckungsgleich (Details lokal neu gemalt,
+Fenster/Kanten sprangen an der Slider-Linie). Deshalb besteht jedes
+**Vorher-Bild ausschließlich aus den Pixeln des Nachher-Bildes** plus
+prozedural erzeugter Verschmutzung – keine Geometrie aus anderen Bildern:
 
-- Analyse (SIFT + Homographie, Messwert „Kantenversatz“): `_src/tools/va_align.py`
-- Erzeugung der deckungsgleichen Vorher-Bilder: `_src/tools/va_synth.py`
-- KI-Originale: `_src/images/vorher-nachher-original/`
+- Erzeugung: `_src/tools/va_dirt.py` (Grauschleier, Witterungsstreifen, Algen,
+  Wasserflecken/Schlieren, Staub/Fußspuren – reine Farboperationen)
+- Prüfung: `_src/tools/va_verify.py` (Canny-Kantenvergleich + Phasenkorrelation
+  je Bildkachel; Ergebnis neu: Median-Versatz 0,04–0,10 px)
+- KI-Originale (nur noch als Nachher-Quelle): `_src/images/vorher-nachher-original/`
 
 Bei **echten** Fotopaaren ist das nicht nötig – einfach die Dateien ersetzen.
+
+## Cache-Sicherheit
+
+Die erzeugten Dateien tragen einen Inhalts-Hash im Namen
+(z. B. `fassade-vorher.5d6439b3-768.avif`). Neues Bild = neuer Dateiname,
+Browser und CDN können keine veraltete Version ausliefern.

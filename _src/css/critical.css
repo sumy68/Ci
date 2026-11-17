@@ -665,6 +665,8 @@ html.js-motion:not(.motion-off) .wipe__glint { display: block; }
 }
 /* Mit JS läuft das Band nur, solange es im Viewport ist */
 .js .marquee:not(.is-running) .marquee__track { animation-play-state: paused; }
+/* Nicht gleichzeitig mit dem Wisch-Effekt laufen (geblurrte Ebene + Dauer-Animation = teuer) */
+html.js-motion:not(.wipe-done):not(.motion-off) .marquee__track { animation-play-state: paused; }
 .marquee__item {
   font-family: var(--display); font-weight: 500;
   font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem);

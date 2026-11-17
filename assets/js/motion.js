@@ -66,7 +66,7 @@
     var dirty = wipe.querySelector('[data-wipe-dirty]');
     var glint = wipe.querySelector('[data-wipe-glint]');
     if (!heroAllowed || !tool || !dirty) {
-      wipe.classList.add('is-clean');
+      wipe.classList.add('is-clean'); root.classList.add('wipe-done');
       return;
     }
     var hero = wipe.closest('.hero');
@@ -86,7 +86,9 @@
         pin: true,
         scrub: 0.6,
         animation: tl,
-        invalidateOnRefresh: true
+        invalidateOnRefresh: true,
+        // Laufband erst nach vollständigem Wisch freigeben
+        onUpdate: function (self) { if (self.progress > 0.98) root.classList.add('wipe-done'); }
       });
       return function () { tl.kill(); gsap.set([tool, dirty, glint].filter(Boolean), { clearProps: 'all' }); };
     });
@@ -99,7 +101,7 @@
         duration: 2,
         delay: 0.4,
         ease: 'power2.inOut',
-        onComplete: function () { wipe.classList.add('is-clean'); }
+        onComplete: function () { wipe.classList.add('is-clean'); root.classList.add('wipe-done'); }
       });
       return function () {
         play.kill();
@@ -281,7 +283,7 @@
     gsap.set($$('[data-reveal="stagger"] > *, [data-reveal="image"], [data-reveal="image"] img'), { clearProps: 'all' });
     $$('[data-count]').forEach(function (el) { el.textContent = el.getAttribute('data-count'); });
     var wipe = document.querySelector('[data-wipe]');
-    if (wipe) wipe.classList.add('is-clean');
+    if (wipe) wipe.classList.add('is-clean'); root.classList.add('wipe-done');
     root.classList.add('motion-off');
   }
 

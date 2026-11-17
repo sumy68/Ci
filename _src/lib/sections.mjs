@@ -2,6 +2,7 @@
 import { SITE, LOCATIONS } from '../data.mjs';
 import { SERVICE_IMAGE_BY_ID } from '../image-config.mjs';
 import { esc, picture, ICONS, button, overline } from './html.mjs';
+import { accordionParts } from './accordion.mjs';
 
 /** Kopf eines Abschnitts: Overline, H2 (maskierte Zeilen-Animation), optional Lead. */
 export const sectionHead = ({ label, title, lead, id, className = '' }) => `<div class="section-head ${className}">
@@ -16,14 +17,24 @@ export const sectionHead = ({ label, title, lead, id, className = '' }) => `<div
  */
 export function serviceRow(service, { index, sizes, contactHref = '#kontakt', city }) {
   const set = SERVICE_IMAGE_BY_ID[service.id];
-  return `<article class="svc-row" id="leistung-${service.id}">
-            <p class="svc-row__num" aria-hidden="true">${String(index + 1).padStart(2, '0')}</p>
-            <div class="svc-row__media frame">${picture(set, { alt: `${service.alt} – ${service.title} in ${city} (Symbolbild)`, sizes })}</div>
-            <div class="svc-row__body">
-              <h3 class="svc-row__title">${service.title}</h3>
-              <p>${service.text}</p>
-              <a class="link-arrow" href="${contactHref}" data-service="${esc(service.title)}"><span>Anfragen<span class="sr-only">: ${service.title}</span></span>${ICONS.arrow()}</a>
-            </div>
+  // Zugeklappt: Nummer + Titel (Keyword). Aufgeklappt: Bild, ausführlicher Text, Anfrage-Link.
+  const acc = accordionParts({
+    id: `leistung-${service.id}`,
+    label: service.title,
+    level: 3,
+    titleClass: 'svc-row__title',
+    prefix: `<span class="svc-row__num" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span>`,
+    content: `<div class="svc-row__detail">
+                <div class="svc-row__media frame">${picture(set, { alt: `${service.alt} – ${service.title} in ${city} (Symbolbild)`, sizes })}</div>
+                <div class="svc-row__body">
+                  <p>${service.text}</p>
+                  <a class="link-arrow" href="${contactHref}" data-service="${esc(service.title)}"><span>Anfragen<span class="sr-only">: ${service.title}</span></span>${ICONS.arrow()}</a>
+                </div>
+              </div>`,
+  });
+  return `<article class="svc-row acc" id="leistung-${service.id}">
+            ${acc.trigger}
+            ${acc.panel}
           </article>`;
 }
 
