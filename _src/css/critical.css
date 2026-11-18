@@ -770,7 +770,7 @@ html.js-motion:not(.wipe-done):not(.motion-off) .marquee__track { animation-play
   .hero__actions .phone-link { white-space: nowrap; }
   /* Weiche, radiale Aufhellung hinter dem Textblock (keine harte Fläche); Abzieher läuft darunter */
   .hero__wash {
-    background: radial-gradient(ellipse 95% 42% at 50% 45%, rgba(250, 250, 248, .88) 0%, rgba(250, 250, 248, .72) 50%, rgba(250, 250, 248, 0) 100%);
+    background: radial-gradient(ellipse 95% 42% at 50% 51%, rgba(250, 250, 248, .88) 0%, rgba(250, 250, 248, .72) 50%, rgba(250, 250, 248, 0) 100%);
   }
 
   /* Laufband kleiner */
