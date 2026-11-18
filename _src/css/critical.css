@@ -759,8 +759,9 @@ html.js-motion:not(.wipe-done):not(.motion-off) .marquee__track { animation-play
   .hero { justify-content: center; }
   .hero__content {
     margin-block: 0;
-    padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 16px);
-    padding-bottom: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 16px + 8.8svh);
+    /* Block 40 px tiefer als die 45-%-Position (≈ 50–51 % der Hero-Höhe) */
+    padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 56px);
+    padding-bottom: calc(var(--header-h) + env(safe-area-inset-top, 0px) - 24px + 8.8svh);
     text-align: center;
   }
   .hero__title { margin-inline: auto; }
